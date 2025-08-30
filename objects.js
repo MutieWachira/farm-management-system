@@ -54,7 +54,7 @@ function refreshDashboard(){
 
 // --- Crop List Display ---
 function updateCropList(){
-    let cropList = document.getElementById('cropList');
+    let cropList = document.getElementById('cropTableBody');
     cropList.innerHTML = ''; // Clear existing rows
 
     farm.crops.forEach(crop => {
