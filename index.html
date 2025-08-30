@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Farm Management System</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <h2>🌾 FMS</h2>
+      <ul>
+        <li><a href="index.html">Dashboard</a></li>
+        <li><a href="#">Farms</a></li>
+        <li><a href="#">Crops</a></li>
+        <li><a href="#">Workers</a></li>
+        <li><a href="#">Equipment</a></li>
+        <li><a href="#">Reports</a></li>
+        <li><a href="#">Settings</a></li>
+        <li><a href="#">Logout</a></li>
+      </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      
+      <!-- Top Navigation Bar -->
+      <div class="topbar">
+        <h2>Dashboard</h2>
+        <div class="topbar-right">
+          <span class="notification">🔔</span>
+          <span class="profile">👤 Admin</span>
+        </div>
+      </div>
+
+<!-- Farm Summary -->
+      <section class="summary">
+        <h2>Farm Summary</h2>
+        <p><span id="farmName"></span></p>
+        <p><span id="farmLocation"></span></p>
+<!-- Farm Details Cards -->
+        <div class="cards">
+          <div class="card">
+            <h3>Total Revenue</h3>
+            <p><span id="farmRevenue"></span></p>
+        </div>
+        <div class="card">
+            <h3>Total Expenses</h3>
+            <p><span id="farmExpenses"></span></p>
+        </div>
+        <div class="card">
+            <h3>Overall Profit</h3>
+            <p style="color:red;"><span id="farmProfit"></span></p>
+          </div>
+        </div>
+      </section>
+<!--crop list details-->
+<section class="crop-list">
+  <h2>Crop List</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Harvest</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody id="cropTableBody">
+      <!-- Crop rows will be dynamically added here -->
+    </tbody>
+  </table>
+</section>
+<!--add crop form-->
+      <section class="add-crop">
+        <h2>Add New Crop</h2>
+        <form action="" method="post" id="addcropForm">
+            <label for="cropName">Crop Name:</label>
+            <input type="text" id="cropName" placeholder="Entera crop name" required>
+            <label for="harvest">Harvest:</label>
+            <input type="text" id="cropHarvest" placeholder="Enter harvest with a comma separating each week in a month"  required>
+            <label for="price">Price:</label>
+            <input type="number" id="cropPrice" placeholder="Enter crop Price" required>
+            
+            <button type="submit">Add Crop</button>
+          </form>
+
+
+      </section>
+    </div>
+    <script src="objects.js"></script>
+</body>
+</html>
