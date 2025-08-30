@@ -62,10 +62,10 @@ function updateCropList(){
       <tr>
         <td>${crop.name}</td>
         <td>${crop.harvest}</td>
-        <td>${crop.price}</td>
+        <td>${crop.pricePerKg}</td>
       </tr>
     `;
-    tableBody.innerHTML += row;
+    cropList.innerHTML += row;
     });
 }
 
