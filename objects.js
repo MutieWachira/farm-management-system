@@ -1,3 +1,4 @@
+// --- Farm object ---
 let farm = {
     name: "Green Valley",
     location: "Nairobi",
@@ -15,93 +16,73 @@ let farm = {
     ]
 };
 
-// --- functions ---
+// --- Functions ---
 function totalHarvest(crops){
-    let total = 0;
-    for(let crop of crops){
-        total += crop.harvest.reduce((sum, value) => sum + value, 0);
-    }
-    return total;
+    return crops.reduce((sum, crop) => sum + crop.harvest.reduce((a, b) => a + b, 0), 0);
 }
 
 function calculateTotalPay(workers){
-    let totalPay = 0;
-    for(let worker of workers){
-        let totalHours = worker.hoursWorked.reduce((sum, value) => sum + value, 0);
-        totalPay += totalHours * worker.hourlyRate;
-    }
-    return totalPay;
+    return workers.reduce((sum, w) => {
+        let hours = w.hoursWorked.reduce((a, b) => a + b, 0);
+        return sum + (hours * w.hourlyRate);
+    }, 0);
 }
 
 function totalExpenses(expenses){
-    let total = 0;
-    for(let expense of expenses){
-        total += expense.seeds + expense.fertilizer + expense.equipment;
-    }
-    return total;
+    return expenses.reduce((sum, e) => sum + e.seeds + e.fertilizer + e.equipment, 0);
 }
 
 function totalRevenue(crops){
-    let revenue = 0;
-    for(let crop of crops){
-        let harvest = crop.harvest.reduce((sum, v) => sum + v, 0);
-        revenue += harvest * crop.pricePerKg;
-    }
-    return revenue;
+    return crops.reduce((sum, crop) => {
+        let harvest = crop.harvest.reduce((a, b) => a + b, 0);
+        return sum + (harvest * crop.pricePerKg);
+    }, 0);
 }
 
 function calculateProfit(farm){
     return totalRevenue(farm.crops) - totalExpenses(farm.expenses) - calculateTotalPay(farm.workers);
 }
 
-// --- DOM updates ---
-document.getElementById("farmName").innerText = farm.name;
-document.getElementById("farmLocation").innerText = farm.location;
-document.getElementById("farmRevenue").innerText = totalRevenue(farm.crops);
-document.getElementById("farmExpenses").innerText = totalExpenses(farm.expenses);
-document.getElementById("farmProfit").innerText = calculateProfit(farm);
-
-//handle crop submission form
-document.getElementById("addcropForm").addEventListener('submit', function(e){
-    e.preventDefault(); //stop page refresh
-
-    let crop_Name =  document.getElementById('cropName').value;
-    let crop_Harvest = document.getElementById('cropHarvest').value.split(',').map(Number);
-    let crop_Price = parseFloat(document.getElementById('cropPrice').value);
-
-    //add new crop to farm
-    farm.crops.push({name: crop_Name, harvest: crop_Harvest, pricePerKg: crop_Price});
-
-    // Refresh dashboard
+// --- DOM Updates ---
+function refreshDashboard(){
+    document.getElementById("farmName").innerText = farm.name;
+    document.getElementById("farmLocation").innerText = farm.location;
     document.getElementById("farmRevenue").innerText = totalRevenue(farm.crops);
+    document.getElementById("farmExpenses").innerText = totalExpenses(farm.expenses);
     document.getElementById("farmProfit").innerText = calculateProfit(farm);
+}
 
-    // Reset form
-    e.target.reset();
-
-})
-// to handle the crop list display
+// --- Crop List Display ---
 function updateCropList(){
     let cropList = document.getElementById('cropList');
-    cropList.innerHTML = ''; // Clear existing list
+    cropList.innerHTML = ''; // Clear existing rows
 
     farm.crops.forEach(crop => {
-        let td = document.createElement('td');
-        td.innerText = `${crop.name} - Harvest: ${crop.harvest.join(', ')} - Price/Kg: ${crop.pricePerKg}`;
-        cropList.appendChild(td);
+        let row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${crop.name}</td>
+            <td>${crop.harvest.join(', ')}</td>
+            <td>${crop.pricePerKg}</td>
+        `;
+        cropList.appendChild(row);
     });
-
 }
-document.getElementById("addcropForm").addEventListener("submit", function(event) {
-  event.preventDefault();
 
-  let name = document.getElementById("cropName").value;
-  let harvest = document.getElementById("cropHarvest").value.split(",").map(Number);
-  let price = Number(document.getElementById("cropPrice").value);
+// --- Handle crop submission form ---
+document.getElementById("addcropForm").addEventListener('submit', function(e){
+    e.preventDefault();
 
-  let crop = { name, harvest, pricePerKg: price };
-  farm.crops.push(crop);
+    let name = document.getElementById('cropName').value;
+    let harvest = document.getElementById('cropHarvest').value.split(',').map(Number);
+    let price = parseFloat(document.getElementById('cropPrice').value);
 
-  updateCropList(); // refresh UI
-  document.getElementById("addCropForm").reset();
+    farm.crops.push({name, harvest, pricePerKg: price});
+
+    refreshDashboard();
+    updateCropList();
+    e.target.reset();
 });
+
+// --- Initial Load ---
+refreshDashboard();
+updateCropList();
