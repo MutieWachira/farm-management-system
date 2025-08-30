@@ -58,13 +58,14 @@ function updateCropList(){
     cropList.innerHTML = ''; // Clear existing rows
 
     farm.crops.forEach(crop => {
-        let row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${crop.name}</td>
-            <td>${crop.harvest.join(', ')}</td>
-            <td>${crop.pricePerKg}</td>
-        `;
-        cropList.appendChild(row);
+        let row = `
+      <tr>
+        <td>${crop.name}</td>
+        <td>${crop.harvest}</td>
+        <td>${crop.price}</td>
+      </tr>
+    `;
+    tableBody.innerHTML += row;
     });
 }
 
