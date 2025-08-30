@@ -135,3 +135,33 @@ body {
   font-weight: bold;
   color: #2c3e50;
 }
+/*crop list section*/
+.crop-list{
+  background: #fff;
+  padding: 25px;
+  margin: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  height: 300px;
+  overflow-y: auto;
+}
+.crop-list h2 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+.crop-list table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.crop-list th, .crop-list td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+.crop-list th {
+  background: #16a085;
+  color: #fff;
+}
+.crop-list tr:hover {
+  background: #f1f1f1;
+}
