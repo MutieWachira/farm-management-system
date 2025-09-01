@@ -164,8 +164,42 @@ body {
 }
 .crop-list td{
   color: #555;
-  
+
 }
 .crop-list tr:hover {
+  background: #f1f1f1;
+}
+/* Worker Table */
+.workers{
+  background: #fff;
+  padding: 25px;
+  margin: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  height: 300px;
+  overflow-y: auto;
+}
+.workers h2 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+.workers table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.workers th, .workers td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+.workers th {
+  background: #16a085;
+  color: #fff;
+}
+.workers td{
+  color: #555;
+
+}
+.workers tr:hover {
   background: #f1f1f1;
 }

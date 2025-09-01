@@ -55,7 +55,7 @@ function refreshDashboard(){
 // --- Crop List Display ---
 function updateCropList(){
     let cropList = document.getElementById('cropTableBody');
-    cropList.innerHTML = ''; // Clear existing rows
+    //cropList.innerHTML = ''; // Clear existing rows
 
     farm.crops.forEach(crop => {
         let row = `
@@ -67,6 +67,8 @@ function updateCropList(){
     `;
     cropList.innerHTML += row;
     });
+    // Update totals every time the crop list changes
+    refreshDashboard();
 }
 
 // --- Handle crop submission form ---
@@ -84,6 +86,26 @@ document.getElementById("addcropForm").addEventListener('submit', function(e){
     e.target.reset();
 });
 
+function updateWorkerList(){
+    let workerList = document.getElementById('workerBodyTable');
+    workerList.innerHTML = ''; // clear old rows  
+    
+    farm.workers.forEach(worker => {
+         let row = `
+        <tr>
+            <td>${worker.name}</td>
+            <td>${worker.role}</td>
+            <td>${worker.hoursWorked.join(',')}</td>
+            <td>${worker.hourlyRate}</td>
+            <td>${totalPay}</td>
+        </tr>
+      `;
+      workerList.innerHTML += row;
+    }); 
+       
+    }
+
 // --- Initial Load ---
 refreshDashboard();
 updateCropList();
+updateWorkerList();
