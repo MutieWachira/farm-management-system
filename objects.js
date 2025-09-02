@@ -102,8 +102,41 @@ document.getElementById('addWorkerForm').addEventListener('submit', function(e){
     e.target.reset();
 
 });
+// --- Handle expense submission form ---
+document.getElementById('addExpenseForm').addEventListener('submit', function(e){
+    e.preventDefault();
+
+    let seeds = document.getElementById('seedExpense').value;
+    let equipment = document.getElementById('equipmentExpense').value;
+    let fertilizer = document.getElementById('fertilizerExpense').value;
+
+    farm.expenses.push({seeds, equipment, fertilizer});
+
+    refreshDashboard();
+    updateExpenseList();
+    e.target.reset();
+
+});
 
 
+
+// --- Worker List Display ---
+function updateExpenseList(){
+    let expenseList = document.getElementById('expenseBodyTable');
+    expenseList.innerHTML = ''; // clear old rows  
+    
+    farm.expenses.forEach(expense => {
+       let row = `
+        <tr>
+            <td>${expense.seeds}</td>
+            <td>${expense.equipment}</td>
+            <td>${expense.fertilizer}</td>
+        </tr>
+      `;
+      expenseList.innerHTML += row;
+    }); 
+       
+}
 
 // --- Worker List Display ---
 function updateWorkerList(){
@@ -132,3 +165,4 @@ function updateWorkerList(){
 refreshDashboard();
 updateCropList();
 updateWorkerList();
+updateExpenseList();

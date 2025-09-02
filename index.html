@@ -119,6 +119,35 @@
           </form>
          </section>
          <!--expenses Section-->
+      <section class="expenses">
+        <table>
+          <thead>
+            <tr>
+              <th>Seeds</th>
+              <th>Equipment</th>
+              <th>Fertilizer</th>
+              <!--<th>Salaries</th>-->
+            </tr>
+          </thead>
+          <tbody id = "expenseBodyTable">
+            <!-- expense rows will be dynamically added here -->
+          </tbody>
+        </table>
+      </section>
+      <!-- Add expense Form -->
+         <section class="add-expense">
+          <h2>Add an Expense</h2>
+          <form id="addExpenseForm">
+            <label for="seedExpense">Seeds:</label>
+            <input type="text" id="seedExpense" placeholder="Enter seed expense" required>
+            <label for="equipmentExpense">Equipment:</label>
+            <input type="text" id="equipmentExpense" placeholder="Enter equipment expense" required>
+            <label for="fertilizerExpense">Fertilizer:</label>
+            <input type="text" id = "fertilizerExpense" placeholder="Enter fertilizer expense" required>
+            
+            <button type="submit">Add Expense</button>
+          </form>
+         </section>
 
     </div>
     <script src="objects.js"></script>
