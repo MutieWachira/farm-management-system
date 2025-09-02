@@ -58,10 +58,11 @@ function updateCropList(){
     //cropList.innerHTML = ''; // Clear existing rows
 
     farm.crops.forEach(crop => {
+        let totalHarvest = crop.harvest.reduce((a, b) => a + b, 0);
         let row = `
       <tr>
         <td>${crop.name}</td>
-        <td>${crop.harvest}</td>
+        <td>${totalHarvest}</td>
         <td>${crop.pricePerKg}</td>
       </tr>
     `;
@@ -98,7 +99,7 @@ function updateWorkerList(){
         <tr>
             <td>${worker.name}</td>
             <td>${worker.role}</td>
-            <td>${worker.hoursWorked.join(',')}</td>
+            <td>${totalHours}</td>
             <td>${worker.hourlyRate}</td>
             <td>${totalPay}</td>
         </tr>
