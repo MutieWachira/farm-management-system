@@ -91,7 +91,10 @@ function updateWorkerList(){
     workerList.innerHTML = ''; // clear old rows  
     
     farm.workers.forEach(worker => {
-         let row = `
+        let totalHours = worker.hoursWorked.reduce((a, b) => a + b, 0);
+        let totalPay = totalHours * worker.hourlyRate;
+        
+        let row = `
         <tr>
             <td>${worker.name}</td>
             <td>${worker.role}</td>
@@ -103,7 +106,7 @@ function updateWorkerList(){
       workerList.innerHTML += row;
     }); 
        
-    }
+}
 
 // --- Initial Load ---
 refreshDashboard();
