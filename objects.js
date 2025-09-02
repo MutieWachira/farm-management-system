@@ -86,7 +86,26 @@ document.getElementById("addcropForm").addEventListener('submit', function(e){
     updateCropList();
     e.target.reset();
 });
+// --- Handle worker submission form ---
+document.getElementById('addWorkerForm').addEventListener('submit', function(e){
+    e.preventDefault();
 
+    let name = document.getElementById('workerName').value;
+    let role = document.getElementById('workerRole').value;
+    let hoursWorked = document.getElementById('hoursWorked').value.split(',').map(Number);
+    let hourlyRate = parseFloat(document.getElementById('hourlyRate').value);
+
+    farm.workers.push({name, role, hoursWorked, hourlyRate});
+
+    refreshDashboard();
+    updateWorkerList();
+    e.target.reset();
+
+});
+
+
+
+// --- Worker List Display ---
 function updateWorkerList(){
     let workerList = document.getElementById('workerBodyTable');
     workerList.innerHTML = ''; // clear old rows  

@@ -77,11 +77,11 @@
         <h2>Add New Crop</h2>
         <form method="post" id="addcropForm">
             <label for="cropName">Crop Name:</label>
-            <input type="text" id="cropName" placeholder="Entera crop name" required>
+            <input type="text" id="cropName" placeholder="Enter a crop" required>
             <label for="harvest">Harvest:</label>
             <input type="text" id="cropHarvest" placeholder="Enter harvest with a comma separating each week in a month"  required>
             <label for="price">Price:</label>
-            <input type="number" id="cropPrice" placeholder="Enter crop Price" required>
+            <input type="text" id="cropPrice" placeholder="Enter crop Price" required>
             
             <button type="submit">Add Crop</button>
           </form>
@@ -102,8 +102,24 @@
             <!-- Worker rows will be dynamically added here -->
           </tbody>
         </table>
-
       </section>
+      <!-- Add Worker Form -->
+         <section class="add-worker">
+          <h2>Add New Worker</h2>
+          <form id="addWorkerForm">
+            <label for="workerName">Name:</label>
+            <input type="text" id="workerName" placeholder="Enter Farm Worker's Name" required>
+            <label for="workerRole">Role:</label>
+            <input type="text" id="workerRole" placeholder="Enter worker's role" required>
+            <label for="hoursWorked">Hours Worked:</label>
+            <input type="text" id = "hoursWorked" placeholder="Enter hours worked with a comma separating each week in a month" required>
+            <label for="hourlyRate">Hourly Rate:</label>
+            <input type="text" id="hourlyRate" placeholder="Enter worker's hourly rate" required>
+            <button type="submit">Add Worker</button>
+          </form>
+         </section>
+         <!--expenses Section-->
+
     </div>
     <script src="objects.js"></script>
 </body>

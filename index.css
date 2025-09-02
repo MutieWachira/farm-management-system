@@ -203,3 +203,87 @@ body {
 .workers tr:hover {
   background: #f1f1f1;
 }
+/*add new crop form*/
+.add-crop{
+  background: #fff;
+  padding: 25px;
+  margin: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+.add-crop h2 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+.add-crop form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.add-crop label {
+  font-weight: bold;
+  color: #555;
+}
+.add-crop input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+.add-crop input:focus {
+  border-color: #16a085;
+  outline: none;
+  box-shadow: 0 0 5px rgba(22, 160, 133, 0.5);
+}
+.add-crop button {
+  padding: 12px;
+  background: #16a085;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+/*add worker form*/
+.add-worker{
+  background: #fff;
+  padding: 25px;
+  margin: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+.add-worker h2 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+.add-worker form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.add-worker label {
+  font-weight: bold;
+  color: #555;
+}
+.add-worker input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+.add-worker input:focus {
+  border-color: #16a085;
+  outline: none;
+  box-shadow: 0 0 5px rgba(22, 160, 133, 0.5);
+}
+.add-worker button {
+  padding: 12px;
+  background: #16a085;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
