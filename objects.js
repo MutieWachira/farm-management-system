@@ -174,6 +174,42 @@ function renderRevenueChart(){
         options: { responsive: true }
     });
 }
+// --- Profit Chart (Line Chart) ---
+function renderProfitChart(){
+    let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Aug", "Oct", "Nov", "Dec"];
+    //calculate profit per month from harvest(for demo we assume each harvest array index = month)
+    let monthlyProfit = farm.crops[0].harvest.map((_, index) => {
+        let revenue = farm.crops.reduce((sum, crop) => sum + (crop.harvest[index] || 0) * crop.pricePerKg, 0);
+        let expense = totalExpenses(farm.expenses) / farm.crops[0].harvest.length; //avg monthly expense
+        let workerPay = calculateTotalPay(farm.workers) / farm.crops[0].harvest.length; //avg monthly worker pay
+        return revenue - expense - workerPay;
+    });
+
+    let ctx = document.getElementById("profitChart").getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: months,
+            datasets: [{
+                label: 'Profit/Loss',
+                data: monthlyProfit,
+                borderColor: 'Green',
+                backgroundColour: 'rgba(0, 255,0, 0.2)',
+                fill: true,
+                tension: 0.3
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins:{
+                title:{
+                    display: true,
+                    text: "Monthly Profit/loss"
+                }
+            }
+        }
+    });
+}
 
 // --- Form Handlers ---
 document.getElementById("addcropForm").addEventListener('submit', function(e){
@@ -241,3 +277,4 @@ updateExpenseList();
 updateRevenueList();
 renderHarvestChart();
 renderRevenueChart();
+renderProfitChart();
