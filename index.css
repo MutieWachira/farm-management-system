@@ -291,6 +291,82 @@ body {
   cursor: pointer;
   transition: background 0.3s;
 }
+/* add revenue form*/
+.add-revenue{
+  background: #fff;
+  padding: 25px;
+  margin: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+.add-revenue h2 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+.add-revenue form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.add-revenue label {
+  font-weight: bold;
+  color: #555;
+}
+.add-revenue input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+.add-revenue input:focus {
+  border-color: #16a085;
+  outline: none;
+  box-shadow: 0 0 5px rgba(22, 160, 133, 0.5);
+}
+.add-revenue button {
+  padding: 12px;
+  background: #16a085;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+/* expense Table */
+.revenue{
+  background: #fff;
+  padding: 25px;
+  margin: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  height: 300px;
+  overflow-y: auto;
+}
+.revenue h2 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+.revenue table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.revenue th, .revenue td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+.revenue th {
+  background: #16a085;
+  color: #fff;
+}
+.revenue td{
+  color: #555;
+
+}
+.revenue tr:hover {
+  background: #f1f1f1;
+}
 /* add expense form*/
 .add-expense{
   background: #fff;

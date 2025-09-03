@@ -13,10 +13,14 @@ let farm = {
     expenses:[
         {seeds: 5000, fertilizer: 3000, equipment: 2000},
         {seeds: 8972, fertilizer: 2765, equipment: 92476},
+    ],
+    revenues: [
+        {source: "Local Market", amount: 15000},
+        {source: "Export", amount: 25000}
     ]
 };
 
-// --- Functions ---
+// --- Utility Functions ---
 function totalHarvest(crops){
     return crops.reduce((sum, crop) => sum + crop.harvest.reduce((a, b) => a + b, 0), 0);
 }
@@ -49,30 +53,129 @@ function refreshDashboard(){
     document.getElementById("farmLocation").innerText = farm.location;
     document.getElementById("farmRevenue").innerText = totalRevenue(farm.crops);
     document.getElementById("farmExpenses").innerText = totalExpenses(farm.expenses);
-    document.getElementById("farmProfit").innerText = calculateProfit(farm);
+
+    let profitEl = document.getElementById("farmProfit");
+    let profit = calculateProfit(farm);
+    profitEl.innerText = profit;
+    profitEl.style.color = profit >= 0 ? "green" : "red";
 }
 
 // --- Crop List Display ---
 function updateCropList(){
     let cropList = document.getElementById('cropTableBody');
-    //cropList.innerHTML = ''; // Clear existing rows
+    cropList.innerHTML = ''; // Clear existing rows
 
     farm.crops.forEach(crop => {
-        let totalHarvest = crop.harvest.reduce((a, b) => a + b, 0);
-        let row = `
-      <tr>
-        <td>${crop.name}</td>
-        <td>${totalHarvest}</td>
-        <td>${crop.pricePerKg}</td>
-      </tr>
-    `;
-    cropList.innerHTML += row;
+            let totalHarvest = crop.harvest.reduce((a, b) => a + b, 0);
+            let row = `
+        <tr>
+            <td>${crop.name}</td>
+            <td>${totalHarvest}</td>
+            <td>${crop.pricePerKg}</td>
+        </tr>
+        `;
+            cropList.innerHTML += row;
     });
-    // Update totals every time the crop list changes
+    refreshDashboard();}
+
+// --- Worker List Display ---
+function updateWorkerList(){
+    let workerList = document.getElementById('workerBodyTable');
+    workerList.innerHTML = '';
+
+    farm.workers.forEach(worker => {
+        let totalHours = worker.hoursWorked.reduce((a, b) => a + b, 0);
+        let totalPay = totalHours * worker.hourlyRate;
+
+        let row = `
+        <tr>
+            <td>${worker.name}</td>
+            <td>${worker.role}</td>
+            <td>${totalHours}</td>
+            <td>${worker.hourlyRate}</td>
+            <td>${totalPay}</td>
+        </tr>
+      `;
+      workerList.innerHTML += row;
+    });
     refreshDashboard();
 }
 
-// --- Handle crop submission form ---
+// --- Expense List Display ---
+function updateExpenseList(){
+    let expenseList = document.getElementById('expenseBodyTable');
+    expenseList.innerHTML = '';
+
+    farm.expenses.forEach(expense => {
+       let row = `
+        <tr>
+            <td>${expense.seeds}</td>
+            <td>${expense.equipment}</td>
+            <td>${expense.fertilizer}</td>
+        </tr>
+      `;
+      expenseList.innerHTML += row;
+    });
+    refreshDashboard();
+}
+
+// --- Revenue List Display ---
+function updateRevenueList(){
+    let revenueList = document.getElementById('revenueBodyTable');
+    revenueList.innerHTML = '';
+
+    farm.revenues.forEach(revenue => {
+       let row = `
+        <tr>
+            <td>${revenue.source}</td>
+            <td>${revenue.amount}</td>
+        </tr>
+      `;
+      revenueList.innerHTML += row;
+    });
+    refreshDashboard();
+}
+
+// --- Chart Functions ---
+let harvestChartInstance, revenueChartInstance;
+
+function renderHarvestChart(){
+    let ctx = document.getElementById("harvestChart").getContext("2d");
+    if (harvestChartInstance) harvestChartInstance.destroy();
+
+    harvestChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: farm.crops.map(c => c.name),
+            datasets: [{
+                label: "Total Harvest (Kg)",
+                data: farm.crops.map(c => c.harvest.reduce((a, b) => a + b, 0)),
+                backgroundColor: "rgba(46, 204, 113, 0.6)"
+            }]
+        },
+        options: { responsive: true, plugins: { legend: { display: false } } }
+    });
+}
+
+function renderRevenueChart(){
+    let ctx = document.getElementById("revenueChart").getContext("2d");
+    if (revenueChartInstance) revenueChartInstance.destroy();
+
+    revenueChartInstance = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: farm.crops.map(c => c.name),
+            datasets: [{
+                label: "Revenue Distribution",
+                data: farm.crops.map(c => c.harvest.reduce((a, b) => a + b, 0) * c.pricePerKg),
+                backgroundColor: ["#1abc9c", "#3498db", "#9b59b6", "#f1c40f"]
+            }]
+        },
+        options: { responsive: true }
+    });
+}
+
+// --- Form Handlers ---
 document.getElementById("addcropForm").addEventListener('submit', function(e){
     e.preventDefault();
 
@@ -84,9 +187,11 @@ document.getElementById("addcropForm").addEventListener('submit', function(e){
 
     refreshDashboard();
     updateCropList();
+    renderHarvestChart();
+    renderRevenueChart();
     e.target.reset();
 });
-// --- Handle worker submission form ---
+
 document.getElementById('addWorkerForm').addEventListener('submit', function(e){
     e.preventDefault();
 
@@ -100,69 +205,39 @@ document.getElementById('addWorkerForm').addEventListener('submit', function(e){
     refreshDashboard();
     updateWorkerList();
     e.target.reset();
-
 });
-// --- Handle expense submission form ---
+
+document.getElementById('addRevenueForm').addEventListener('submit', function(e){
+    e.preventDefault();
+
+    let source = document.getElementById('sourceRevenue').value;
+    let amount = parseFloat(document.getElementById('revenueAmount').value);
+
+    farm.revenues.push({source, amount});
+
+    updateRevenueList();
+    e.target.reset();
+});
+
 document.getElementById('addExpenseForm').addEventListener('submit', function(e){
     e.preventDefault();
 
-    let seeds = document.getElementById('seedExpense').value;
-    let equipment = document.getElementById('equipmentExpense').value;
-    let fertilizer = document.getElementById('fertilizerExpense').value;
+    let seeds = parseFloat(document.getElementById('seedExpense').value);
+    let equipment = parseFloat(document.getElementById('equipmentExpense').value);
+    let fertilizer = parseFloat(document.getElementById('fertilizerExpense').value);
 
     farm.expenses.push({seeds, equipment, fertilizer});
 
     refreshDashboard();
     updateExpenseList();
     e.target.reset();
-
 });
-
-
-
-// --- Worker List Display ---
-function updateExpenseList(){
-    let expenseList = document.getElementById('expenseBodyTable');
-    expenseList.innerHTML = ''; // clear old rows  
-    
-    farm.expenses.forEach(expense => {
-       let row = `
-        <tr>
-            <td>${expense.seeds}</td>
-            <td>${expense.equipment}</td>
-            <td>${expense.fertilizer}</td>
-        </tr>
-      `;
-      expenseList.innerHTML += row;
-    }); 
-       
-}
-
-// --- Worker List Display ---
-function updateWorkerList(){
-    let workerList = document.getElementById('workerBodyTable');
-    workerList.innerHTML = ''; // clear old rows  
-    
-    farm.workers.forEach(worker => {
-        let totalHours = worker.hoursWorked.reduce((a, b) => a + b, 0);
-        let totalPay = totalHours * worker.hourlyRate;
-        
-        let row = `
-        <tr>
-            <td>${worker.name}</td>
-            <td>${worker.role}</td>
-            <td>${totalHours}</td>
-            <td>${worker.hourlyRate}</td>
-            <td>${totalPay}</td>
-        </tr>
-      `;
-      workerList.innerHTML += row;
-    }); 
-       
-}
 
 // --- Initial Load ---
 refreshDashboard();
 updateCropList();
 updateWorkerList();
 updateExpenseList();
+updateRevenueList();
+renderHarvestChart();
+renderRevenueChart();
