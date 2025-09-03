@@ -138,7 +138,7 @@ function updateRevenueList(){
 
 // --- Chart Functions ---
 let harvestChartInstance, revenueChartInstance;
-
+//harvest chat display
 function renderHarvestChart(){
     let ctx = document.getElementById("harvestChart").getContext("2d");
     if (harvestChartInstance) harvestChartInstance.destroy();
@@ -156,7 +156,7 @@ function renderHarvestChart(){
         options: { responsive: true, plugins: { legend: { display: false } } }
     });
 }
-
+//revenue chart display
 function renderRevenueChart(){
     let ctx = document.getElementById("revenueChart").getContext("2d");
     if (revenueChartInstance) revenueChartInstance.destroy();
@@ -212,6 +212,7 @@ function renderProfitChart(){
 }
 
 // --- Form Handlers ---
+//add crop from handler
 document.getElementById("addcropForm").addEventListener('submit', function(e){
     e.preventDefault();
 
@@ -228,6 +229,7 @@ document.getElementById("addcropForm").addEventListener('submit', function(e){
     e.target.reset();
 });
 
+//add worker form handler
 document.getElementById('addWorkerForm').addEventListener('submit', function(e){
     e.preventDefault();
 
@@ -243,6 +245,7 @@ document.getElementById('addWorkerForm').addEventListener('submit', function(e){
     e.target.reset();
 });
 
+//add revenue form handler
 document.getElementById('addRevenueForm').addEventListener('submit', function(e){
     e.preventDefault();
 
@@ -255,6 +258,7 @@ document.getElementById('addRevenueForm').addEventListener('submit', function(e)
     e.target.reset();
 });
 
+//add expense form handler
 document.getElementById('addExpenseForm').addEventListener('submit', function(e){
     e.preventDefault();
 
