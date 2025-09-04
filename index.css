@@ -141,6 +141,20 @@ body {
   font-weight: bold;
   color: #2c3e50;
 }
+.grid-Class{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 20px;
+}
+.grid-Class2{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+
 /*crop list section*/
 .crop-list{
   background: #fff;
@@ -150,7 +164,7 @@ body {
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
   height: 300px;
   overflow-y: auto;
-  width: 50%;
+  width: 550px;
 }
 .crop-list h2 {
   color: #2c3e50;
@@ -176,14 +190,43 @@ body {
 .crop-list tr:hover {
   background: #f1f1f1;
 }
+/*--Harvest chart--*/
+.charts{
+  background: #fff;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  overflow: auto;
+}
+.chartsRev{
+  background: #fff;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  overflow: auto;
+  height: 600px;
+  width: 480px;
+}
+.chartsProf{
+  background: #fff;
+  padding: 20px;
+  margin-top: -95%;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  overflow: auto;
+  height: 386px;
+  width: 430px;
+}
 
 /*add new crop form*/
 .add-crop{
   background: #fff;
   padding: 25px;
   margin-top: 20px;
-  width: 50%;
-  height: 400px;
+  width: 420px;
+  height: 150px;
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
@@ -192,8 +235,8 @@ body {
   margin-bottom: 15px;
 }
 .add-crop form {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: .5fr .5fr;
   gap: 15px;
 }
 .add-crop label {
@@ -201,10 +244,12 @@ body {
   color: #555;
 }
 .add-crop input {
-  padding: 10px;
-  border: 1px solid #ccc;
+  padding: 5px;
+  border: 2px solid #ccc;
   border-radius: 5px;
   font-size: 16px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  
 }
 .add-crop input:focus {
   border-color: #16a085;
@@ -212,7 +257,7 @@ body {
   box-shadow: 0 0 5px rgba(22, 160, 133, 0.5);
 }
 .add-crop button {
-  padding: 12px;
+  padding: 5px;
   background: #16a085;
   color: #fff;
   border: none;
@@ -451,11 +496,4 @@ body {
 .expenses tr:hover {
   background: #f1f1f1;
 }
-.harvestChart {
-  background: #fff;
-  width: 50%;
-  padding: 20px;
-  margin-top: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
+

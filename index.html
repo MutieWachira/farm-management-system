@@ -35,7 +35,7 @@
         </div>
       </div>
 
-<!-- Farm Summary -->
+      <!-- Farm Summary -->
       <section class="summary">
         <h2>Farm Summary</h2>
         <p><span id="farmName"></span></p>
@@ -57,36 +57,64 @@
             <p style="color:red;"><span id="farmProfit"></span></p>
           </div>
         </div>
-<!--crop list details-->
-<section class="crop-list">
-  <h2>Crop List</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Harvest</th>
-        <th>Price</th>
-      </tr>
-    </thead>
-    <tbody id="cropTableBody">
-      <!-- Crop rows will be dynamically added here -->
-    </tbody>
-  </table>
-</section>
-<!--add crop form-->
+
+      <!--grid section display-->
+      <section class="grid-Class">
+        <!--crop list details-->
+          <section class="crop-list">
+            <h2>Crop List</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Harvest</th>
+                  <th>Price</th>
+                </tr>
+              </thead>
+              <tbody id="cropTableBody">
+                <!-- Crop rows will be dynamically added here -->
+              </tbody>
+            </table>
+          </section>
+          <!--chart Section-->
+          <section class="charts">
+            <h2>Harvest Chart</h2>
+            <div>
+              <canvas id="harvestChart" height="723" width="1200" style="display: block; box-sizing: border-box; height: 502px; width: 200px;"></canvas>
+            </div>
+            </section>
+      </section>
+      <section class="grid-Class2">
+      <!--add crop form-->
       <section class="add-crop">
         <h2>Add New Crop</h2>
         <form method="post" id="addcropForm">
-            <label for="cropName">Crop Name:</label>
             <input type="text" id="cropName" placeholder="Enter a crop" required>
-            <label for="harvest">Harvest:</label>
             <input type="text" id="cropHarvest" placeholder="Enter harvest with a comma separating each week in a month"  required>
-            <label for="price">Price:</label>
             <input type="text" id="cropPrice" placeholder="Enter crop Price" required>
-            
             <button type="submit">Add Crop</button>
           </form>
       </section>
+
+      <section class="chartsRev">
+            <h2>Revenue Chart</h2>
+            <div>
+              <canvas id="revenueChart" height="723" width="1250" style="display: flex; box-sizing: border-box; height: 502px; width: 200px;"></canvas>
+            </div>
+      </section>
+
+      <section class="chartsProf">
+            <h2>Profit Chart</h2>
+            <div>
+              <canvas id="profitChart" height="723" width="1250" style="display: flex; box-sizing: border-box; height: 502px; width: 200px;"></canvas>
+            </div>
+      </section>
+
+      </section>
+
+      
+
+
       <!-- Workers Section -->
       <section class="workers">
         <table>
@@ -177,25 +205,17 @@
          </section>
 
          <!-- Charts Section -->
-<section class="charts">
-  <h2>Farm Analytics</h2>
-  
-  <div>
-    <canvas id="harvestChart"></canvas>
-  </div>
-  
-  <div>
-    <canvas id="revenueChart"></canvas>
-  </div>
-  <div>
-    <canvas id="profitChart"></canvas>
-  </div>
-</section>
+          <section class="charts">
+            <h2>Farm Analytics</h2>
+            <div>
+              <canvas id="profitChart"></canvas>
+            </div>
+          </section>
 
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="objects.js"></script>
-    
-
+              <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+              <script src="objects.js"></script>
+              <script src="index.js"></script>    
+  </div>
 </body>
 </html>
