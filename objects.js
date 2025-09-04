@@ -51,12 +51,12 @@ function calculateProfit(farm){
 function refreshDashboard(){
     document.getElementById("farmName").innerText = farm.name;
     document.getElementById("farmLocation").innerText = farm.location;
-    document.getElementById("farmRevenue").innerText = totalRevenue(farm.crops);
-    document.getElementById("farmExpenses").innerText = totalExpenses(farm.expenses);
+    document.getElementById("farmRevenue").innerText = formatCurrency(totalRevenue(farm.crops));
+    document.getElementById("farmExpenses").innerText = formatCurrency(totalExpenses(farm.expenses));
 
     let profitEl = document.getElementById("farmProfit");
     let profit = calculateProfit(farm);
-    profitEl.innerText = profit;
+    profitEl.innerText = formatCurrency(profit);
     profitEl.style.color = profit >= 0 ? "green" : "red";
 }
 
@@ -71,7 +71,7 @@ function updateCropList(){
         <tr>
             <td>${crop.name}</td>
             <td>${totalHarvest}</td>
-            <td>${crop.pricePerKg}</td>
+            <td>${formatCurrency(crop.pricePerKg)}</td>
         </tr>
         `;
             cropList.innerHTML += row;
@@ -92,8 +92,8 @@ function updateWorkerList(){
             <td>${worker.name}</td>
             <td>${worker.role}</td>
             <td>${totalHours}</td>
-            <td>${worker.hourlyRate}</td>
-            <td>${totalPay}</td>
+            <td>${formatCurrency(worker.hourlyRate)}</td>
+            <td>${formatCurrency(totalPay)}</td>
         </tr>
       `;
       workerList.innerHTML += row;
@@ -109,9 +109,9 @@ function updateExpenseList(){
     farm.expenses.forEach(expense => {
        let row = `
         <tr>
-            <td>${expense.seeds}</td>
-            <td>${expense.equipment}</td>
-            <td>${expense.fertilizer}</td>
+            <td>${formatCurrency(expense.seeds)}</td>
+            <td>${formatCurrency(expense.equipment)}</td>
+            <td>${formatCurrency(expense.fertilizer)}</td>
         </tr>
       `;
       expenseList.innerHTML += row;
@@ -128,7 +128,7 @@ function updateRevenueList(){
        let row = `
         <tr>
             <td>${revenue.source}</td>
-            <td>${revenue.amount}</td>
+            <td>${formatCurrency(revenue.amount)}</td>
         </tr>
       `;
       revenueList.innerHTML += row;
@@ -226,6 +226,7 @@ document.getElementById("addcropForm").addEventListener('submit', function(e){
     updateCropList();
     renderHarvestChart();
     renderRevenueChart();
+    saveFarmData()
     e.target.reset();
 });
 
@@ -242,6 +243,7 @@ document.getElementById('addWorkerForm').addEventListener('submit', function(e){
 
     refreshDashboard();
     updateWorkerList();
+    saveFarmData()
     e.target.reset();
 });
 
@@ -255,6 +257,7 @@ document.getElementById('addRevenueForm').addEventListener('submit', function(e)
     farm.revenues.push({source, amount});
 
     updateRevenueList();
+    saveFarmData()
     e.target.reset();
 });
 
@@ -270,10 +273,41 @@ document.getElementById('addExpenseForm').addEventListener('submit', function(e)
 
     refreshDashboard();
     updateExpenseList();
+    saveFarmData()
     e.target.reset();
 });
 
+//save farm data to local Storage
+function saveFarmData(){
+    localStorage.setItem("farmData", JSON.stringify(farm));
+}
+
+//load farm data from localStorage
+function loadFarmData(){
+    const storedData = localStorage.getItem("farmData");
+    if (storedData){
+        farm = JSON.parse(storedData);
+    }
+}
+
+//Format numbers as Kenyan Shillings (KES)
+function formatCurrency(amount){
+    return new Intl.NumberFormat('en-KE', { style: 'currency', currency: 'KES' }).format(amount);
+}
+//
+function updateSummaryCards() {
+    let savedFarm = JSON.parse(localStorage.getItem("farm")) || farm;
+
+    let revenue = totalRevenue(savedFarm.crops);
+    let expenses = totalExpenses(savedFarm.expenses);
+    let profit = revenue - expenses - calculateTotalPay(savedFarm.workers);
+
+    document.getElementById("totalRevenue").innerText = formatCurrency(revenue);
+    document.getElementById("totalExpenses").innerText = formatCurrency(expenses);
+    document.getElementById("totalProfit").innerText = formatCurrency(profit);
+}
 // --- Initial Load ---
+loadFarmData();
 refreshDashboard();
 updateCropList();
 updateWorkerList();
