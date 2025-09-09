@@ -49,8 +49,8 @@ function calculateProfit(farm){
 
 // --- DOM Updates ---
 function refreshDashboard(){
-    document.getElementById("farmName").innerText = farm.name;
-    document.getElementById("farmLocation").innerText = farm.location;
+    //document.getElementById("farmName").innerText = farm.name;
+    //document.getElementById("farmLocation").innerText = farm.location;
     document.getElementById("farmRevenue").innerText = formatCurrency(totalRevenue(farm.crops));
     document.getElementById("farmExpenses").innerText = formatCurrency(totalExpenses(farm.expenses));
 
@@ -210,72 +210,97 @@ function renderProfitChart(){
         }
     });
 }
+//worker chart display
+function renderWorkerHoursChart() {
+  let ctx = document.getElementById("workerHoursChart").getContext("2d");
+
+  let workerNames = farm.workers.map(w => w.name);
+  let totalHours = farm.workers.map(w => w.hoursWorked.reduce((a, b) => a + b, 0));
+
+  new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: workerNames,
+      datasets: [{
+        label: "Total Hours Worked",
+        data: totalHours,
+        backgroundColor: "rgba(54, 162, 235, 0.6)"
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: { beginAtZero: true }
+      }
+    }
+  });
+}
 
 // --- Form Handlers ---
 //add crop from handler
-document.getElementById("addcropForm").addEventListener('submit', function(e){
-    e.preventDefault();
+// document.getElementById("addcropForm").addEventListener('submit', function(e){
+//     e.preventDefault();
 
-    let name = document.getElementById('cropName').value;
-    let harvest = document.getElementById('cropHarvest').value.split(',').map(Number);
-    let price = parseFloat(document.getElementById('cropPrice').value);
+//     let name = document.getElementById('cropName').value;
+//     let harvest = document.getElementById('cropHarvest').value.split(',').map(Number);
+//     let price = parseFloat(document.getElementById('cropPrice').value);
 
-    farm.crops.push({name, harvest, pricePerKg: price});
+//     farm.crops.push({name, harvest, pricePerKg: price});
 
-    refreshDashboard();
-    updateCropList();
-    renderHarvestChart();
-    renderRevenueChart();
-    saveFarmData()
-    e.target.reset();
-});
+//     refreshDashboard();
+//     updateCropList();
+//     renderHarvestChart();
+//     renderRevenueChart();
+//     saveFarmData()
+//     e.target.reset();
+// });
 
-//add worker form handler
-document.getElementById('addWorkerForm').addEventListener('submit', function(e){
-    e.preventDefault();
+// //add worker form handler
+// document.getElementById('addWorkerForm').addEventListener('submit', function(e){
+//     e.preventDefault();
 
-    let name = document.getElementById('workerName').value;
-    let role = document.getElementById('workerRole').value;
-    let hoursWorked = document.getElementById('hoursWorked').value.split(',').map(Number);
-    let hourlyRate = parseFloat(document.getElementById('hourlyRate').value);
+//     let name = document.getElementById('workerName').value;
+//     let role = document.getElementById('workerRole').value;
+//     let hoursWorked = document.getElementById('hoursWorked').value.split(',').map(Number);
+//     let hourlyRate = parseFloat(document.getElementById('hourlyRate').value);
 
-    farm.workers.push({name, role, hoursWorked, hourlyRate});
+//     farm.workers.push({name, role, hoursWorked, hourlyRate});
 
-    refreshDashboard();
-    updateWorkerList();
-    saveFarmData()
-    e.target.reset();
-});
+//     refreshDashboard();
+//     updateWorkerList();
+//     saveFarmData()
+//     e.target.reset();
+// });
 
-//add revenue form handler
-document.getElementById('addRevenueForm').addEventListener('submit', function(e){
-    e.preventDefault();
+// //add revenue form handler
+// document.getElementById('addRevenueForm').addEventListener('submit', function(e){
+//     e.preventDefault();
 
-    let source = document.getElementById('sourceRevenue').value;
-    let amount = parseFloat(document.getElementById('revenueAmount').value);
+//     let source = document.getElementById('sourceRevenue').value;
+//     let amount = parseFloat(document.getElementById('revenueAmount').value);
 
-    farm.revenues.push({source, amount});
+//     farm.revenues.push({source, amount});
 
-    updateRevenueList();
-    saveFarmData()
-    e.target.reset();
-});
+//     updateRevenueList();
+//     saveFarmData()
+//     e.target.reset();
+// });
 
-//add expense form handler
-document.getElementById('addExpenseForm').addEventListener('submit', function(e){
-    e.preventDefault();
+// //add expense form handler
+// document.getElementById('addExpenseForm').addEventListener('submit', function(e){
+//     e.preventDefault();
 
-    let seeds = parseFloat(document.getElementById('seedExpense').value);
-    let equipment = parseFloat(document.getElementById('equipmentExpense').value);
-    let fertilizer = parseFloat(document.getElementById('fertilizerExpense').value);
+//     let seeds = parseFloat(document.getElementById('seedExpense').value);
+//     let equipment = parseFloat(document.getElementById('equipmentExpense').value);
+//     let fertilizer = parseFloat(document.getElementById('fertilizerExpense').value);
 
-    farm.expenses.push({seeds, equipment, fertilizer});
+//     farm.expenses.push({seeds, equipment, fertilizer});
 
-    refreshDashboard();
-    updateExpenseList();
-    saveFarmData()
-    e.target.reset();
-});
+//     refreshDashboard();
+//     updateExpenseList();
+//     saveFarmData()
+//     e.target.reset();
+// });
 
 //save farm data to local Storage
 function saveFarmData(){
@@ -316,3 +341,4 @@ updateRevenueList();
 renderHarvestChart();
 renderRevenueChart();
 renderProfitChart();
+renderWorkerHoursChart();

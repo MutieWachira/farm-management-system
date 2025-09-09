@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Farm Management System</title>
-  <link rel="stylesheet" href="index.css">
+  <title>Farmify</title>
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=settings" />
 </head>
 <body>
   <div class="container">
@@ -14,18 +15,16 @@
       <ul>
         <li><a href="index.html">Dashboard</a></li>
         <li><a href="#">Farms</a></li>
-        <li><a href="#">Crops</a></li>
-        <li><a href="#">Workers</a></li>
+        <li><a href="crops.html">Crops</a></li>
+        <li><a href="workers.html">Workers</a></li>
         <li><a href="#">Equipment</a></li>
         <li><a href="#">Reports</a></li>
         <li><a href="#">Settings</a></li>
         <li><a href="#">Logout</a></li>
       </ul>
     </div>
-
     <!-- Main Content -->
-    <div class="main-content">
-      
+     <div class="main">
       <!-- Top Navigation Bar -->
       <div class="topbar">
         <h2>Dashboard</h2>
@@ -34,31 +33,41 @@
           <span class="profile">👤 Admin</span>
         </div>
       </div>
-
-      <!-- Farm Summary -->
-      <section class="summary">
-        <h2>Farm Summary</h2>
-        <p><span id="farmName"></span></p>
-        <p><span id="farmLocation"></span></p>
-      </section>
-
-      <!-- Farm Details Cards -->
+      <!-- Dashboard Content -->
+       <!-- Farm Details Cards -->
         <div class="cards">
           <div class="card">
+            <i class="fas fa-dollar-sign"></i>
             <h3>Total Revenue</h3>
             <p><span id="farmRevenue"></span></p>
         </div>
         <div class="card">
+          <i class="fas fa-wallet"></i>
             <h3>Total Expenses</h3>
             <p><span id="farmExpenses"></span></p>
         </div>
         <div class="card">
+          <i class="fas fa-chart-line"></i>
             <h3>Overall Profit</h3>
             <p><span id="farmProfit"></span></p>
           </div>
+          <div class="card">
+            <i class="fas fa-shopping-cart"></i>
+            <h3>Total Sales</h3>
+            <p><span id="#"></span></p>
+          </div>
+          <div class="card">
+            <i class="fas fa-user"></i>
+            <h3>Workers</h3>
+            <p><span id="#"></span></p>
+          </div>
+          <div class="card">
+            <i class="fas fa-box"></i>
+            <h3>Orders</h3>
+            <p><span id="#"></span></p>
+          </div>
         </div>
-
-      <!--grid section display-->
+        <!--grid section display-->
       <section class="grid-Class">
         <!--crop list details-->
           <section class="crop-list">
@@ -80,142 +89,23 @@
           <section class="charts">
             <h2>Harvest Chart</h2>
             <div>
-              <canvas id="harvestChart" height="723" width="1200" style="display: block; box-sizing: border-box; height: 502px; width: 200px;"></canvas>
+              <canvas id="profitChart"></canvas>
             </div>
             </section>
       </section>
-      <section class="grid-Class2">
-      <!--add crop form-->
-      <section class="add-crop">
-        <h2>Add New Crop</h2>
-        <form method="post" id="addcropForm">
-            <input type="text" id="cropName" placeholder="Enter a crop" required>
-            <input type="text" id="cropHarvest" placeholder="Enter harvest with a comma separating each week in a month"  required>
-            <input type="text" id="cropPrice" placeholder="Enter crop Price" required>
-            <button type="submit">Add Crop</button>
-          </form>
-      </section>
-
-      <section class="chartsRev">
-            <h2>Revenue Chart</h2>
-            <div>
-              <canvas id="revenueChart" height="723" width="1250" style="display: flex; box-sizing: border-box; height: 502px; width: 200px;"></canvas>
-            </div>
-      </section>
-
-      <section class="chartsProf">
+      <div class="grid-class2">
+        <!--chart Section-->
+          <section class="charts">
             <h2>Profit Chart</h2>
             <div>
-              <canvas id="profitChart" height="723" width="1250" style="display: flex; box-sizing: border-box; height: 502px; width: 200px;"></canvas>
-            </div>
-      </section>
-
-      </section>
-
-      
-
-
-      <!-- Workers Section -->
-      <section class="workers">
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Role</th>
-              <th>Hours Worked</th>
-              <th>Hourly Rate</th>
-              <th>Total Pay</th>
-            </tr>
-          </thead>
-          <tbody id = "workerBodyTable">
-            <!-- Worker rows will be dynamically added here -->
-          </tbody>
-        </table>
-      </section>
-      <!-- Add Worker Form -->
-         <section class="add-worker">
-          <h2>Add New Worker</h2>
-          <form id="addWorkerForm">
-            <label for="workerName">Name:</label>
-            <input type="text" id="workerName" placeholder="Enter Farm Worker's Name" required>
-            <label for="workerRole">Role:</label>
-            <input type="text" id="workerRole" placeholder="Enter worker's role" required>
-            <label for="hoursWorked">Hours Worked:</label>
-            <input type="text" id = "hoursWorked" placeholder="Enter hours worked with a comma separating each week in a month" required>
-            <label for="hourlyRate">Hourly Rate:</label>
-            <input type="text" id="hourlyRate" placeholder="Enter worker's hourly rate" required>
-            <button type="submit">Add Worker</button>
-          </form>
-         </section>
-         <!--expenses Section-->
-      <section class="expenses">
-        <table>
-          <thead>
-            <tr>
-              <th>Seeds</th>
-              <th>Equipment</th>
-              <th>Fertilizer</th>
-              <!--<th>Salaries</th>-->
-            </tr>
-          </thead>
-          <tbody id = "expenseBodyTable">
-            <!-- expense rows will be dynamically added here -->
-          </tbody>
-        </table>
-      </section>
-      <!-- Add expense Form -->
-         <section class="add-expense">
-          <h2>Add an Expense</h2>
-          <form id="addExpenseForm">
-            <label for="seedExpense">Seeds:</label>
-            <input type="text" id="seedExpense" placeholder="Enter seed expense" required>
-            <label for="equipmentExpense">Equipment:</label>
-            <input type="text" id="equipmentExpense" placeholder="Enter equipment expense" required>
-            <label for="fertilizerExpense">Fertilizer:</label>
-            <input type="text" id = "fertilizerExpense" placeholder="Enter fertilizer expense" required>
-            
-            <button type="submit">Add Expense</button>
-          </form>
-         </section>
-         <!--revenue Section-->
-      <section class="revenue">
-        <table>
-          <thead>
-            <tr>
-              <th>Source</th>
-              <th>Amount</th>
-            </tr>
-          </thead>
-          <tbody id = "revenueBodyTable">
-            <!-- revenue rows will be dynamically added here -->
-          </tbody>
-        </table>
-      </section>
-      <!-- Add revenue Form -->
-         <section class="add-revenue">
-          <h2>Add a Revenue</h2>
-          <form id="addRevenueForm">
-            <label for="sourceRevenue">Source:</label>
-            <input type="text" id="sourceRevenue" placeholder="Enter revenue source" required>
-            <label for="revenueAmount">Amount:</label>
-            <input type="text" id="revenueAmount" placeholder="Enter revenue amount" required>
-
-            <button type="submit">Add Revenue</button>
-          </form>
-         </section>
-
-         <!-- Charts Section -->
-          <section class="charts">
-            <h2>Farm Analytics</h2>
-            <div>
-              <canvas id="profitChart"></canvas>
+              <canvas id="profitChart" height="729" width="1200" style="display: block; box-sizing: border-box; height: 800px; width: 400px;"></canvas>
             </div>
           </section>
 
-    </div>
-              <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-              <script src="objects.js"></script>
-              <script src="index.js"></script>    
-  </div>
+     </div>
+    <!--end of container-->
+  </div> 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="objects.js"></script>  
 </body>
 </html>
