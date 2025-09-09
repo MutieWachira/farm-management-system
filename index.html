@@ -34,73 +34,26 @@
         </div>
       </div>
       <!-- Dashboard Content -->
-       <!-- Farm Details Cards -->
-        <div class="cards">
-          <div class="card">
-            <i class="fas fa-dollar-sign"></i>
-            <h3>Total Revenue</h3>
-            <p><span id="farmRevenue"></span></p>
-        </div>
-        <div class="card">
-          <i class="fas fa-wallet"></i>
-            <h3>Total Expenses</h3>
-            <p><span id="farmExpenses"></span></p>
-        </div>
-        <div class="card">
-          <i class="fas fa-chart-line"></i>
-            <h3>Overall Profit</h3>
-            <p><span id="farmProfit"></span></p>
-          </div>
-          <div class="card">
-            <i class="fas fa-shopping-cart"></i>
-            <h3>Total Sales</h3>
-            <p><span id="#"></span></p>
-          </div>
-          <div class="card">
-            <i class="fas fa-user"></i>
-            <h3>Workers</h3>
-            <p><span id="#"></span></p>
-          </div>
-          <div class="card">
-            <i class="fas fa-box"></i>
-            <h3>Orders</h3>
-            <p><span id="#"></span></p>
-          </div>
-        </div>
-        <!--grid section display-->
-      <section class="grid-Class">
-        <!--crop list details-->
-          <section class="crop-list">
-            <h2>Crop List</h2>
-            <table>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Harvest</th>
-                  <th>Price</th>
-                </tr>
-              </thead>
-              <tbody id="cropTableBody">
-                <!-- Crop rows will be dynamically added here -->
-              </tbody>
-            </table>
-          </section>
-          <!--chart Section-->
-          <section class="charts">
-            <h2>Harvest Chart</h2>
-            <div>
-              <canvas id="profitChart"></canvas>
+       <div class="weather-container">
+          <h2 class="loc">🌍 Detecting location...</h2>
+          <p class="temp">--°C</p>
+          <p>Loading...</p>
+
+          <div class="details">
+            <div class="detail-box">
+              <strong>--%</strong>
+              <span>Humidity</span>
             </div>
-            </section>
-      </section>
-      <div class="grid-class2">
-        <!--chart Section-->
-          <section class="charts">
-            <h2>Profit Chart</h2>
-            <div>
-              <canvas id="profitChart" height="729" width="1200" style="display: block; box-sizing: border-box; height: 800px; width: 400px;"></canvas>
+            <div class="detail-box">
+              <strong>-- km/h</strong>
+              <span>Wind</span>
             </div>
-          </section>
+            <div class="detail-box">
+              <strong>-- hPa</strong>
+              <span>Pressure</span>
+            </div>
+    </div>
+  </div>
 
      </div>
     <!--end of container-->
