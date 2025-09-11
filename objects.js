@@ -235,46 +235,6 @@ function renderWorkerHoursChart() {
     }
   });
 }
-
-const apiKey = "f00c38e0279b7bc85480c3fe775d518c"; // 🔑 Replace with your OpenWeatherMap API key
-
-    function getWeather(lat, lon) {
-      const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`;
-
-      fetch(url)
-        .then(response => response.json())
-        .then(data => {
-          document.querySelector(".loc").textContent = `🌤️ ${data.name}`;
-          document.querySelector(".temp").textContent = `${Math.round(data.main.temp)}°C`;
-          document.querySelector("p").textContent = data.weather[0].description;
-
-          document.querySelectorAll(".detail-box")[0].querySelector("strong").textContent = `${data.main.humidity}%`;
-          document.querySelectorAll(".detail-box")[1].querySelector("strong").textContent = `${data.wind.speed} km/h`;
-          document.querySelectorAll(".detail-box")[2].querySelector("strong").textContent = `${data.main.pressure} hPa`;
-        })
-        .catch(err => {
-          document.querySelector("h2").textContent = "⚠️ Failed to fetch weather";
-        });
-    }
-
-    function getLocation() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          position => {
-            const lat = position.coords.latitude;
-            const lon = position.coords.longitude;
-            getWeather(lat, lon);
-          },
-          error => {
-            document.querySelector("h2").textContent = "⚠️ Location blocked";
-          }
-        );
-      } else {
-        document.querySelector("h2").textContent = "❌ Geolocation not supported";
-      }
-    }
-
-    getLocation();
 // --- Form Handlers ---
 //add crop from handler
 // document.getElementById("addcropForm").addEventListener('submit', function(e){
