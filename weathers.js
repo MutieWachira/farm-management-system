@@ -57,7 +57,7 @@ async function getWeather(lat, lon) {
   descEl.textContent = data.weather[0].description;
   weatherIcon.src = `images/assets/weather/${getWeatherIcon(id)}`;
   humidityEl.textContent = `${data.main.humidity}%`;
-  const windSpeedKmh = (data.wind.speed * 3.6).toFixed(1); // Convert m/s → km/h
+  const windSpeedKmh = (data.wind.speed * 3.6).toFixed(1);
   windEl.textContent = `${windSpeedKmh} km/h`;
   currentDateTxt.textContent = getCurrentDate();
 
@@ -74,7 +74,6 @@ async function updateForecastInfo(lat, lon) {
 
   forecastEl.innerHTML = "";
 
-  // Pick every 8th item ≈ one forecast per day (24h interval)
   for (let i = 8; i < forecastData.list.length; i += 8) {
     let day = forecastData.list[i];
     let id = day.weather[0].id;
@@ -83,9 +82,7 @@ async function updateForecastInfo(lat, lon) {
     let card = `
       <div class="forecast-item">
         <h5 class="forecast-item-date regular-txt">
-          ${new Date(day.dt_txt).toLocaleDateString("en-US", {
-            weekday: "short",
-          })}
+          ${new Date(day.dt_txt).toLocaleDateString("en-US", { weekday: "short" })}
         </h5>
         <img src="images/assets/weather/${icon}" alt="" class="forecast-item-img">
         <h5 class="forecast-item-temp">${Math.round(day.main.temp)}°C</h5>
@@ -102,12 +99,12 @@ function setBackground(data) {
   const isDaytime = now >= sunrise && now < sunset;
 
   let condition = data.weather[0].main.toLowerCase();
-  const windSpeed = (data.wind.speed * 3.6).toFixed(1); // km/h
+  const windSpeed = (data.wind.speed * 3.6).toFixed(1);
 
   const weatherSection = document.querySelector(".weather-section");
   const effectsLayer = document.querySelector(".effects");
   weatherSection.className = "weather-section"; // reset
-  effectsLayer.innerHTML = ""; // reset effects
+  effectsLayer.innerHTML = ""; // reset
 
   if (isDaytime) {
     weatherSection.classList.add("day");
@@ -117,7 +114,7 @@ function setBackground(data) {
     } else if (condition.includes("cloud")) {
       weatherSection.classList.add("clouds");
       effectsLayer.innerHTML += '<div class="sun"></div>'; 
-      effectsLayer.innerHTML += '<div class="cloud"></div><div class="cloud"></div>';
+      spawnClouds(effectsLayer, 3); // multiple clouds
     } else if (condition.includes("rain") || condition.includes("drizzle")) {
       weatherSection.classList.add("rain");
       spawnRain(effectsLayer);
@@ -130,10 +127,11 @@ function setBackground(data) {
 
   } else {
     weatherSection.classList.add("night");
-    effectsLayer.innerHTML += '<div class="moon"></div><div class="stars"></div>';
+    effectsLayer.innerHTML += '<div class="moon"></div>';
+    createStars(effectsLayer, 80);
 
     if (condition.includes("cloud")) {
-      effectsLayer.innerHTML += '<div class="cloud"></div><div class="cloud"></div>';
+      spawnClouds(effectsLayer, 2);
     } else if (condition.includes("rain") || condition.includes("drizzle")) {
       weatherSection.classList.add("rain");
       spawnRain(effectsLayer);
@@ -145,12 +143,23 @@ function setBackground(data) {
     }
   }
 
-  // 🌬️ Add wind gusts if windy
-  if (windSpeed > 15) {
+  // 🌬️ Wind gusts if strong
+  if (windSpeed > 29) {
     spawnWind(effectsLayer, windSpeed);
   }
 }
 
+// 🌞 Clouds generator
+function spawnClouds(container, count = 2) {
+  for (let i = 0; i < count; i++) {
+    const cloud = document.createElement("div");
+    cloud.classList.add("cloud");
+    cloud.style.left = `${Math.random() * 100}vw`;
+    cloud.style.top = `${10 + Math.random() * 30}%`;
+    cloud.style.animationDuration = `${20 + Math.random() * 20}s`;
+    container.appendChild(cloud);
+  }
+}
 
 // 🌧️ Rain generator
 function spawnRain(container) {
@@ -180,22 +189,33 @@ function spawnSnow(container) {
     container.appendChild(flake);
   }
 }
+
 // 🌬️ Wind gust generator
 function spawnWind(container, windSpeed) {
-  // The stronger the wind, the more gusts we spawn
-  const gustCount = Math.min(Math.floor(windSpeed / 5), 20); // cap at 20 gusts
-
+  const gustCount = Math.min(Math.floor(windSpeed / 5), 20);
   for (let i = 0; i < gustCount; i++) {
     const gust = document.createElement("div");
     gust.classList.add("wind-gust");
-
-    // Random vertical position
     gust.style.top = `${Math.random() * 100}vh`;
-
-    // Speed proportional to wind strength
-    const duration = Math.max(3 - windSpeed / 20, 1); // Faster with stronger wind
+    const duration = Math.max(3 - windSpeed / 20, 1);
     gust.style.animationDuration = `${duration + Math.random()}s`;
-
     container.appendChild(gust);
+  }
+}
+
+
+// ✨ Stars generator
+function createStars(container, count = 50) {
+  for (let i = 0; i < count; i++) {
+    const star = document.createElement("div");
+    star.classList.add("star");
+    const size = Math.random() * 2 + 1;
+    star.style.width = `${size}px`;
+    star.style.height = `${size}px`;
+    star.style.top = `${Math.random() * 100}%`;
+    star.style.left = `${Math.random() * 100}%`;
+    star.style.animationDuration = `${Math.random() * 3 + 2}s`;
+    star.style.animationDelay = `${Math.random() * 5}s`;
+    container.appendChild(star);
   }
 }
