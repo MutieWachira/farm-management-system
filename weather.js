@@ -30,7 +30,7 @@ async function getWeather(lat, lon) {
   tempEl.textContent = `${Math.round(data.main.temp)}°C`;
   humidityEl.textContent = `${data.main.humidity}%`;
   windEl.textContent = `${data.wind.speed} m/s`;
-  pressureEl.textContent = `${data.main.pressure} hPa`;
+  //pressureEl.textContent = `${data.main.pressure} hPa`;
   descEl.textContent = data.weather[0].description;
   locationEl.textContent = `${data.name}, ${data.sys.country}`;
   weatherIcon.src = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;

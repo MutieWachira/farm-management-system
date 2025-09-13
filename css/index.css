@@ -125,7 +125,7 @@ body{
   justify-content: space-between;
   align-items: center;
 }
-.location{
+.country-txt{
   display: flex;
   align-items: center;
   gap: 6px;
