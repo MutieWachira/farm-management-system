@@ -1,13 +1,12 @@
-const apiKey = "f00c38e0279b7bc85480c3fe775d518c";
-const weatherIcon = document.querySelector(".weather-icon");
+const apiKey = "3a0dc5c777e980f94325c779c5e20602";
+const weatherIcon = document.querySelector(".weather-summary-img");
 const tempEl = document.querySelector(".temp");
 const descEl = document.querySelector(".description");
 const locationEl = document.querySelector(".location");
-const forecastEl = document.getElementById("forecast");
-const farmerTipEl = document.getElementById("farmer-tip");
-const humidityEl = document.getElementById("humidity");
-const windEl = document.getElementById("wind");
-const pressureEl = document.getElementById("pressure");
+const humidityEl = document.querySelector(".humidity-value-txt");
+const windEl = document.querySelector(".wind-value-txt");
+const currentDateTxt = document.querySelector(".current-date-txt");
+const forecastEl = document.querySelector(".forecast-item-container");
 
 // Get user location
 navigator.geolocation.getCurrentPosition(success, error);
@@ -18,105 +17,205 @@ function success(position) {
   getWeather(lat, lon);
 }
 
+// Error if GPS not enabled
 function error() {
   alert("Unable to retrieve location. Please enable GPS.");
 }
 
+// Get weather icon based on condition ID
+function getWeatherIcon(id) {
+  if (id <= 232) return "thunderstorm.svg";
+  if (id <= 321) return "drizzle.svg";
+  if (id <= 531) return "rain.svg";
+  if (id <= 622) return "snow.svg";
+  if (id <= 781) return "atmosphere.svg";
+  if (id === 800) return "clear.svg";
+  return "clouds.svg";
+}
+
+// Current date
+function getCurrentDate() {
+  const currentDate = new Date();
+  const options = {
+    weekday: "short",
+    day: "2-digit",
+    month: "short",
+  };
+  return currentDate.toLocaleDateString("en-GB", options);
+}
+
 async function getWeather(lat, lon) {
-  // Current Weather
-  let res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`);
+  // Current weather
+  let res = await fetch(
+    `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`
+  );
   let data = await res.json();
+  const id = data.weather[0].id;
 
-  tempEl.textContent = `${Math.round(data.main.temp)}°C`;
-  humidityEl.textContent = `${data.main.humidity}%`;
-  windEl.textContent = `${data.wind.speed} m/s`;
-  //pressureEl.textContent = `${data.main.pressure} hPa`;
-  descEl.textContent = data.weather[0].description;
   locationEl.textContent = `${data.name}, ${data.sys.country}`;
-  weatherIcon.src = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
+  tempEl.textContent = `${Math.round(data.main.temp)}°C`;
+  descEl.textContent = data.weather[0].description;
+  weatherIcon.src = `images/assets/weather/${getWeatherIcon(id)}`;
+  humidityEl.textContent = `${data.main.humidity}%`;
+  const windSpeedKmh = (data.wind.speed * 3.6).toFixed(1);
+  windEl.textContent = `${windSpeedKmh} km/h`;
+  currentDateTxt.textContent = getCurrentDate();
 
-    changeBackground(data.weather[0].main);
-    giveFarmerTips(data.weather[0].main);
+  await updateForecastInfo(lat, lon);
+  setBackground(data);
+}
 
-
-  // 7-day forecast
-  let forecastRes = await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`);
+async function updateForecastInfo(lat, lon) {
+  // Fetch 5-day / 3-hour forecast
+  let forecastRes = await fetch(
+    `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`
+  );
   let forecastData = await forecastRes.json();
 
   forecastEl.innerHTML = "";
-  for (let i = 0; i < forecastData.list.length; i += 8) { // every 24 hrs
+
+  for (let i = 8; i < forecastData.list.length; i += 8) {
     let day = forecastData.list[i];
+    let id = day.weather[0].id;
+    let icon = getWeatherIcon(id);
+
     let card = `
-      <div class="card">
-        <p>${new Date(day.dt_txt).toLocaleDateString("en-US", { weekday: "short" })}</p>
-        <img src="https://openweathermap.org/img/wn/${day.weather[0].icon}.png" />
-        <p>${Math.round(day.main.temp)}°C</p>
+      <div class="forecast-item">
+        <h5 class="forecast-item-date regular-txt">
+          ${new Date(day.dt_txt).toLocaleDateString("en-US", { weekday: "short" })}
+        </h5>
+        <img src="images/assets/weather/${icon}" alt="" class="forecast-item-img">
+        <h5 class="forecast-item-temp">${Math.round(day.main.temp)}°C</h5>
       </div>
     `;
     forecastEl.innerHTML += card;
   }
 }
 
-// Background change based on weather
-function changeBackground(weather) {
-  const bg = document.getElementById("animated-bg");
-  bg.innerHTML = ""; // clear old animations
+function setBackground(data) {
+  const now = data.dt;
+  const sunrise = data.sys.sunrise;
+  const sunset = data.sys.sunset;
+  const isDaytime = now >= sunrise && now < sunset;
 
-  if (weather.includes("Clear")) {
-    document.body.style.background = "linear-gradient(to top, #2980b9, #6dd5fa, #ffffff)";
-    let sun = document.createElement("div");
-    sun.classList.add("sun");
-    bg.appendChild(sun);
-  }
+  let condition = data.weather[0].main.toLowerCase();
+  const windSpeed = (data.wind.speed * 3.6).toFixed(1);
 
-  else if (weather.includes("Cloud")) {
-    document.body.style.background = "linear-gradient(to top, #757f9a, #d7dde8)";
-    for (let i = 0; i < 3; i++) {
-      let cloud = document.createElement("div");
-      cloud.classList.add("cloud");
-      cloud.style.top = `${50 + i * 80}px`;
-      cloud.style.left = `${i * 200}px`;
-      bg.appendChild(cloud);
+  const weatherSection = document.querySelector(".weather-section");
+  const effectsLayer = document.querySelector(".effects");
+  weatherSection.className = "weather-section"; // reset
+  effectsLayer.innerHTML = ""; // reset
+
+  if (isDaytime) {
+    weatherSection.classList.add("day");
+
+    if (condition.includes("clear")) {
+      effectsLayer.innerHTML += '<div class="sun"></div>';
+    } else if (condition.includes("cloud")) {
+      weatherSection.classList.add("clouds");
+      effectsLayer.innerHTML += '<div class="sun"></div>'; 
+      spawnClouds(effectsLayer, 3); // multiple clouds
+    } else if (condition.includes("rain") || condition.includes("drizzle")) {
+      weatherSection.classList.add("rain");
+      spawnRain(effectsLayer);
+    } else if (condition.includes("snow")) {
+      weatherSection.classList.add("snow");
+      spawnSnow(effectsLayer);
+    } else if (condition.includes("thunderstorm")) {
+      weatherSection.classList.add("storm");
+    }
+
+  } else {
+    weatherSection.classList.add("night");
+    effectsLayer.innerHTML += '<div class="moon"></div>';
+    createStars(effectsLayer, 80);
+
+    if (condition.includes("cloud")) {
+      spawnClouds(effectsLayer, 2);
+    } else if (condition.includes("rain") || condition.includes("drizzle")) {
+      weatherSection.classList.add("rain");
+      spawnRain(effectsLayer);
+    } else if (condition.includes("snow")) {
+      weatherSection.classList.add("snow");
+      spawnSnow(effectsLayer);
+    } else if (condition.includes("thunderstorm")) {
+      weatherSection.classList.add("storm");
     }
   }
 
-  else if (weather.includes("Rain")) {
-    document.body.style.background = "linear-gradient(to top, #283e51, #485563)";
-    for (let i = 0; i < 50; i++) {
-      let drop = document.createElement("div");
-      drop.classList.add("raindrop");
-      drop.style.left = `${Math.random() * window.innerWidth}px`;
-      drop.style.animationDuration = `${0.5 + Math.random()}s`;
-      bg.appendChild(drop);
-    }
-  }
-
-  else if (weather.includes("Snow")) {
-    document.body.style.background = "linear-gradient(to top, #e6dada, #274046)";
-    for (let i = 0; i < 30; i++) {
-      let snow = document.createElement("div");
-      snow.classList.add("snowflake");
-      snow.innerHTML = "❄";
-      snow.style.left = `${Math.random() * window.innerWidth}px`;
-      snow.style.animationDuration = `${3 + Math.random() * 3}s`;
-      bg.appendChild(snow);
-    }
-  }
-
-  else {
-    document.body.style.background = "linear-gradient(to top, #2c3e50, #bdc3c7)";
+  // 🌬️ Wind gusts if strong
+  if (windSpeed > 29) {
+    spawnWind(effectsLayer, windSpeed);
   }
 }
 
-// Farmer recommendations
-function giveFarmerTips(weather) {
-  let tip;
-  if (weather.includes("Rain")) tip = "🌧️ Expect rains. Prepare drainage and store harvested crops safely.";
-  else if (weather.includes("Clear")) tip = "☀️ Sunny weather! Good time for planting and drying harvest.";
-  else if (weather.includes("Cloud")) tip = "☁️ Cloudy skies. Monitor for possible rain, reduce irrigation.";
-  else if (weather.includes("Snow")) tip = "❄️ Snow expected. Protect crops and livestock.";
-  else tip = "🌱 Monitor weather updates to adjust farming activities.";
-
-  farmerTipEl.textContent = tip;
+// 🌞 Clouds generator
+function spawnClouds(container, count = 2) {
+  for (let i = 0; i < count; i++) {
+    const cloud = document.createElement("div");
+    cloud.classList.add("cloud");
+    cloud.style.left = `${Math.random() * 100}vw`;
+    cloud.style.top = `${10 + Math.random() * 30}%`;
+    cloud.style.animationDuration = `${20 + Math.random() * 20}s`;
+    container.appendChild(cloud);
+  }
 }
 
+// 🌧️ Rain generator
+function spawnRain(container) {
+  for (let i = 0; i < 100; i++) {
+    const drop = document.createElement("div");
+    drop.classList.add("raindrop");
+    drop.style.left = `${Math.random() * 100}vw`;
+    drop.style.animationDuration = `${0.5 + Math.random()}s`;
+    drop.style.animationDelay = `${Math.random()}s`;
+    drop.style.opacity = Math.random();
+    container.appendChild(drop);
+  }
+}
+
+// ❄️ Snow generator
+function spawnSnow(container) {
+  for (let i = 0; i < 60; i++) {
+    const flake = document.createElement("div");
+    flake.classList.add("snowflake");
+    const size = 5 + Math.random() * 10;
+    flake.style.width = `${size}px`;
+    flake.style.height = `${size}px`;
+    flake.style.left = `${Math.random() * 100}vw`;
+    flake.style.animationDuration = `${4 + Math.random() * 4}s`;
+    flake.style.animationDelay = `${Math.random() * 5}s`;
+    flake.style.opacity = 0.6 + Math.random() * 0.4;
+    container.appendChild(flake);
+  }
+}
+
+// 🌬️ Wind gust generator
+function spawnWind(container, windSpeed) {
+  const gustCount = Math.min(Math.floor(windSpeed / 5), 20);
+  for (let i = 0; i < gustCount; i++) {
+    const gust = document.createElement("div");
+    gust.classList.add("wind-gust");
+    gust.style.top = `${Math.random() * 100}vh`;
+    const duration = Math.max(3 - windSpeed / 20, 1);
+    gust.style.animationDuration = `${duration + Math.random()}s`;
+    container.appendChild(gust);
+  }
+}
+
+
+// ✨ Stars generator
+function createStars(container, count = 50) {
+  for (let i = 0; i < count; i++) {
+    const star = document.createElement("div");
+    star.classList.add("star");
+    const size = Math.random() * 2 + 1;
+    star.style.width = `${size}px`;
+    star.style.height = `${size}px`;
+    star.style.top = `${Math.random() * 100}%`;
+    star.style.left = `${Math.random() * 100}%`;
+    star.style.animationDuration = `${Math.random() * 3 + 2}s`;
+    star.style.animationDelay = `${Math.random() * 5}s`;
+    container.appendChild(star);
+  }
+}

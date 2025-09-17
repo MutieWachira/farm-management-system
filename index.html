@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Farmify</title>
   <link rel="stylesheet" href="css/index.css">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
 <body>
@@ -90,31 +92,64 @@ air
         </div>
       </div>
       <!--end of weather section-->
-      <div class="updates">
-        <h1>Updates</h1>
-        <div class="update-row">
-          <div class="update">
-            <p class="update-time">10:30 AM</p>
-            <p class="update-text">Rain expected in your area today. Carry an umbrella!</p>
+      <div class="stats">
+        <h1>Quick Stats</h1>
+        <div class="stats-row">
+          <div class="stat">
+            <p class="stat-Detail">Total Sales</p>
+            <p class="stat-text">120</p>
           </div>
-          <div class="update">
-            <p class="update-time">10:30 AM</p>
-            <p class="update-text">Rain expected in your area today. Carry an umbrella!</p>
+          <div class="stat">
+            <p class="stat-Detail">Harvest collected this week</p>
+            <p class="stat-text">45,000 kg</p>
           </div>
-          <div class="update">
-            <p class="update-time">10:30 AM</p>
-            <p class="update-text">Rain expected in your area today. Carry an umbrella!</p>
+          <div class="stat">
+            <p class="stat-Detail">Irrigattion Status</p>
+            <p class="stat-text">80%</p>
+          </div>
+          <div class="stat">
+            <p class="stat-Detail">Pest Alert</p>
+            <p class="stat-text">3</p>
           </div>
         </div>
       </div>
-      <!---end of updates--->
+      <!---end of Quick Stat--->
      </div>
+      <div class="middle-section">
+       <!--recent activity Table-->
+       <div class="recent-activities">
+        <h2>Recent Activities</h2>
+        <table class="recentActivityTable">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Name</th>
+              <th>Activity</th>
+            </tr>
+          </thead>
+          <tbody class="recentactivityBodyTable">
+
+          </tbody>
+
+        </table>
+       </div>
+       <!--grid section displaying various sections-->
+       <div class="various-sections">
+        <div class="chart-container">
+          <div class="chart">
+
+          </div> 
+        </div>
+       </div>
+
+        <!--end of middle section-->
+      </div>
       <!---end of main section-->
      </div>
     <!--end of container-->
   </div> 
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="weathers.js"></script>  
+  <script src="weather.js"></script>  
 </body>
 </html>
