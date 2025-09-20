@@ -1,0 +1,58 @@
+*{
+ margin: 0;
+ padding: 0;
+}
+/* Style the navigation */
+.navigation {
+  position: sticky;
+  top: 0;
+  overflow: hidden;
+  background-color: #000000;
+}
+
+/* navigation links */
+.navigation a {
+  float: right;
+  display: flex;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px;
+  text-decoration: none;
+}
+
+/* Page content */
+.content {
+  padding: 16px;
+}
+
+/* Background*/
+.container{
+    height: 400px;
+    border: solid;
+}
+
+.category{
+    border: solid;
+    height: 160px;
+}
+.category h1{
+    font-size: 28px;
+    padding: 12px;
+}
+.category-container{
+    display: flex;
+    margin: 20px;
+    justify-content: space-between;
+}
+.category-card{
+    background: #888888;
+    width: 80px;
+    border-radius: 10px;
+}
+.category-row{
+    text-align: center;
+    margin: 10px;
+}
+.category-row p{
+    font-size: 14px;
+}
