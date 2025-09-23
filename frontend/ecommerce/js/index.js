@@ -33,30 +33,8 @@ function showPage(page) {
   prevBtn.disabled = page === 1;
   nextBtn.disabled = page === totalPages;
 
-  // Render pagination numbers
-  renderPaginationNumbers(totalPages);
 }
 
-function renderPaginationNumbers(totalPages) {
-  paginationNumbers.innerHTML = ""; // clear old buttons
-
-  for (let i = 1; i <= totalPages; i++) {
-    const btn = document.createElement("button");
-    btn.textContent = i;
-    btn.classList.add("page-number");
-
-    if (i === currentPage) {
-      btn.classList.add("active-page");
-    }
-
-    btn.addEventListener("click", () => {
-      currentPage = i;
-      showPage(currentPage);
-    });
-
-    paginationNumbers.appendChild(btn);
-  }
-}
 
 // Pagination event listeners
 prevBtn.addEventListener("click", () => {
