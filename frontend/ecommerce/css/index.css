@@ -46,12 +46,7 @@
   margin: 20px;
   justify-content: space-between;
 }
-.category-card {
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
-  background: #ffffff;
-  width: 80px;
-  border-radius: 10px;
-}
+
 .category-card:hover {
   transform: translateY(-2px);
 }
@@ -67,32 +62,89 @@ text-align: center;
 .category-row p {
   font-size: 14px;
 }
+/* Active category */
+.category-card {
+  padding: 8px 16px;
+  margin: 4px;
+  border: 1px solid #ddd;
+  background: #f9f9f9;
+  cursor: pointer;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  width: 80px;
+  transition: 0.3s;
+}
+.category-card.active-category {
+  background: #28a745;
+  color: white;
+  border-color: #28a745;
+}
 /*grocery disply section*/
 .groceries {
-  border: solid;
+  margin: 5px;
 }
 
 .groceries h1 {
-  font-size: 28px;
-  padding: 20px;
+  font-size: 26px;
+  padding: 10px;
 }
 
 .groceries-row {
   display: flex;
-  gap: 20px;
+  flex-wrap: wrap; /* allows items to wrap to next line */
+  gap: 20px; /* spacing between cards */
+  justify-content: space-between; /* align items to left */
 }
+
 .groceries-card {
-  width:200px;
-  border: solid;
-}
-.groceries-card img {
-  height: 70px;
-  width: 100px;
-}
-.groceries-details {
+  width: 180px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
   text-align: center;
-  display: flex;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
 }
-.groceries-details p{
-  margin-bottom: 20px;
+
+.groceries-card img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+}
+
+.groceries-card:hover {
+  transform: scale(1.05);
+}
+
+.groceries-details {
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+  gap: 10px;
+}
+
+.pagination button {
+  padding: 8px 16px;
+  background-color: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-size: 14px;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #1b5e20;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }

@@ -26,37 +26,43 @@
     <div class="category">
       <h1>Categories</h1>
       <div class="category-container">
-        <div class="category-card">
+        <div class="category-card active-category" data-category="all">
           <div class="category-row">
             <span class="material-symbols-outlined"> nutrition </span>
             <p>All</p>
           </div>
         </div>
-         <div class="category-card">
+         <div class="category-card" data-category="eggs">
           <div class="category-row">
             <i class="fa-solid fa-egg"></i>
             <p>Eggs</p>
           </div>
         </div>
-         <div class="category-card">
+         <div class="category-card"data-category="fruits">
           <div class="category-row">
             <i class="fa-solid fa-apple-whole"></i>
             <p>Fruits</p>
           </div>
         </div>
-         <div class="category-card">
+         <div class="category-card" data-category="grains">
           <div class="category-row">
             <i class="fa-solid fa-wheat-awn"></i>
             <p>Grains</p>
           </div>
         </div>
-         <div class="category-card">
+         <div class="category-card" data-category="vegetables">
           <div class="category-row">
-            <span class="material-symbols-outlined"> nutrition </span>
-            <p>Proteins</p>
+            <i class="fa-solid fa-wheat-awn"></i>
+            <p>Veggies</p>
           </div>
         </div>
-         <div class="category-card">
+         <div class="category-card" data-category="beans">
+          <div class="category-row">
+            <span class="material-symbols-outlined"> nutrition </span>
+            <p>Beans</p>
+          </div>
+        </div>
+         <div class="category-card" data-category="meat">
           <div class="category-row">
             <i class="fa-solid fa-drumstick-bite"></i>
             <p>Meat</p>
@@ -68,71 +74,71 @@
     <div class="groceries">
       <h1>Items</h1>
       <div class="groceries-row">
-        <div class="groceries-card">
-          <img src="" alt="" />
+        <div class="groceries-card" data-category="fruits">
+          <img src="images/apple.jfif" alt="" />
           <div class="groceries-details">
             <p>Item 1</p>
             <p>Item Price</p>
           </div>
         </div>
-        <div class="groceries-card">
-          <img src="" alt="" />
+        <div class="groceries-card" data-category="beans">
+          <img src="images/beans.jpg" alt="" />
           <div class="groceries-details">
             <p>Item 1</p>
             <p>Item Price</p>
           </div>
         </div>
-        <div class="groceries-card">
-          <img src="" alt="" />
+        <div class="groceries-card" data-category="eggs">
+          <img src="images/eggs.jfif" alt="" />
           <div class="groceries-details">
             <p>Item 1</p>
             <p>Item Price</p>
           </div>
         </div>
-        <div class="groceries-card">
-          <img src="" alt="" />
+        <div class="groceries-card" data-category="meat"> 
+          <img src="images/meatcchick.jfif" alt="" />
           <div class="groceries-details">
             <p>Item 1</p>
             <p>Item Price</p>
           </div>
         </div>
-        <div class="groceries-card">
-          <img src="" alt="" />
+        <div class="groceries-card" data-category="grains">
+          <img src="images/Maize_grain.jpg" alt="" />
           <div class="groceries-details">
             <p>Item 1</p>
             <p>Item Price</p>
           </div>
         </div>
-        <div class="groceries-card">
-          <img src="" alt="" />
+        <div class="groceries-card" data-category="beans">
+          <img src="images/ndengu.jfif" alt="" />
           <div class="groceries-details">
             <p>Item 1</p>
             <p>Item Price</p>
           </div>
         </div>
-        <div class="groceries-card">
-          <img src="" alt="" />
+        <div class="groceries-card" data-category="fruits">
+          <img src="images/avocado.jfif" alt="" />
           <div class="groceries-details">
             <p>Item 1</p>
             <p>Item Price</p>
           </div>
         </div>
-        <div class="groceries-card">
-          <img src="" alt="" />
+        <div class="groceries-card" data-category="vegetables">
+          <img src="images/cabbage.jfif" alt="" />
           <div class="groceries-details">
             <p>Item 1</p>
             <p>Item Price</p>
           </div>
         </div>
-        <div class="groceries-card">
-          <img src="" alt="" />
+        <div class="groceries-card" data-category="vegetables">
+          <img src="images/carrot.jfif" alt="" />
           <div class="groceries-details">
             <p>Item 1</p>
             <p>Item Price</p>
           </div>
         </div>
-        <div class="groceries-card">
-          <img src="" alt="" />
+        <div class="groceries-card"  data-category="grains">
+          <img src="images/wheat.jfif" alt="" />
           <div class="groceries-details">
             <p>Item 1</p>
             <p>Item Price</p>
@@ -142,5 +148,13 @@
       </div>
     </div>
     <!--end of groceries display-->
+    <div class="pagination">
+  <button id="prevBtn" disabled>Previous</button>
+  <button id="nextBtn">Next</button>
+
+    </div>
+
+
+    <script src="js/index.js"></script>
   </body>
 </html>
