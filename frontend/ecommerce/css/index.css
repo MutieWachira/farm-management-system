@@ -1,152 +1,201 @@
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
-/* Style the navigation */
+
+/* TOP NAVIGATION */
+/* Navigation */
 .navigation {
-  position: sticky;
-  top: 0;
-  overflow: hidden;
-  background-color: #000000;
-}
-
-/* navigation links */
-.navigation a {
-  float: right;
+  position: sticky;   /* make it stick */
+  top: 0;             /* stick to top */
+  z-index: 1000;      /* keep it above other elements */
+  background: #2e7d32;
+  padding: 15px 30px;
   display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  transition: all 0.3s ease; /* smooth transition */
+}
+
+/* Nav links */
+.navigation a {
   color: #f2f2f2;
-  text-align: center;
-  padding: 14px;
   text-decoration: none;
+  margin-left: 20px;
+  font-size: 16px;
+  transition: color 0.3s ease, font-size 0.3s ease;
 }
 
-/* Page content */
-.content {
-  padding: 16px;
+.navigation a:hover {
+  color: #ffeb3b;
 }
 
-/* Background*/
+/* Scrolled state */
+.navigation.scrolled {
+  background: #1b5e20;
+  padding: 8px 30px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.navigation.scrolled a {
+  font-size: 14px;
+  color: #e0e0e0;
+}
+
+/* HERO BACKGROUND */
 .container {
-  width: auto;
-  height: 400px;
-}
-.container img{
-  width: 1264px;
-  height: 400px;
-  object-fit: cover;
+  width: 100%;
+  height: 500px;   /* fixed height for the hero/banner */
+  overflow: hidden; /* crop anything outside */
 
 }
+
+.container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;  /* keeps aspect ratio, fills space */
+  object-position: center; /* centers the focus */
+  display: block;  /* removes default inline spacing */
+}
+
+.container h1 {
+  position: relative;
+  font-size: 48px;
+  z-index: 1;
+}
+
+/* CATEGORY SECTION */
 .category {
-  height: 160px;
+  padding: 25px 20px;
+  background: #f4f6f8;
 }
+
 .category h1 {
-  font-size: 26px;
-  padding: 10px;
+  font-size: 28px;
+  margin-bottom: 20px;
 }
+
 .category-container {
   display: flex;
-  margin: 20px;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: flex-start;
+}
+
+.category-card {
+  flex: 1 0 100px;
+  max-width: 120px;
+  padding: 15px;
+  border-radius: 12px;
+  text-align: center;
+  background: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: 0.3s;
 }
 
 .category-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-5px);
 }
-.category-row {
-  text-align: center;
-  margin: 10px;
-}
-.category-row i{
-height: 25px;
-width: 25px;
-text-align: center;
-}
-.category-row p {
-  font-size: 14px;
-}
-/* Active category */
-.category-card {
-  padding: 8px 16px;
-  margin: 4px;
-  border: 1px solid #ddd;
-  background: #f9f9f9;
-  cursor: pointer;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.5);
-  border-radius: 10px;
-  width: 80px;
-  transition: 0.3s;
-}
+
 .category-card.active-category {
-  background: #28a745;
+  background: #2e7d32;
   color: white;
-  border-color: #28a745;
+  border: none;
 }
-/*grocery disply section*/
+
+/* GROCERY SECTION */
 .groceries {
-  margin: 5px;
+  padding: 40px 20px;
 }
 
 .groceries h1 {
-  font-size: 26px;
-  padding: 10px;
+  font-size: 28px;
+  margin-bottom: 20px;
 }
 
 .groceries-row {
   display: flex;
-  flex-wrap: wrap; /* allows items to wrap to next line */
-  gap: 20px; /* spacing between cards */
-  justify-content: space-between; /* align items to left */
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: flex-start;
 }
 
 .groceries-card {
-  width: 180px;
+  width: calc(25% - 20px);
+  min-width: 200px;
   border: 1px solid #ddd;
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
-  text-align: center;
   background: #fff;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  transition: transform 0.2s;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+}
+
+.groceries-card:hover {
+  transform: translateY(-5px);
 }
 
 .groceries-card img {
   width: 100%;
-  height: 120px;
+  height: 160px;
   object-fit: cover;
 }
 
-.groceries-card:hover {
-  transform: scale(1.05);
-}
-
 .groceries-details {
-  padding: 10px;
+  padding: 12px;
   display: flex;
   justify-content: space-between;
+  font-size: 15px;
+  font-weight: 500;
+  color: #333;
 }
+
+/* PAGINATION */
 .pagination {
   display: flex;
   justify-content: center;
-  margin: 20px 0;
-  gap: 10px;
+  margin-top: 30px;
+  gap: 12px;
 }
 
 .pagination button {
-  padding: 8px 16px;
-  background-color: #2e7d32;
+  padding: 10px 20px;
+  border-radius: 8px;
+  background: #2e7d32;
   color: white;
   border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.2s;
   font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
 }
 
 .pagination button:hover:not(:disabled) {
-  background-color: #1b5e20;
+  background: #1b5e20;
 }
 
 .pagination button:disabled {
-  background-color: #ccc;
+  background: #ccc;
   cursor: not-allowed;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .groceries-card {
+    width: calc(50% - 20px);
+  }
+
+  .category-container {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .groceries-card {
+    width: 100%;
+  }
 }

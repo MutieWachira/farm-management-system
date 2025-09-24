@@ -69,3 +69,14 @@ categories.forEach((cat) => {
 
 // Initial load
 showPage(currentPage);
+
+
+//sticky navigation<script>
+  window.addEventListener("scroll", function () {
+    const nav = document.querySelector(".navigation");
+    if (window.scrollY > 50) {
+      nav.classList.add("scrolled");
+    } else {
+      nav.classList.remove("scrolled");
+    }
+  });
