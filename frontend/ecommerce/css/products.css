@@ -1,0 +1,188 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* TOP NAVIGATION */
+/* Navigation */
+.navigation {
+  position: sticky;   /* make it stick */
+  top: 0;             /* stick to top */
+  z-index: 1000;      /* keep it above other elements */
+  background: #2e7d32;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  transition: all 0.3s ease; /* smooth transition */
+}
+
+/* Nav links */
+.navigation a {
+  color: #f2f2f2;
+  text-decoration: none;
+  margin-left: 20px;
+  font-size: 16px;
+  transition: color 0.3s ease, font-size 0.3s ease;
+}
+
+.navigation a:hover {
+  color: #ffeb3b;
+}
+
+/* Scrolled state */
+.navigation.scrolled {
+  background: #1b5e20;
+  padding: 8px 30px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.navigation.scrolled a {
+  font-size: 14px;
+  color: #e0e0e0;
+}
+
+/*product page css*/
+.product-container {
+    display: flex;
+}
+
+.product-image {
+    margin: 200px;
+}
+.product-image img {
+    border-radius: 12px;
+}
+.product-description {
+    margin-top: 180px;
+}
+.product-title {
+    font-weight: 800;
+    font-size: 32px;
+    margin-bottom: 5px;
+}
+.product-price {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+.counter-cart {
+    display: flex;
+}
+.counter {
+    display: flex;
+    gap: 2px;
+    margin: 10px;
+    text-align: center;
+}
+.counter button {
+    width: 32px;
+    height: 32px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+.counter button:hover {
+    background-color: #1b5e20;
+}
+
+.counter input {
+    width: 50px;
+    text-align: center;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    height: 32px;
+}
+.cart {
+    display: flex;
+    gap: 2px;
+    margin: 10px;
+    text-align: center;
+}
+
+.cart button {
+    background-color: #10ad1a;
+    border-radius: 12px;
+    width: 100px;
+    
+}
+
+.wishlist {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 16px;
+  color: #444;
+  transition: color 0.3s;
+}
+
+.wishlist:hover {
+  color: #e53935;
+}
+
+.wishlist .wishlist-icon {
+  font-size: 20px;
+}
+.wishlist.active {
+  color: #e53935; /* red when active */
+  font-weight: bold;
+}
+/* ======================
+   MEDIA QUERIES
+====================== */
+
+/* Tablet screens */
+@media (max-width: 900px) {
+  .product-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .product-description {
+    margin-top: 20px;
+  }
+
+  .product-title {
+    font-size: 26px;
+  }
+
+  .product-price {
+    font-size: 18px;
+  }
+}
+
+/* Mobile screens */
+@media (max-width: 600px) {
+  .product-container {
+    padding: 20px;
+    gap: 20px;
+  }
+
+  .product-title {
+    font-size: 22px;
+  }
+
+  .product-price {
+    font-size: 16px;
+  }
+
+  .counter-cart {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cart button {
+    width: 100%; /* full width on mobile */
+  }
+}
