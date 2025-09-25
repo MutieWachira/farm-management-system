@@ -41,3 +41,37 @@ wishlistBtn.addEventListener("click", () => {
     wishlistText.textContent = "Add to Wishlist";
   }
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const addToCartBtn = document.getElementById("add-to-cart");
+
+  addToCartBtn.addEventListener("click", () => {
+    const productName = document.getElementById("product-name").textContent;
+    const productPrice = parseFloat(document.getElementById("product-price").dataset.price);
+    const productImage = "images/avocado.jfif"; // you can set dynamically
+
+    // Get existing cart or empty
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    // Check if already in cart
+    const existing = cart.find(item => item.name === productName);
+
+    if (existing) {
+      existing.qty += 1;
+    } else {
+      cart.push({
+        name: productName,
+        price: productPrice,
+        image: productImage,
+        qty: 1
+      });
+    }
+
+    // Save back to localStorage
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    //alert("✅ Item added to cart!");
+    // Optional: redirect to cart page
+    window.location.href = "cart.html";
+  });
+});
