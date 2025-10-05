@@ -1,3 +1,4 @@
+/* Global Reset and Base Styles */
 * {
   margin: 0;
   padding: 0;
@@ -11,6 +12,7 @@ body {
   display: flex;
   overflow: hidden;
 }
+
 /* Sidebar */
 .sidebar {
   width: 240px;
@@ -20,6 +22,8 @@ body {
   position: fixed;
   height: 100%;
   box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+  transition: left 0.3s ease;
+  z-index: 200;
 }
 
 .sidebar h2 {
@@ -47,10 +51,12 @@ body {
 .sidebar ul li a:hover {
   background: rgba(255, 255, 255, 0.1);
 }
+
 /* Main Section */
 .main {
   margin-left: 240px;
-  width: 1680px;
+  width: calc(100% - 240px); /* Responsive width */
+  display: flex;
   flex-direction: column;
   overflow: hidden;
 }
@@ -80,11 +86,12 @@ body {
   align-items: center;
 }
 
-/*tile section*/
+/* Tile Section */
 .tile-container {
   border: solid;
   border-radius: 12px;
   margin: 20px;
+  overflow-x: auto;
 }
 
 .tiles {
@@ -103,6 +110,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+  max-width: 100%;
 }
 
 .tile span {
@@ -118,13 +127,54 @@ body {
   background-color: white;
   margin-bottom: 10px;
 }
+
 .tile:hover {
   transform: translateY(-5px);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 4px 4px 12px rgba(0,0,0,0.2);
 }
-@media (max-width: 600px) {
+
+/* Responsive Layouts */
+@media (max-width: 768px) {
+  .sidebar {
+    position: absolute;
+    width: 200px;
+    left: -200px; /* Hidden by default */
+  }
+
+  .sidebar.active {
+    left: 0; /* Show sidebar when toggled */
+  }
+
+  .main {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .topbar h2 {
+    font-size: 1.2rem;
+  }
+
+  .topbar-right {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
   .tiles {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* 1 tile per row on small screens */
+  }
+
+  .tile span {
+    width: 50px;
+    height: 50px;
+    font-size: 1rem;
   }
 }
+
+
