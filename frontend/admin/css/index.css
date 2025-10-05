@@ -10,6 +10,7 @@ body {
   color: #333;
   display: flex;
 }
+
 /* Sidebar */
 .sidebar {
   width: 240px;
