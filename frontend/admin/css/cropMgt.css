@@ -1,0 +1,271 @@
+/* ===== Global Reset and Base Styles ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background: #f4f6f8;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ===== Sidebar ===== */
+.sidebar {
+  width: 240px;
+  background: linear-gradient(180deg, #2c3e50, #1a252f);
+  color: #ecf0f1;
+  padding: 25px 15px;
+  position: fixed;
+  height: 100%;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.15);
+  transition: left 0.3s ease;
+  z-index: 200;
+}
+
+.sidebar h2 {
+  margin-bottom: 35px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 22px;
+  color: #f1c40f;
+}
+
+.sidebar ul {
+  list-style: none;
+}
+
+.sidebar ul li {
+  margin: 18px 0;
+}
+
+.sidebar ul li a {
+  color: #ecf0f1;
+  text-decoration: none;
+  display: block;
+  padding: 10px 15px;
+  border-radius: 8px;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.sidebar ul li a:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(4px);
+}
+
+/* ===== Main Section ===== */
+.main {
+  flex: 1;
+  overflow-y: auto;
+  height: 100vh;
+  margin-left: 240px;
+  padding-bottom: 50px;
+}
+
+/* ===== Topbar ===== */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffff;
+  padding: 15px 25px;
+  border-bottom: 1px solid #ddd;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.topbar h2 {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.topbar-right {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.topbar-right span {
+  cursor: pointer;
+  font-size: 18px;
+  transition: color 0.3s;
+}
+
+.topbar-right span:hover {
+  color: #16a085;
+}
+
+/* ===== Search and Add Crop Section ===== */
+.search-add-crop {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+  margin: 25px;
+  align-items: center;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.search-bar input {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  height: 40px;
+  width: 280px;
+  padding: 0 15px;
+  font-size: 14px;
+  outline: none;
+  transition: border 0.3s, box-shadow 0.3s;
+}
+
+.search-bar input:focus {
+  border: 1px solid #16a085;
+  box-shadow: 0 0 5px rgba(22, 160, 133, 0.3);
+}
+
+.search-bar button {
+  background: #16a085;
+  color: white;
+  border: none;
+  height: 40px;
+  width: 40px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.search-bar button:hover {
+  background: #13856b;
+}
+
+.add-crop-button button {
+  background: #27ae60;
+  color: white;
+  border: none;
+  height: 40px;
+  width: 160px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.add-crop-button button:hover {
+  background: #219150;
+  transform: translateY(-2px);
+}
+
+/* ===== Crop Table Section ===== */
+.crop-container {
+  margin: 30px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 25px;
+}
+
+.crop-container h1 {
+  margin-bottom: 20px;
+  font-size: 22px;
+  color: #2c3e50;
+  border-bottom: 2px solid #27ae60;
+  padding-bottom: 10px;
+}
+
+.crop-container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.crop-container table thead {
+  background: #27ae60;
+  color: white;
+}
+.edit-btn,
+.delete-btn{
+  width: 60px;
+  height: 40px;
+  border: none;
+  border-radius: 12px;
+}
+.edit-btn{
+  background: #27ae60;
+}
+.delete-btn{
+  background: #ff0000;
+}
+.crop-container table th,
+.crop-container table td {
+  text-align: center;
+  padding: 14px;
+  border-bottom: 1px solid #eee;
+}
+
+
+
+.crop-container table td:last-child {
+  color: #16a085;
+  font-weight: 600;
+}
+
+/* ===== Responsive Layout ===== */
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #2c3e50;
+  }
+
+  .sidebar {
+    position: absolute;
+    width: 200px;
+    left: -200px;
+  }
+
+  .sidebar.active {
+    left: 0;
+  }
+
+  .main {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .topbar h2 {
+    font-size: 1.2rem;
+  }
+
+  .search-add-crop {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-bar input {
+    width: 100%;
+  }
+
+  .add-crop-button button {
+    width: 100%;
+  }
+}
