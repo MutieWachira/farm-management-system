@@ -49,16 +49,29 @@
           <button type="submit" title="Search"><i class="fa-solid fa-magnifying-glass"></i></button>
         </div>
 
+         <!-- Filter Dropdown -->
+  <div class="filter-options">
+    <select id="filterSelect">
+      <option value="all">All Status</option>
+      <option value="planted">Planted</option>
+      <option value="growing">Growing</option>
+      <option value="harvested">Harvested</option>
+      <option value="diseased">Diseased</option>
+    </select>
+  </div>
+
         <div class="add-crop-button">
           <button type="button"><i class="fa-solid fa-plus"></i> Add Crop</button>
         </div>
+        
       </section>
+      
 
       <!-- Crop Table -->
       <section class="crop-container">
         <h1>Crop List</h1>
         <div class="table-wrapper">
-          <table>
+          <table id="table-wrapper">
             <thead>
               <tr>
                 <th>Name</th>
@@ -74,7 +87,7 @@
                 <td>Durum</td>
                 <td>2023-03-15</td>
                 <td><span class="status growing">Growing</span></td>
-                <td><button class="edit-btn"><i class="fa-solid fa-pen"></i></button> <button class="delete-btn"><i class="fa-solid fa-trash"></i></button></td>
+                <td><button class="edit-btn"><a href="edit-crop.html"><i class="fa-solid fa-pen"></a></i></button> <button class="delete-btn"><i class="fa-solid fa-trash"></i></button></td>
               </tr>
               <tr>
                 <td>Rice</td>
@@ -105,11 +118,6 @@
     </main>
   </div>
 
-  <script>
-    // sidebar toggle
-    function toggleSidebar() {
-      document.querySelector('.sidebar').classList.toggle('active');
-    }
-  </script>
+  <script src="js/cropmgt.js"></script>
 </body>
 </html>

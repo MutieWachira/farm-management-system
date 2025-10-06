@@ -149,6 +149,23 @@ body {
   background: #13856b;
 }
 
+.filter-options select {
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid #969292;
+  padding: 0 10px;
+  background: #ffffff;
+  color: #333;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.filter-options select:focus {
+  outline: none;
+  border-color: #2ecc71;
+  box-shadow: 0 0 5px rgba(46, 204, 113, 0.5);
+}
+
 .add-crop-button button {
   background: #27ae60;
   color: white;
