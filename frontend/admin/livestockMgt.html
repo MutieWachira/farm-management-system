@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Farmify - Crop Management</title>
+  <link rel="stylesheet" href="css/livestockMgt.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div class="container">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2>🌾 FMS</h2>
+      <nav>
+        <ul>
+          <li><a href="index.html"><i class="fa-solid fa-chart-line"></i> Dashboard</a></li>
+          <li><a href="#"><i class="fa-solid fa-boxes-stacked"></i> Product Management</a></li>
+          <li><a href="#"><i class="fa-solid fa-clipboard-list"></i> Order Management</a></li>
+          <li><a href="#"><i class="fa-solid fa-users"></i> User Management</a></li>
+          <li><a href="farmops.html" class="active"><i class="fa-solid fa-tractor"></i> Farm Operations</a></li>
+          <li><a href="#"><i class="fa-solid fa-chart-pie"></i> Reports</a></li>
+          <li><a href="#"><i class="fa-solid fa-gear"></i> Settings</a></li>
+          <li><a href="#"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+
+      <!-- Topbar -->
+      <header class="topbar">
+        <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+        <h2>Livestock Management</h2>
+        <div class="topbar-right">
+          <span class="notification"><i class="fa-solid fa-bell"></i></span>
+          <span class="profile"><i class="fa-solid fa-user"></i> Admin</span>
+        </div>
+      </header>
+
+      <!-- Search + Add Crop -->
+      <section class="search-add-crop">
+        <div class="search-bar">
+          <input type="text" placeholder="Search livestock..." aria-label="Search livestocks">
+          <button type="submit" title="Search"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+
+         <!-- Filter Dropdown -->
+  <div class="filter-options">
+    <select id="filterSelect">
+      <option value="all">All Status</option>
+      <option value="planted">Planted</option>
+      <option value="growing">Growing</option>
+      <option value="harvested">Harvested</option>
+      <option value="diseased">Diseased</option>
+    </select>
+  </div>
+
+        <div class="add-livestock-button">
+          <button type="button"><i class="fa-solid fa-plus"></i> Add Livestock</button>
+        </div>
+        
+      </section>
+      
+
+      <!-- Crop Table -->
+      <section class="livestock-container">
+        <h1>Livestock List</h1>
+        <div class="table-wrapper">
+          <table id="table-wrapper">
+            <thead>
+              <tr>
+                <th>Species</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Cow</td>
+                <td class="status Healthy">Healthy</td>
+                <td><button class="edit-btn"><a href="edit-livestock.html"><i class="fa-solid fa-pen"></a></i></button> <button class="delete-btn"><i class="fa-solid fa-trash"></i></button></td>
+              </tr>
+              <tr>
+                <td>Pig</td>
+                <td class="status Healthy">Healthy</td>
+                <td><button class="edit-btn"><a href="edit-livestock.html"><i class="fa-solid fa-pen"></a></i></button> <button class="delete-btn"><i class="fa-solid fa-trash"></i></button></td>
+              </tr>
+              <tr>
+                <td>Chicken</td>
+                <td class="status Sick">Sick</td>
+                <td><button class="edit-btn"><a href="edit-livestock.html"><i class="fa-solid fa-pen"></a></i></button> <button class="delete-btn"><i class="fa-solid fa-trash"></i></button></td>
+              </tr>
+              <tr>
+                <td>Turkey</td>
+                <td class="status Healthy">Healthy</td>
+                <td><button class="edit-btn"><a href="edit-livestock.html"><i class="fa-solid fa-pen"></a></i></button> <button class="delete-btn"><i class="fa-solid fa-trash"></i></button></td>
+              </tr>
+              
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="js/cropmgt.js"></script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Farmify - Edit Livestock</title>
+  <link rel="stylesheet" href="css/livestock-edit.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div class="container">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2>🌾 FMS</h2>
+      <nav>
+        <ul>
+          <li><a href="index.html"><i class="fa-solid fa-chart-line"></i> Dashboard</a></li>
+          <li><a href="#"><i class="fa-solid fa-boxes-stacked"></i> Product Management</a></li>
+          <li><a href="#"><i class="fa-solid fa-clipboard-list"></i> Order Management</a></li>
+          <li><a href="#"><i class="fa-solid fa-users"></i> User Management</a></li>
+          <li><a href="farmops.html" class="active"><i class="fa-solid fa-tractor"></i> Farm Operations</a></li>
+          <li><a href="#"><i class="fa-solid fa-chart-pie"></i> Reports</a></li>
+          <li><a href="#"><i class="fa-solid fa-gear"></i> Settings</a></li>
+          <li><a href="#"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+
+      <!-- Topbar -->
+      <header class="topbar">
+        <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+        <h2>Edit Livestock Details</h2>
+        <div class="topbar-right">
+          <span class="notification"><i class="fa-solid fa-bell"></i></span>
+          <span class="profile"><i class="fa-solid fa-user"></i> Admin</span>
+        </div>
+      </header>
+
+      <!-- Breadcrumb -->
+      <div class="breadcrumb">
+        <a href="farmops.html">Farm Operations</a> &gt; 
+        <a href="livestockMgt.html">Livestock Management</a> &gt; 
+        <span>Edit Crop</span>
+      </div>
+
+      <!-- Edit livestock Form -->
+      <div class="edit-livestock-container">
+        <h1>Update Livestock</h1>
+
+        <form action="#" class="edit-livestock-form">
+
+          <div class="form-group">
+            <label for="livestock-species">Species:</label>
+            <input type="text" id="livestock-species" name="livestock-species" placeholder="Enter livestock species" required>
+          </div>
+
+          <div class="form-group">
+            <label for="status">livestock Status:</label>
+            <select id="status" name="status" required>
+              <option value="">-- Select Status --</option>
+              <option value="planted">Healthy</option>
+              <option value="growing">Sick</option>
+            </select>
+          </div>
+
+          
+
+          <div class="form-actions">
+            <button type="submit" class="btn-save"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
+            <button type="button" class="btn-cancel" onclick="window.history.back()"><i class="fa-solid fa-xmark"></i> Cancel</button>
+          </div>
+
+        </form>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/cropmgt.js"></script>
+</body>
+</html>
