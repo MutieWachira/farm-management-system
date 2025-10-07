@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Farmify - Equipment Management</title>
+  <link rel="stylesheet" href="css/equipmentMgt.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div class="container">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2>🌾 FMS</h2>
+      <nav>
+        <ul>
+          <li><a href="index.html"><i class="fa-solid fa-chart-line"></i> Dashboard</a></li>
+          <li><a href="#"><i class="fa-solid fa-boxes-stacked"></i> Product Management</a></li>
+          <li><a href="#"><i class="fa-solid fa-clipboard-list"></i> Order Management</a></li>
+          <li><a href="#"><i class="fa-solid fa-users"></i> User Management</a></li>
+          <li><a href="farmops.html" class="active"><i class="fa-solid fa-tractor"></i> Farm Operations</a></li>
+          <li><a href="#"><i class="fa-solid fa-chart-pie"></i> Reports</a></li>
+          <li><a href="#"><i class="fa-solid fa-gear"></i> Settings</a></li>
+          <li><a href="#"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+
+      <!-- Topbar -->
+      <header class="topbar">
+        <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+        <h2>Equipment Management</h2>
+        <div class="topbar-right">
+          <span class="notification"><i class="fa-solid fa-bell"></i></span>
+          <span class="profile"><i class="fa-solid fa-user"></i> Admin</span>
+        </div>
+      </header>
+
+      <!-- Search + Add Equipment -->
+      <section class="search-add-equipment">
+        <div class="search-bar">
+          <input type="text" placeholder="Search equipments..." aria-label="Search equipments">
+          <button type="submit" title="Search"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+
+         <!-- Filter Dropdown -->
+  <div class="filter-options">
+    <select id="filterSelect">
+      <option value="all">All Status</option>
+      <option value="planted">In Use</option>
+      <option value="growing">In Repair</option>
+    </select>
+  </div>
+
+        <div class="add-equipment-button">
+          <button type="button"><i class="fa-solid fa-plus"></i> Add Equipment</button>
+        </div>
+        
+      </section>
+      
+
+      <!-- Equipment Table -->
+      <section class="equipment-container">
+        <h1>Equipment List</h1>
+        <div class="table-wrapper">
+          <table id="table-wrapper">
+            <thead>
+              <tr>
+                <th>Equipment Name</th>
+                <th>Type</th>
+                <th>Purchase Date</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Tractor</td>
+                <td>Tractor</td>
+                <td>2021-03-15</td>
+                <td><span class="status In Use">In Use</span></td>
+                <td><button class="edit-btn"><a href="edit-equip.html"><i class="fa-solid fa-pen"></a></i></button> <button class="delete-btn"><i class="fa-solid fa-trash"></i></button></td>
+              </tr>
+              <tr>
+                <td>Plow</td>
+                <td>Tillage</td>
+                <td>2020-08-22</td>
+                <td><span class="status In Repair">In Repair</span></td>
+                <td><button class="edit-btn"><i class="fa-solid fa-pen"></i></button> <button class="delete-btn"><i class="fa-solid fa-trash"></i></button></td>
+              </tr>
+              <tr>
+                <td>Seeder</td>
+                <td>Seeding</td>
+                <td>2021-01-10</td>
+                <td><span class="status In Use">In Use</span></td>
+                <td><button class="edit-btn"><i class="fa-solid fa-pen"></i></button> <button class="delete-btn"><i class="fa-solid fa-trash"></i></button></td>
+              </tr>
+              <tr>
+                <td>Harvester</td>
+                <td>Harvesting</td>
+                <td>2021-06-05</td>
+                <td><span class="status In Repair">In Repair</span></td>
+                <td><button class="edit-btn"><i class="fa-solid fa-pen"></i></button> <button class="delete-btn"><i class="fa-solid fa-trash"></i></button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="js/cropmgt.js"></script>
+</body>
+</html>

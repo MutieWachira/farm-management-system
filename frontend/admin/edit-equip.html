@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Farmify - Equipment Crop</title>
+  <link rel="stylesheet" href="css/edit-equip.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div class="container">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2>🌾 FMS</h2>
+      <nav>
+        <ul>
+          <li><a href="index.html"><i class="fa-solid fa-chart-line"></i> Dashboard</a></li>
+          <li><a href="#"><i class="fa-solid fa-boxes-stacked"></i> Product Management</a></li>
+          <li><a href="#"><i class="fa-solid fa-clipboard-list"></i> Order Management</a></li>
+          <li><a href="#"><i class="fa-solid fa-users"></i> User Management</a></li>
+          <li><a href="farmops.html" class="active"><i class="fa-solid fa-tractor"></i> Farm Operations</a></li>
+          <li><a href="#"><i class="fa-solid fa-chart-pie"></i> Reports</a></li>
+          <li><a href="#"><i class="fa-solid fa-gear"></i> Settings</a></li>
+          <li><a href="#"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main">
+
+      <!-- Topbar -->
+      <header class="topbar">
+        <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+        <h2>Edit Crop Details</h2>
+        <div class="topbar-right">
+          <span class="notification"><i class="fa-solid fa-bell"></i></span>
+          <span class="profile"><i class="fa-solid fa-user"></i> Admin</span>
+        </div>
+      </header>
+
+      <!-- Breadcrumb -->
+      <div class="breadcrumb">
+        <a href="farmops.html">Farm Operations</a> &gt; 
+        <a href="equipmentMgt.html">Equipment Management</a> &gt; 
+        <span>Edit Equipment</span>
+      </div>
+
+      <!-- Edit Crop Form -->
+      <div class="edit-equipment-container">
+        <h1>Update Equipment</h1>
+
+        <form action="#" class="edit-equipment-form">
+
+          <div class="form-group">
+            <label for="equipment-name">Equipment Name:</label>
+            <input type="text" id="equipment-name" name="equipment-name" placeholder="Enter equipment name" required>
+          </div>
+
+          <div class="form-group">
+            <label for="equipment-type">Type:</label>
+            <input type="text" id="equipment-type" name="equipment-type" placeholder="Enter equipment type" required>
+          </div>
+
+          <div class="form-group">
+            <label for="purchase-date">Purchase Date:</label>
+            <input type="date" id="purchase-date" name="purchase-date" required>
+          </div>
+
+          <div class="form-group">
+            <label for="status">Crop Status:</label>
+            <select id="status" name="status" required>
+              <option value="">-- Select Status --</option>
+              <option value="planted">In use</option>
+              <option value="growing">In Repair</option>
+            </select>
+          </div>
+
+          
+
+          <div class="form-actions">
+            <button type="submit" class="btn-save"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
+            <button type="button" class="btn-cancel" onclick="window.history.back()"><i class="fa-solid fa-xmark"></i> Cancel</button>
+          </div>
+
+        </form>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/cropmgt.js"></script>
+</body>
+</html>
