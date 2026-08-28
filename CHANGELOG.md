@@ -100,3 +100,35 @@ AgriCore is a modern farm management system designed to help farmers and farm ma
 - Authentication errors avoid unnecessarily revealing account information.
 - JWT secrets are loaded from environment variables.
 - Authentication endpoints validate incoming data.
+
+## [0.2.1] - 2026-08-28
+
+### Added
+
+- Added server-side refresh token sessions.
+- Added refresh token hashing.
+- Added refresh token rotation.
+- Added refresh token revocation.
+- Added logout endpoint.
+- Added refresh endpoint.
+- Added authentication API client to Next.js.
+- Added login page.
+- Added registration page.
+- Added authenticated dashboard.
+- Added frontend authentication types.
+- Added frontend environment configuration.
+
+### Changed
+
+- Changed refresh tokens from long-lived JWTs to server-tracked opaque tokens.
+- Updated authentication service to support token rotation.
+- Updated frontend architecture to communicate with the FastAPI API.
+
+### Security
+
+- Refresh tokens are stored as SHA-256 hashes.
+- Refresh tokens can be revoked.
+- Refresh tokens are rotated after use.
+- Authentication secrets remain environment-based.
+- Passwords continue to use Argon2 hashing.
+- Frontend does not receive password hashes.

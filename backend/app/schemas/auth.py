@@ -2,7 +2,10 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field
 
+class RefreshTokenRequest(BaseModel):
+    """Request body for refreshing authentication."""
 
+    refresh_token: str = Field(min_length=1)
 class RegisterRequest(BaseModel):
     """Request body for user registration"""
 

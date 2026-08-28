@@ -9,6 +9,7 @@ from app.schemas.auth import (
     RegisterRequest,
     TokenResponse,
     UserResponse,
+    RefreshTokenRequest,
 )
 from app.services.auth_service import (
     AuthenticationError,
@@ -82,3 +83,47 @@ def get_me(
 ) -> User:
     """Return the authenticated user."""
     return current_user
+
+
+@router.post(
+    "/refresh",
+    response_model=TokenResponse,
+)
+def refresh(
+    data: RefreshTokenRequest,
+    session: Session = Depends(get_db),
+) -> TokenResponse:
+    """Rotate a refresh token."""
+
+    service = AuthService(session)
+
+    try:
+        access_token, refresh_token = service.refresh(
+            data.refresh_token,
+        )
+    except AuthenticationError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=str(exc),
+        ) from exc
+
+    return TokenResponse(
+        access_token=access_token,
+        refresh_token=refresh_token,
+    )
+
+
+@router.post("/logout")
+def logout(
+    data: RefreshTokenRequest,
+    session: Session = Depends(get_db),
+) -> dict[str, str]:
+    """Revoke a refresh token."""
+
+    AuthService(session).logout(
+        data.refresh_token,
+    )
+
+    return {
+        "message": "Successfully logged out.",
+    }

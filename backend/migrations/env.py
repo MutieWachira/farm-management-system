@@ -14,6 +14,7 @@ sys.path.insert(
 )
 
 from app.db.base import Base
+import app.models
 
 # Alembic Config object.
 config = context.config
