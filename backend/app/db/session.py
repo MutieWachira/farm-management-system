@@ -1,15 +1,12 @@
+from collections.abc import Generator
+
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from sqlalchemy.orm import Session, sessionmaker
 
-class Settings(BaseSettings):
-    database_url:str
-    models_config = SettingsConfigDict(
-        env_file="../.env",
-        extra="ignore",
-    )
+from app.core.config import get_settings
 
-settings = Settings()
+settings = get_settings()
+
 engine = create_engine(
     settings.database_url,
     pool_pre_ping=True,
@@ -20,3 +17,14 @@ SessionLocal = sessionmaker(
     autoflush=False,
     autocommit=False,
 )
+
+
+def get_db() -> Generator[Session, None, None]:
+    """Provide a database session for a request."""
+
+    session = SessionLocal()
+
+    try:
+        yield session
+    finally:
+        session.close()

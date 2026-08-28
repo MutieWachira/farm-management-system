@@ -1,0 +1,84 @@
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.orm import Session
+
+from app.api.dependencies import get_current_user
+from app.db.session import get_db
+from app.models.user import User
+from app.schemas.auth import (
+    LoginRequest,
+    RegisterRequest,
+    TokenResponse,
+    UserResponse,
+)
+from app.services.auth_service import (
+    AuthenticationError,
+    AuthService,
+    UserAlreadyExistsError,
+)
+
+router = APIRouter(
+    prefix="/api/v1/auth",
+    tags=["Authentication"],
+)
+
+
+@router.post(
+    "/register",
+    response_model=UserResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+def register(
+    data: RegisterRequest,
+    session: Session = Depends(get_db),
+) -> User:
+    """Register a new AgriCore user."""
+
+    service = AuthService(session)
+
+    try:
+        return service.register(data)
+    except UserAlreadyExistsError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=str(exc),
+        ) from exc
+
+
+@router.post(
+    "/login",
+    response_model=TokenResponse,
+)
+def login(
+    data: LoginRequest,
+    session: Session = Depends(get_db),
+) -> TokenResponse:
+    """Authenticate a user."""
+
+    service = AuthService(session)
+
+    try:
+        access_token, refresh_token = service.authenticate(
+            email=data.email,
+            password=data.password,
+        )
+    except AuthenticationError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=str(exc),
+        ) from exc
+
+    return TokenResponse(
+        access_token=access_token,
+        refresh_token=refresh_token,
+    )
+
+
+@router.get(
+    "/me",
+    response_model=UserResponse,
+)
+def get_me(
+    current_user: User = Depends(get_current_user),
+) -> User:
+    """Return the authenticated user."""
+    return current_user

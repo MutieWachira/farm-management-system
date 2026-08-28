@@ -1,25 +1,19 @@
-from logging.config import fileConfig
 import os
 import sys
+from logging.config import fileConfig
 from pathlib import Path
-from dotenv import load_dotenv
-
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
 
 from alembic import context
+from dotenv import load_dotenv
+from sqlalchemy import engine_from_config, pool
 
 # Add the backend directory to Python's import path.
 sys.path.insert(
     0,
-    os.path.abspath(
-        os.path.join(os.path.dirname(__file__), "..")
-    ),
+    os.path.abspath(os.path.join(os.path.dirname(__file__), "..")),
 )
 
 from app.db.base import Base
-from app.models import User, Farm, FarmMembership, Field
-
 
 # Alembic Config object.
 config = context.config
@@ -43,16 +37,12 @@ def get_database_url() -> str:
     database_url = os.getenv("DATABASE_URL")
 
     if not database_url:
-        raise RuntimeError(
-            "DATABASE_URL environment variable is not set."
-        )
+        raise RuntimeError("DATABASE_URL environment variable is not set.")
 
     return database_url
 
 
 config = context.config
-
-
 
 
 if config.config_file_name is not None:
@@ -100,6 +90,7 @@ def run_migrations_online() -> None:
 
         with context.begin_transaction():
             context.run_migrations()
+
 
 if context.is_offline_mode():
     run_migrations_offline()

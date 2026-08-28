@@ -67,3 +67,36 @@ AgriCore is a modern farm management system designed to help farmers and farm ma
 
 - Kept database credentials outside source-controlled files.
 - Added `.env.example` for safe environment configuration.
+
+## [0.2.0] - 2026-08-28  15:30
+
+### Added
+
+- Added user registration.
+- Added user login.
+- Added JWT access tokens.
+- Added JWT refresh tokens.
+- Added authenticated `/me` endpoint.
+- Added Argon2 password hashing.
+- Added authentication configuration.
+- Added authentication dependencies.
+- Added user repository.
+- Added authentication service.
+- Added login and registration schemas.
+- Added account activation status.
+- Added authentication unit tests.
+
+### Changed
+
+- Updated the User model with `is_active`.
+- Updated application configuration to support JWT settings.
+- Updated API version configuration to `0.2.0`.
+
+### Security
+
+- Passwords are never stored in plaintext.
+- Password hashes are never returned through API responses.
+- Access tokens are short-lived.
+- Authentication errors avoid unnecessarily revealing account information.
+- JWT secrets are loaded from environment variables.
+- Authentication endpoints validate incoming data.

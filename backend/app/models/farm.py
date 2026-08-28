@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from sqlalchemy import CheckConstraint, Numeric, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.db.base import Base, UUIDPrimaryKeyMixin, TimestampMixin
+from app.db.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
 
 if TYPE_CHECKING:
     from app.models.farm_membership import FarmMembership
