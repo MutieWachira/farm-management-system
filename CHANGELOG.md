@@ -132,3 +132,40 @@ AgriCore is a modern farm management system designed to help farmers and farm ma
 - Authentication secrets remain environment-based.
 - Passwords continue to use Argon2 hashing.
 - Frontend does not receive password hashes.
+
+## [0.3.0] - 2026-09-21
+
+### Added
+
+- Added Farm domain model.
+- Added Farm database migration.
+- Added Farm creation API.
+- Added Farm listing API.
+- Added Farm retrieval API.
+- Added Farm update API.
+- Added Farm deletion API.
+- Added Farm service layer.
+- Added Farm repository.
+- Added Farm request and response schemas.
+- Added farm ownership authorization.
+- Added frontend Farm types.
+- Added frontend Farm API client.
+- Added My Farms page.
+- Added farm creation form.
+- Added farm listing UI.
+- Connected dashboard farm count to the backend.
+
+### Security
+
+- Farm resources are protected by authentication.
+- Farm access is restricted to the authenticated farm owner.
+- Users cannot access another user's farm by changing the farm ID.
+- Unauthorized farm resources return a non-disclosing 404 response.
+- Farm ownership is enforced server-side rather than relying on frontend restrictions.
+
+### Testing
+
+- Added Farm API test coverage.
+- Added ownership authorization test coverage.
+- Added validation tests for Farm input.
+- Verified frontend production build.

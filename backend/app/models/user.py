@@ -7,6 +7,7 @@ from app.db.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
 
 if TYPE_CHECKING:
     from app.models.farm_membership import FarmMembership
+    from app.models.farm import Farm
 
 
 class User(
@@ -48,3 +49,6 @@ class User(
         back_populates="user",
         cascade="all, delete-orphan",
     )
+    farms: Mapped[list["Farm"]] = relationship(
+    back_populates="owner",
+)

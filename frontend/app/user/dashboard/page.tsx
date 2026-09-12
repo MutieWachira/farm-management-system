@@ -2,37 +2,110 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 import { getCurrentUser } from "@/src/lib/auth-api";
+import { getAccessToken, clearTokens } from "@/src/lib/auth_storage";
+import { getFarms } from "@/src/lib/farm-api";
+
 import type { User } from "@/src/types/auth";
+import type { Farm } from "@/src/types/farm";
 
 export default function DashboardPage() {
   const router = useRouter();
 
+  // ============================================================
+  // STATE
+  // ============================================================
+
   const [user, setUser] = useState<User | null>(null);
+  const [farms, setFarms] = useState<Farm[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // ============================================================
+  // LOAD DASHBOARD DATA
+  // ============================================================
 
   useEffect(() => {
-    const token =
-      sessionStorage.getItem("access_token");
+    let isMounted = true;
 
-    if (!token) {
-      router.replace("/login");
-      return;
-    }
+    const loadDashboard = async () => {
+      try {
+        // ------------------------------------------------------
+        // Check authentication
+        // ------------------------------------------------------
 
-    getCurrentUser(token)
-      .then(setUser)
-      .catch(() => {
-        sessionStorage.clear();
+        const token = getAccessToken();
+
+        if (!token) {
+          router.replace("/login");
+          return;
+        }
+
+        // ------------------------------------------------------
+        // Load user and farms concurrently
+        // ------------------------------------------------------
+
+        const [currentUser, userFarms] = await Promise.all([
+          getCurrentUser(token),
+          getFarms(),
+        ]);
+
+        // ------------------------------------------------------
+        // Prevent state updates if component was unmounted
+        // ------------------------------------------------------
+
+        if (!isMounted) {
+          return;
+        }
+
+        setUser(currentUser);
+        setFarms(userFarms);
+      } catch (error) {
+        console.error("Failed to load dashboard:", error);
+
+        if (!isMounted) {
+          return;
+        }
+
+        /*
+         * Authentication/API failure.
+         *
+         * Clear only AgriCore authentication tokens.
+         */
+        clearTokens();
+
         router.replace("/login");
-      });
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    loadDashboard();
+
+    // ----------------------------------------------------------
+    // Cleanup
+    // ----------------------------------------------------------
+
+    return () => {
+      isMounted = false;
+    };
   }, [router]);
 
-  if (!user) {
+  // ============================================================
+  // LOADING STATE
+  // ============================================================
+
+  if (loading) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-slate-50">
         <div className="flex flex-col items-center gap-4">
-          <div className="h-10 w-10 animate-spin rounded-full border-4 border-emerald-100 border-t-emerald-600" />
+          <div
+            className="h-10 w-10 animate-spin rounded-full border-4
+              border-emerald-100 border-t-emerald-600"
+          />
 
           <p className="text-sm font-medium text-slate-500">
             Loading AgriCore...
@@ -42,12 +115,28 @@ export default function DashboardPage() {
     );
   }
 
+  // ============================================================
+  // AUTHENTICATION GUARD
+  // ============================================================
+
+  if (!user) {
+    return null;
+  }
+
+  // ============================================================
+  // DASHBOARD
+  // ============================================================
+
   return (
     <main className="min-h-screen bg-slate-50">
-      {/* Top Navigation */}
+      {/* ========================================================
+          TOP NAVIGATION
+      ========================================================= */}
+
       <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/95 backdrop-blur">
         <div className="flex h-16 items-center justify-between px-6 lg:px-8">
           {/* Brand */}
+
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-600 text-lg font-bold text-white shadow-sm">
               A
@@ -65,10 +154,13 @@ export default function DashboardPage() {
           </div>
 
           {/* Header Actions */}
+
           <div className="flex items-center gap-4">
             <button
               type="button"
-              className="hidden rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 sm:block"
+              className="hidden rounded-lg border border-slate-200
+                bg-white px-4 py-2 text-sm font-medium text-slate-700
+                transition hover:bg-slate-50 sm:block"
             >
               Help
             </button>
@@ -84,7 +176,11 @@ export default function DashboardPage() {
                 </p>
               </div>
 
-              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-emerald-100 text-sm font-bold text-emerald-700">
+              <div
+                className="flex h-9 w-9 items-center justify-center
+                  rounded-full bg-emerald-100 text-sm font-bold
+                  text-emerald-700"
+              >
                 {user.first_name.charAt(0).toUpperCase()}
               </div>
             </div>
@@ -92,9 +188,15 @@ export default function DashboardPage() {
         </div>
       </header>
 
-      {/* Main Content */}
+      {/* ========================================================
+          MAIN CONTENT
+      ========================================================= */}
+
       <div className="mx-auto max-w-7xl px-6 py-8 lg:px-8">
-        {/* Welcome Section */}
+        {/* ======================================================
+            WELCOME SECTION
+        ======================================================= */}
+
         <section className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
           <div>
             <p className="mb-2 text-sm font-medium text-emerald-600">
@@ -113,20 +215,33 @@ export default function DashboardPage() {
 
           <button
             type="button"
-            className="inline-flex w-fit items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+            className="inline-flex w-fit items-center justify-center
+              gap-2 rounded-xl bg-emerald-600 px-5 py-3
+              text-sm font-semibold text-white shadow-sm
+              transition hover:bg-emerald-700 hover:shadow-md
+              focus:outline-none focus:ring-2
+              focus:ring-emerald-500 focus:ring-offset-2"
           >
             <span className="text-lg leading-none">+</span>
             Add Farm
           </button>
         </section>
 
-        {/* KPI Cards */}
+        {/* ======================================================
+            KPI CARDS
+        ======================================================= */}
+
         <section
           aria-label="Farm statistics"
           className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4"
         >
-          {/* Farms */}
-          <div className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+          {/* Total Farms */}
+
+          <div
+            className="group rounded-2xl border border-slate-200
+              bg-white p-5 shadow-sm transition
+              hover:-translate-y-0.5 hover:shadow-md"
+          >
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-500">
@@ -134,7 +249,7 @@ export default function DashboardPage() {
                 </p>
 
                 <p className="mt-3 text-3xl font-bold tracking-tight text-slate-900">
-                  0
+                  {farms.length}
                 </p>
               </div>
 
@@ -148,8 +263,13 @@ export default function DashboardPage() {
             </p>
           </div>
 
-          {/* Fields */}
-          <div className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+          {/* Total Fields */}
+
+          <div
+            className="group rounded-2xl border border-slate-200
+              bg-white p-5 shadow-sm transition
+              hover:-translate-y-0.5 hover:shadow-md"
+          >
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-500">
@@ -171,8 +291,13 @@ export default function DashboardPage() {
             </p>
           </div>
 
-          {/* Crops */}
-          <div className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+          {/* Active Crops */}
+
+          <div
+            className="group rounded-2xl border border-slate-200
+              bg-white p-5 shadow-sm transition
+              hover:-translate-y-0.5 hover:shadow-md"
+          >
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-500">
@@ -194,8 +319,13 @@ export default function DashboardPage() {
             </p>
           </div>
 
-          {/* Health */}
-          <div className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+          {/* Farm Health */}
+
+          <div
+            className="group rounded-2xl border border-slate-200
+              bg-white p-5 shadow-sm transition
+              hover:-translate-y-0.5 hover:shadow-md"
+          >
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm font-medium text-slate-500">
@@ -218,10 +348,18 @@ export default function DashboardPage() {
           </div>
         </section>
 
-        {/* Main Dashboard Grid */}
+        {/* ======================================================
+            MAIN DASHBOARD GRID
+        ======================================================= */}
+
         <section className="mt-6 grid gap-6 lg:grid-cols-3">
-          {/* Farm Overview */}
-          <div className="lg:col-span-2 rounded-2xl border border-slate-200 bg-white shadow-sm">
+          {/* ====================================================
+              FARM OVERVIEW
+          ===================================================== */}
+
+          <div className="rounded-2xl border border-slate-200 bg-white shadow-sm lg:col-span-2">
+            {/* Header */}
+
             <div className="flex items-center justify-between border-b border-slate-100 px-6 py-5">
               <div>
                 <h2 className="font-semibold text-slate-900">
@@ -233,39 +371,88 @@ export default function DashboardPage() {
                 </p>
               </div>
 
-              <button
-                type="button"
-                className="text-sm font-medium text-emerald-600 transition hover:text-emerald-700"
+              {/* Manage Farms */}
+
+              <Link
+                href="/user/farms"
+                className="inline-flex rounded-lg border border-slate-200
+                  px-4 py-2 text-sm font-medium text-slate-700
+                  transition hover:bg-slate-50
+                  focus:outline-none focus:ring-2
+                  focus:ring-emerald-500 focus:ring-offset-2"
               >
-                View all
-              </button>
+                Manage farms
+              </Link>
             </div>
 
             {/* Empty State */}
-            <div className="flex min-h-64 flex-col items-center justify-center px-6 py-10 text-center">
-              <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 text-2xl">
-                🌿
+
+            {farms.length === 0 ? (
+              <div className="flex min-h-64 flex-col items-center justify-center px-6 py-10 text-center">
+                <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 text-2xl">
+                  🌿
+                </div>
+
+                <h3 className="font-semibold text-slate-900">
+                  No farms registered yet
+                </h3>
+
+                <p className="mt-2 max-w-sm text-sm leading-6 text-slate-500">
+                  Add your first farm to begin tracking fields,
+                  crops, and agricultural operations.
+                </p>
+
+                <Link
+                  href="/user/farms"
+                  className="mt-5 inline-flex rounded-xl border
+                    border-emerald-200 bg-emerald-50 px-4 py-2.5
+                    text-sm font-semibold text-emerald-700
+                    transition hover:bg-emerald-100
+                    focus:outline-none focus:ring-2
+                    focus:ring-emerald-500 focus:ring-offset-2"
+                >
+                  Manage your farms
+                </Link>
               </div>
+            ) : (
+              /* Farm List */
 
-              <h3 className="font-semibold text-slate-900">
-                No farms registered yet
-              </h3>
+              <div className="divide-y divide-slate-100">
+                {farms.map((farm) => (
+                  <div
+                    key={farm.id}
+                    className="flex items-center justify-between
+                      px-6 py-4 transition hover:bg-slate-50"
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50 text-xl">
+                        🌱
+                      </div>
 
-              <p className="mt-2 max-w-sm text-sm leading-6 text-slate-500">
-                Add your first farm to begin tracking fields,
-                crops, and agricultural operations.
-              </p>
+                      <div>
+                        <p className="text-sm font-semibold text-slate-900">
+                          {farm.name}
+                        </p>
 
-              <button
-                type="button"
-                className="mt-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2.5 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-100"
-              >
-                Add your first farm
-              </button>
-            </div>
+                        <p className="mt-1 text-xs text-slate-500">
+                          {farm.location || "Location not specified"}
+                        </p>
+                      </div>
+                    </div>
+
+                    <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700">
+                      Active
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* Quick Actions */}
+          {/* ====================================================
+              QUICK ACTIONS
+          ===================================================== */}
+
           <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div className="border-b border-slate-100 px-6 py-5">
               <h2 className="font-semibold text-slate-900">
@@ -278,9 +465,12 @@ export default function DashboardPage() {
             </div>
 
             <div className="space-y-2 p-4">
-              <button
-                type="button"
-                className="flex w-full items-center gap-4 rounded-xl p-3 text-left transition hover:bg-slate-50"
+              {/* Add Farm */}
+
+              <Link
+                href="/user/farms"
+                className="flex w-full items-center gap-4 rounded-xl
+                  p-3 text-left transition hover:bg-slate-50"
               >
                 <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-50 text-lg">
                   🌱
@@ -295,11 +485,14 @@ export default function DashboardPage() {
                     Register a new farm
                   </p>
                 </div>
-              </button>
+              </Link>
+
+              {/* Manage Fields */}
 
               <button
                 type="button"
-                className="flex w-full items-center gap-4 rounded-xl p-3 text-left transition hover:bg-slate-50"
+                className="flex w-full items-center gap-4 rounded-xl
+                  p-3 text-left transition hover:bg-slate-50"
               >
                 <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-lg">
                   ◫
@@ -316,9 +509,12 @@ export default function DashboardPage() {
                 </div>
               </button>
 
+              {/* Manage Crops */}
+
               <button
                 type="button"
-                className="flex w-full items-center gap-4 rounded-xl p-3 text-left transition hover:bg-slate-50"
+                className="flex w-full items-center gap-4 rounded-xl
+                  p-3 text-left transition hover:bg-slate-50"
               >
                 <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-50 text-lg">
                   🌾
@@ -335,9 +531,12 @@ export default function DashboardPage() {
                 </div>
               </button>
 
+              {/* Reports */}
+
               <button
                 type="button"
-                className="flex w-full items-center gap-4 rounded-xl p-3 text-left transition hover:bg-slate-50"
+                className="flex w-full items-center gap-4 rounded-xl
+                  p-3 text-left transition hover:bg-slate-50"
               >
                 <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-lg">
                   📊
@@ -357,7 +556,10 @@ export default function DashboardPage() {
           </div>
         </section>
 
-        {/* Activity */}
+        {/* ======================================================
+            RECENT ACTIVITY
+        ======================================================= */}
+
         <section className="mt-6 rounded-2xl border border-slate-200 bg-white shadow-sm">
           <div className="border-b border-slate-100 px-6 py-5">
             <h2 className="font-semibold text-slate-900">
