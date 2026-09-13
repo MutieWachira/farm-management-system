@@ -54,6 +54,18 @@ def list_farms(
     )
 
 
+@router.get(
+    "/{farm_id}",
+    response_model=FarmResponse,
+)
+def get_farm(
+    farm: Farm = Depends(get_owned_farm),
+) -> Farm:
+    """Return an owned farm by ID."""
+
+    return farm
+
+
 @router.patch(
     "/{farm_id}",
     response_model=FarmResponse,

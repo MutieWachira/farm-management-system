@@ -468,7 +468,7 @@ export default function DashboardPage() {
               {/* Add Farm */}
 
               <Link
-                href="/user/farms"
+                href="/user/farms/farmId/members"
                 className="flex w-full items-center gap-4 rounded-xl
                   p-3 text-left transition hover:bg-slate-50"
               >
@@ -478,7 +478,7 @@ export default function DashboardPage() {
 
                 <div>
                   <p className="text-sm font-semibold text-slate-800">
-                    Add a farm
+                    Add a member
                   </p>
 
                   <p className="text-xs text-slate-500">

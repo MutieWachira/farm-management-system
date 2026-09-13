@@ -1,5 +1,7 @@
 from uuid import UUID
 
+from app.core.enums import FarmRole
+from app.models.farm_membership import FarmMembership
 from sqlalchemy.orm import Session
 from app.models.farm import Farm
 from app.repositories.farm_repository import FarmRepository
@@ -22,8 +24,9 @@ class FarmService:
                 data.description.strip()
                 if data.description
                 else None
-                ),
+            ),
         )
+        farm.memberships.append(FarmMembership(user_id=owner_id, role=FarmRole.OWNER))
         self.farms.create(farm)
         self.session.commit()
 
@@ -49,9 +52,9 @@ class FarmService:
                 else None
             )
 
-            self.session.commit()
+        self.session.commit()
 
-            return farm
+        return farm
 
     def delete(self, farm: Farm) -> None:
         """Delete an existing owned farm."""

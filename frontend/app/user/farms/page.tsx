@@ -686,8 +686,8 @@ Dashboard </Link>
                 )}
 
                 <div className="mt-6 border-t border-slate-100 pt-4">
-                  <button
-                    type="button"
+                  <Link
+                    href={`/user/farms/${farm.id}`}
                     className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-600 transition hover:text-emerald-700"
                   >
                     View farm
@@ -705,7 +705,7 @@ Dashboard </Link>
                         d="M5 12h14M13 6l6 6-6 6"
                       />
                     </svg>
-                  </button>
+                  </Link>
                 </div>
               </article>
             ))}

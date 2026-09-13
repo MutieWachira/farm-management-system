@@ -169,3 +169,40 @@ AgriCore is a modern farm management system designed to help farmers and farm ma
 - Added ownership authorization test coverage.
 - Added validation tests for Farm input.
 - Verified frontend production build.
+
+## [0.4.0] - 2026-09-13
+
+### Added
+
+- Added FarmMembership domain model.
+- Added FarmRole enumeration.
+- Added OWNER, MANAGER, WORKER and VIEWER roles.
+- Added farm membership database migration.
+- Added automatic OWNER membership when creating a farm.
+- Added farm member repository.
+- Added farm member service.
+- Added farm member API endpoints.
+- Added member listing.
+- Added member addition.
+- Added member role management.
+- Added member removal.
+- Added frontend farm-member types.
+- Added frontend membership API client.
+- Added farm members management UI.
+
+### Security
+
+- Added server-side farm membership authorization.
+- Restricted member management to farm owners.
+- Prevented managers, workers and viewers from modifying memberships.
+- Prevented removal or reassignment of the farm owner.
+- Prevented duplicate farm memberships.
+- Farm membership access remains protected by authentication.
+
+### Testing
+
+- Added farm membership authorization tests.
+- Added role permission tests.
+- Added duplicate membership tests.
+- Added owner protection tests.
+- Added frontend lint and production build checks.
