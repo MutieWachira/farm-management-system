@@ -36,9 +36,11 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:3000",
+         # Highly recommended: Add your local loopback address as well
+        "http://127.0.0.1:3000" 
         "https://farm-management-system-swart-six.vercel.app"
     ],
-    allow_credentials=False,
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
