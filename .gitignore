@@ -4,8 +4,12 @@ __pycache__/
 *.pyo
 .pytest_cache/
 .ruff_cache/
+.mypy_cache/
+.hypothesis/
+*.egg-info/
 
 # Python virtual environment
+.venv/
 backend/.venv/
 
 # Environment variables
@@ -14,9 +18,12 @@ backend/.venv/
 !.env.example
 
 # Node
+node_modules/
 frontend/node_modules/
+.npm/
 frontend/.next/
 frontend/out/
+frontend/next-env.d.ts
 
 # IDE
 .vscode/

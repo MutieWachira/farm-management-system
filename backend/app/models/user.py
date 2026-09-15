@@ -1,12 +1,13 @@
 from typing import TYPE_CHECKING
 
-from sqlalchemy import String
+from sqlalchemy import Boolean, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from app.db.base import Base, UUIDPrimaryKeyMixin, TimestampMixin
+from app.db.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
 
 if TYPE_CHECKING:
     from app.models.farm_membership import FarmMembership
+    from app.models.farm import Farm
 
 
 class User(
@@ -37,9 +38,17 @@ class User(
         String(100),
         nullable=False,
     )
+    is_active: Mapped[bool] = mapped_column(
+        Boolean,
+        nullable=False,
+        default=True,
+    )
 
     memberships: Mapped[list["FarmMembership"]] = relationship(
         "FarmMembership",
         back_populates="user",
         cascade="all, delete-orphan",
     )
+    farms: Mapped[list["Farm"]] = relationship(
+    back_populates="owner",
+)
