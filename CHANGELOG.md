@@ -206,3 +206,159 @@ AgriCore is a modern farm management system designed to help farmers and farm ma
 - Added duplicate membership tests.
 - Added owner protection tests.
 - Added frontend lint and production build checks.
+
+## [0.5.0] - 2026-09-15
+
+### Added
+
+- Added Field domain model for managing individual farm fields.
+- Added Field status lifecycle:
+  - ACTIVE
+  - FALLOW
+  - INACTIVE
+- Added Field-to-Farm relationship.
+- Added database migration for the `fields` table.
+- Added Field Pydantic schemas for creation, updates, and responses.
+- Added Field repository layer.
+- Added Field service layer.
+- Added Field API endpoints for:
+  - Creating fields
+  - Listing fields
+  - Retrieving a field
+  - Updating fields
+  - Deleting fields
+- Added Field frontend types and API client.
+- Added Field management page.
+- Added Field creation and editing functionality.
+- Added Field deletion functionality.
+- Added Field status display.
+- Added responsive Field management UI using Next.js and Tailwind CSS.
+
+### Security
+
+- Restricted Field creation, updating, and deletion to farm owners and managers.
+- Allowed authorized farm members to view fields.
+- Enforced farm membership before allowing Field access.
+- Prevented users from accessing fields belonging to farms where they are not members.
+- Added field-to-farm ownership checks for individual Field operations.
+- Maintained backend authorization as the authoritative security boundary.
+
+### Validation
+
+- Added Field name length validation.
+- Added positive `area_hectares` validation.
+- Added maximum area validation.
+- Added soil type length validation.
+- Added description length validation.
+- Added Field status validation.
+
+### Testing
+
+- Added Field API tests covering:
+  - Owner field creation
+  - Manager field creation
+  - Worker creation rejection
+  - Viewer creation rejection
+  - Owner field listing
+  - Manager field listing
+  - Worker field listing
+  - Viewer field listing
+  - Field retrieval
+  - Field updating
+  - Field deletion
+  - Cross-farm access protection
+  - Input validation
+  - Unauthenticated access
+
+### Frontend
+
+- Added Field management navigation from the Farm management interface.
+- Added responsive Field cards and management controls.
+- Added Field status badges.
+- Added Field information display including:
+  - Field name
+  - Area
+  - Soil type
+  - Status
+  - Description
+- Added navigation from Fields to Crop management.
+
+### Maintenance
+
+- Completed Field management implementation across backend and frontend.
+- Established the Field foundation for the Crop management module.
+
+## [0.6.0] - 2026-09-15
+
+### Added
+
+- Added Crop domain model with crop lifecycle statuses:
+  - PLANNED
+  - PLANTED
+  - GROWING
+  - HARVESTED
+  - FAILED
+  - CANCELLED
+- Added Crop database migration.
+- Added Crop-to-Field relationship.
+- Added Crop Pydantic schemas for creation, updates, and responses.
+- Added Crop repository layer.
+- Added Crop service layer.
+- Added Crop API endpoints for:
+  - Creating crops
+  - Listing crops
+  - Retrieving a crop
+  - Updating crops
+  - Deleting crops
+- Added farm membership authorization for Crop operations.
+- Added Crop frontend types and API client.
+- Added Crop management page.
+- Added Create Crop form.
+- Added Edit Crop functionality.
+- Added Delete Crop functionality.
+- Added crop status display and production summaries.
+- Added client-side Crop form validation.
+- Added loading, error, and saving states.
+
+### Security
+
+- Restricted Crop creation, updating, and deletion to farm owners and managers.
+- Allowed farm members with valid membership to read crops.
+- Enforced field ownership through farm membership authorization.
+- Prevented cross-field and cross-farm Crop access.
+- Maintained backend validation as the authoritative security boundary.
+
+### Testing
+
+- Added Crop API tests covering:
+  - Owner creation
+  - Manager creation
+  - Worker creation rejection
+  - Viewer creation rejection
+  - Owner listing
+  - Manager listing
+  - Worker listing
+  - Viewer listing
+  - Owner updating
+  - Manager updating
+  - Worker updating rejection
+  - Viewer updating rejection
+  - Owner deletion
+  - Manager deletion
+  - Worker deletion rejection
+  - Viewer deletion rejection
+  - Cross-farm access protection
+  - Input validation
+  - Unauthenticated access
+
+### Frontend
+
+- Added responsive Crop management UI using Next.js and Tailwind CSS.
+- Added reusable Create/Edit Crop form behavior.
+- Added user-friendly validation and API error handling.
+- Added Crop management navigation from the Field page.
+
+### Maintenance
+
+- Completed Crop feature implementation across backend and frontend.
+- Updated project version to v0.6.0.

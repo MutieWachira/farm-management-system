@@ -5,6 +5,8 @@ from app.api.auth import router as auth_router
 from app.core.config import get_settings
 from app.api.farms import router as farm_router
 from app.api.farm_members import router as farm_members_router
+from app.api.fields import router as fields_router
+from app.api.crops import router as crops_router
 
 
 settings = get_settings()
@@ -44,6 +46,8 @@ app.add_middleware(
 app.include_router(auth_router)
 app.include_router(farm_router)
 app.include_router(farm_members_router)
+app.include_router(fields_router)
+app.include_router(crops_router)
 
 @app.get("/health")
 async def health_check() -> dict[str, str]:

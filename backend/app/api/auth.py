@@ -1,4 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+import json
+from urllib.parse import parse_qs
+
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 
 from app.api.dependencies import get_current_user
@@ -49,11 +52,23 @@ def register(
     "/login",
     response_model=TokenResponse,
 )
-def login(
-    data: LoginRequest,
+async def login(
+    request: Request,
     session: Session = Depends(get_db),
 ) -> TokenResponse:
     """Authenticate a user."""
+
+    content_type = request.headers.get("content-type", "")
+    body = await request.body()
+
+    if "application/x-www-form-urlencoded" in content_type:
+        form_data = parse_qs(body.decode(), keep_blank_values=True)
+        data = LoginRequest(
+            email=form_data.get("username", form_data.get("email", [""]))[0],
+            password=form_data.get("password", [""])[0],
+        )
+    else:
+        data = LoginRequest.model_validate(json.loads(body))
 
     service = AuthService(session)
 
