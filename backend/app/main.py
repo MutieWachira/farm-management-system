@@ -29,7 +29,7 @@ app = FastAPI(
 #   http://localhost:3000
 #
 # Backend:
-#   http://127.0.0.1:8000
+#   http://127.0.0.1:8000,
 # ---------------------------------------------------------------------------
 
 app.add_middleware(
@@ -37,8 +37,8 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:3000",
          # Highly recommended: Add your local loopback address as well
-        "http://127.0.0.1:3000" 
-        "https://farm-management-system-swart-six.vercel.app"
+        "http://127.0.0.1:3000",
+        "https://farm-management-system-swart-six.vercel.app",
     ],
     allow_credentials=True,
     allow_methods=["*"],
