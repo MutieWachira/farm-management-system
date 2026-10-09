@@ -1,6 +1,5 @@
 from datetime import datetime
 from enum import Enum
-import string
 from typing import TYPE_CHECKING
 from uuid import UUID
 
@@ -10,7 +9,7 @@ from app.db.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
 
 if TYPE_CHECKING:
     from app.models.field import Field
-
+    from app.models.farm_activity import FarmActivity
 
 class CropStatus(str, Enum):
     """Possible lifecycle states of a crop."""
@@ -81,3 +80,7 @@ class Crop(UUIDPrimaryKeyMixin, TimestampMixin, Base):
         "Field",
         back_populates="crops",
     )
+
+    activities: Mapped[list["FarmActivity"]] = relationship(
+    back_populates="crop",
+)

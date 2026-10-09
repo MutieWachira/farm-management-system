@@ -10,6 +10,7 @@ if TYPE_CHECKING:
     from app.models.farm_membership import FarmMembership
     from app.models.field import Field
     from app.models.user import User
+    from app.models.farm_activity import FarmActivity
 
 
 class Farm(
@@ -69,3 +70,8 @@ class Farm(
         back_populates="farm",
         cascade="all, delete-orphan",
     )
+
+    activities: Mapped[list["FarmActivity"]] = relationship(
+    back_populates="farm",
+    cascade="all, delete-orphan",
+)
