@@ -5,7 +5,7 @@ from app.models.field import Field, FieldStatus
 from app.models.user import User
 from app.models.refresh_token import RefreshToken
 from app.models.crop import Crop, CropStatus
-from app.models.farm_activity import FarmActivity
+from app.models.farm_activity import FarmActivity, ActivityType
 
 __all__ = [
     "Farm",
@@ -18,4 +18,5 @@ __all__ = [
     "Crop",
     "CropStatus",
     "FarmActivity"
+    "ActivityType",
 ]

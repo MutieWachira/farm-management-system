@@ -362,3 +362,43 @@ AgriCore is a modern farm management system designed to help farmers and farm ma
 
 - Completed Crop feature implementation across backend and frontend.
 - Updated project version to v0.6.0.
+
+## [0.7.0] - 2026-10-13
+
+# Added
+
+- Introduced the Farm Activities feature for recording and tracking farm operations.
+- Added support for the following activity types:
+    - Planting
+    - Irrigation
+    - Fertilization
+    - Spraying
+    - Weeding
+    - Pest control
+    - Harvesting
+    - Land preparation
+    - Maintenance
+    - Other activities
+- Added activity details, including title, date, description, quantity, unit, and cost.
+- Added optional associations between activities, farms, fields, and crops.
+- Added backend API endpoints for creating, listing, retrieving, updating, and deleting farm activities.
+- Added request and response schemas for activity data validation.
+- Added repository and service layers for farm activity operations.
+- Added farm membership and role-based permission checks for activity management.
+- Added validation to ensure associated fields and crops belong to the correct farm.
+- Added a frontend page for recording, viewing, editing, and deleting farm activities.
+- Added activity history, loading states, empty states, success messages, error messages, and activity cost summaries.
+- Added frontend validation for required fields, quantities, and costs.
+
+# Security
+- Restricted activity creation, updating, and deletion to authorized farm managers and owners.
+- Restricted activity access to authorized farm members.
+- Added farm-scoped activity retrieval to prevent access to activities belonging to another farm.
+- Added validation for field and crop associations.
+- Validation and Testing
+- Planned API tests for permissions, farm isolation, invalid inputs, and activity CRUD operations.
+- Planned frontend checks using TypeScript, linting, and a production build.
+
+# Notes
+- Activity costs represent recorded costs and are not a complete farm accounting or profit calculation.
+- Automated tests, migration verification, and production-build checks must pass before this release is considered complete.

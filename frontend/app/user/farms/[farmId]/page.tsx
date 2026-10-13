@@ -608,10 +608,18 @@ export default function FarmDetailsPage() {
         available: true,
       },
       {
+        title: "Farm  Activities",
+        description:
+          "View and manage your farm activities.",
+        href: `/user/farms/${farmId}/activities`,
+        icon: "🚜",
+        available: true,
+      },
+      {
         title: "Irrigation",
         description:
           "Manage irrigation systems and water usage.",
-        href: `/dashboard/farms/${farmId}/irrigation`,
+        href: `/user/farms/${farmId}/irrigation`,
         icon: "💧",
         available: false,
       },
@@ -619,7 +627,7 @@ export default function FarmDetailsPage() {
         title: "Livestock",
         description:
           "Manage livestock records, health information, and production.",
-        href: `/dashboard/farms/${farmId}/livestock`,
+        href: `/user/farms/${farmId}/livestock`,
         icon: "◉",
         available: false,
       },
@@ -635,7 +643,7 @@ export default function FarmDetailsPage() {
         title: "Members",
         description:
           "View and manage users who have access to this farm.",
-        href: `/dashboard/farms/${farmId}/members`,
+        href: `/user/farms/${farmId}/members`,
         icon: "♙",
         available: true,
       },
