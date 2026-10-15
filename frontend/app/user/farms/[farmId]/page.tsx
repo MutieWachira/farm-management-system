@@ -629,7 +629,7 @@ export default function FarmDetailsPage() {
           "Manage livestock records, health information, and production.",
         href: `/user/farms/${farmId}/livestock`,
         icon: "🐄",
-        available: false,
+        available: true,
       },
       {
         title: "Inventory",

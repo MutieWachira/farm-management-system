@@ -11,6 +11,8 @@ from app.models.inventory_transaction import (
 )
 from app.models.refresh_token import RefreshToken
 from app.models.user import User
+from app.models.livestock import Livestock, LivestockStatus
+
 
 __all__ = [
     "Farm",
@@ -27,4 +29,6 @@ __all__ = [
     "InventoryItem",
     "InventoryTransaction",
     "InventoryMovementType",
+    "Livestock",
+    "LivestockStatus",
 ]

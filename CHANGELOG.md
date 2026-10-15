@@ -432,3 +432,26 @@ AgriCore is a modern farm management system designed to help farmers and farm ma
 # Notes
 - Frontend functional testing and the production build must be completed before declaring this release production-ready.
 - Database migration status and automated inventory integration-test results should be verified before release.
+
+# v0.9.0 — 2026-10-15
+
+# Added — Livestock Management
+- Added livestock data model and database migration.
+- Added livestock schemas for creating, updating, and returning livestock records.
+- Added repository and service layers for livestock data access and business logic.
+- Added livestock API endpoints for creating, listing, retrieving, and updating records.
+- Added farm-scoped livestock access and permission checks.
+- Added the livestock frontend page at frontend/src/app/user/farms/[farmId]/livestock/page.tsx.
+- Added livestock registration and editing forms.
+- Added livestock overview statistics and record listing.
+- Added search and filtering by species and status.
+- Added support for Active, Sold, Deceased, and Missing statuses.
+
+# Validation
+- Backend compilation and API route registration checks passed, if confirmed during testing.
+- Frontend TypeScript checks passed, if confirmed during testing.
+- Record any additional automated or manual tests completed for this release.
+
+# Notes
+- Livestock deletion and dedicated livestock transaction/history tracking are not included in this entry.
+- Keep the changelog updated as additional features and fixes are implemented.
