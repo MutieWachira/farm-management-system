@@ -1231,7 +1231,7 @@ export default function CropsPage() {
                       htmlFor="actual-harvest-date"
                       className="block text-sm font-medium text-slate-700"
                     >
-                      Actual harvest
+                      Actual harvest (optional)
                     </label>
 
                     <input

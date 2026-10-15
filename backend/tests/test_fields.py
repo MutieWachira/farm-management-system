@@ -1005,3 +1005,87 @@ def test_field_area_large_negative_is_rejected():
     )
 
     assert response.status_code == 422
+
+
+def test_total_field_area_cannot_exceed_farm_area():
+    owner, owner_token = create_user(prefix="field_area_limit")
+    farm = create_farm(
+        access_token=owner_token,
+        name="Field Area Limit Farm",
+        area_hectares=10.0,
+    )
+    farm_id = get_farm_id(farm)
+    create_field(
+        access_token=owner_token,
+        farm_id=farm_id,
+        area_hectares=6.0,
+    )
+
+    response = client.post(
+        f"/api/v1/farms/{farm_id}/fields",
+        headers=auth_headers(owner_token),
+        json={
+            "name": "Oversized Field",
+            "area_hectares": 5.0,
+            "soil_type": "Loam",
+        },
+    )
+
+    assert response.status_code == 422
+    assert "Total field area cannot exceed the farm area" in response.text
+
+    boundary_field = create_field(
+        access_token=owner_token,
+        farm_id=farm_id,
+        name="Boundary Field",
+        area_hectares=4.0,
+    )
+    assert boundary_field["area_hectares"] == 4.0
+
+
+def test_field_update_cannot_exceed_farm_area():
+    _, owner_token = create_user(prefix="field_update_area_limit")
+    farm = create_farm(
+        access_token=owner_token,
+        name="Field Update Area Limit Farm",
+        area_hectares=10.0,
+    )
+    farm_id = get_farm_id(farm)
+    field = create_field(
+        access_token=owner_token,
+        farm_id=farm_id,
+        area_hectares=6.0,
+    )
+
+    response = client.patch(
+        f"/api/v1/farms/{farm_id}/fields/{field['id']}",
+        headers=auth_headers(owner_token),
+        json={"area_hectares": 11.0},
+    )
+
+    assert response.status_code == 422
+    assert "Total field area cannot exceed the farm area" in response.text
+
+
+def test_farm_area_cannot_be_reduced_below_total_field_area():
+    _, owner_token = create_user(prefix="farm_area_below_fields")
+    farm = create_farm(
+        access_token=owner_token,
+        name="Farm Area Below Fields",
+        area_hectares=10.0,
+    )
+    farm_id = get_farm_id(farm)
+    create_field(
+        access_token=owner_token,
+        farm_id=farm_id,
+        area_hectares=6.0,
+    )
+
+    response = client.patch(
+        f"/api/v1/farms/{farm_id}",
+        headers=auth_headers(owner_token),
+        json={"area_hectares": 5.0},
+    )
+
+    assert response.status_code == 422
+    assert "Farm area cannot be less than the total field area" in response.text

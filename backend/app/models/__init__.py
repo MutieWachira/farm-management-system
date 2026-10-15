@@ -1,11 +1,16 @@
-from app.models.farm import Farm
-from app.models.farm_membership import FarmMembership
 from app.core.enums import FarmRole
-from app.models.field import Field, FieldStatus
-from app.models.user import User
-from app.models.refresh_token import RefreshToken
 from app.models.crop import Crop, CropStatus
-from app.models.farm_activity import FarmActivity, ActivityType
+from app.models.farm import Farm
+from app.models.farm_activity import ActivityType, FarmActivity
+from app.models.farm_membership import FarmMembership
+from app.models.field import Field, FieldStatus
+from app.models.inventory_item import InventoryItem
+from app.models.inventory_transaction import (
+    InventoryMovementType,
+    InventoryTransaction,
+)
+from app.models.refresh_token import RefreshToken
+from app.models.user import User
 
 __all__ = [
     "Farm",
@@ -17,6 +22,9 @@ __all__ = [
     "RefreshToken",
     "Crop",
     "CropStatus",
-    "FarmActivity"
+    "FarmActivity",
     "ActivityType",
+    "InventoryItem",
+    "InventoryTransaction",
+    "InventoryMovementType",
 ]

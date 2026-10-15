@@ -230,6 +230,7 @@ def test_owner_can_create_crop(client: TestClient):
     assert data["name"] == "Maize"
     assert data["variety"] == "H614"
     assert data["status"] == "PLANTED"
+    assert data["actual_harvest_date"] is None
     assert data["area_hectares"] == 5.0
     assert data["expected_yield"] == 4.5
 

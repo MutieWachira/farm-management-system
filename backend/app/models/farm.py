@@ -11,6 +11,7 @@ if TYPE_CHECKING:
     from app.models.field import Field
     from app.models.user import User
     from app.models.farm_activity import FarmActivity
+    from app. models.inventory_item import InventoryItem
 
 
 class Farm(
@@ -74,4 +75,10 @@ class Farm(
     activities: Mapped[list["FarmActivity"]] = relationship(
     back_populates="farm",
     cascade="all, delete-orphan",
-)
+    )
+
+    inventory_items: Mapped[list["InventoryItem"]] = relationship (
+      "InventoryItem",
+      back_populates="farm",
+      cascade="all, delete-orphan",  
+    )

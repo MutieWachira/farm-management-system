@@ -1,5 +1,6 @@
 from uuid import UUID
 
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.models.field import Field
@@ -47,6 +48,21 @@ class FieldRepository:
             .order_by(Field.created_at.asc())
             .all()
         )
+
+    def total_area_by_farm(
+        self,
+        farm_id: UUID,
+        *,
+        exclude_field_id: UUID | None = None,
+    ) -> float:
+        statement = self.session.query(
+            func.coalesce(func.sum(Field.area_hectares), 0.0),
+        ).filter(Field.farm_id == farm_id)
+
+        if exclude_field_id is not None:
+            statement = statement.filter(Field.id != exclude_field_id)
+
+        return float(statement.scalar())
 
     def update(
         self,

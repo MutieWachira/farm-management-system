@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
+import { getCrops } from "@/src/lib/crop-api";
+import { getFields } from "@/src/lib/field-api";
 import {
   createFarmActivity,
   deleteFarmActivity,
@@ -15,6 +17,8 @@ import type {
   CreateFarmActivityRequest,
   FarmActivity,
 } from "@/src/types/farm-activity";
+import type { Crop } from "@/src/types/crop";
+import type { Field } from "@/src/types/field";
 
 const ACTIVITY_TYPES: { value: ActivityType; label: string }[] = [
   { value: "PLANTING", label: "Planting" },
@@ -127,6 +131,8 @@ export default function FarmActivitiesPage() {
   const farmId = params.farmId;
 
   const [activities, setActivities] = useState<FarmActivity[]>([]);
+  const [fields, setFields] = useState<Field[]>([]);
+  const [crops, setCrops] = useState<Crop[]>([]);
   const [form, setForm] = useState<ActivityForm>(INITIAL_FORM);
   const [editingActivity, setEditingActivity] =
     useState<FarmActivity | null>(null);
@@ -137,12 +143,43 @@ export default function FarmActivitiesPage() {
   const [showForm, setShowForm] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [optionsError, setOptionsError] = useState("");
+  const [loadingOptions, setLoadingOptions] = useState(true);
+
+  const loadRelatedRecords = useCallback(async () => {
+    if (!farmId) {
+      setFields([]);
+      setCrops([]);
+      setLoadingOptions(false);
+      return;
+    }
+
+    setLoadingOptions(true);
+    setOptionsError("");
+
+    try {
+      const farmFields = await getFields(farmId);
+      const cropLists = await Promise.all(
+        farmFields.map((field) => getCrops(field.id)),
+      );
+
+      setFields(farmFields);
+      setCrops(cropLists.flat());
+    } catch (err) {
+      setFields([]);
+      setCrops([]);
+      setOptionsError(getErrorMessage(err));
+    } finally {
+      setLoadingOptions(false);
+    }
+  }, [farmId]);
 
   const loadActivities = useCallback(async () => {
     if (!farmId) {
       return;
     }
 
+    void loadRelatedRecords();
     setLoading(true);
     setError("");
 
@@ -154,7 +191,7 @@ export default function FarmActivitiesPage() {
     } finally {
       setLoading(false);
     }
-  }, [farmId]);
+  }, [farmId, loadRelatedRecords]);
 
   useEffect(() => {
     void loadActivities();
@@ -294,6 +331,12 @@ export default function FarmActivitiesPage() {
   );
 
   const recentActivities = activities.length;
+  const availableCrops = form.field_id
+    ? crops.filter((crop) => crop.field_id === form.field_id)
+    : crops;
+  const fieldNames = new Map(
+    fields.map((field) => [field.id, field.name]),
+  );
 
   return (
     <main className="min-h-screen bg-slate-50 px-4 py-6 text-slate-900 sm:px-6 lg:px-8">
@@ -504,17 +547,29 @@ export default function FarmActivitiesPage() {
                     htmlFor="activity-field"
                     className="mb-2 block text-sm font-medium text-slate-700"
                   >
-                    Field ID (optional)
+                    Field (optional)
                   </label>
-                  <input
+                  <select
                     id="activity-field"
+                    disabled={loadingOptions || Boolean(optionsError)}
                     value={form.field_id}
-                    onChange={(event) =>
-                      updateForm("field_id", event.target.value)
-                    }
-                    placeholder="Paste the field UUID"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
-                  />
+                    onChange={(event) => {
+                      updateForm("field_id", event.target.value);
+                      updateForm("crop_id", "");
+                    }}
+                    className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 disabled:bg-slate-100"
+                  >
+                    <option value="">
+                      {loadingOptions
+                        ? "Loading fields..."
+                        : "No field selected"}
+                    </option>
+                    {fields.map((field) => (
+                      <option key={field.id} value={field.id}>
+                        {field.name}
+                      </option>
+                    ))}
+                  </select>
                   <p className="mt-1 text-xs text-slate-500">
                     Leave empty if this activity is not linked to a field.
                   </p>
@@ -525,21 +580,41 @@ export default function FarmActivitiesPage() {
                     htmlFor="activity-crop"
                     className="mb-2 block text-sm font-medium text-slate-700"
                   >
-                    Crop ID (optional)
+                    Crop (optional)
                   </label>
-                  <input
+                  <select
                     id="activity-crop"
+                    disabled={loadingOptions || Boolean(optionsError)}
                     value={form.crop_id}
                     onChange={(event) =>
                       updateForm("crop_id", event.target.value)
                     }
-                    placeholder="Paste the crop UUID"
-                    className="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100"
-                  />
+                    className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-100 disabled:bg-slate-100"
+                  >
+                    <option value="">
+                      {loadingOptions
+                        ? "Loading crops..."
+                        : "No crop selected"}
+                    </option>
+                    {availableCrops.map((crop) => (
+                      <option key={crop.id} value={crop.id}>
+                        {crop.variety
+                          ? `${crop.name} (${crop.variety})`
+                          : crop.name}
+                        {!form.field_id &&
+                          ` — ${fieldNames.get(crop.field_id) ?? "Unknown field"}`}
+                      </option>
+                    ))}
+                  </select>
                   <p className="mt-1 text-xs text-slate-500">
                     If selected, the crop must belong to this farm and match
                     the selected field when one is supplied.
                   </p>
+                  {optionsError && (
+                    <p role="alert" className="mt-1 text-xs text-red-700">
+                      Unable to load fields and crops: {optionsError}
+                    </p>
+                  )}
                 </div>
 
                 <div>

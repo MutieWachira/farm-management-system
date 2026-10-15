@@ -402,3 +402,33 @@ AgriCore is a modern farm management system designed to help farmers and farm ma
 # Notes
 - Activity costs represent recorded costs and are not a complete farm accounting or profit calculation.
 - Automated tests, migration verification, and production-build checks must pass before this release is considered complete.
+
+# [0.8.0] - 2026-10-15
+
+# Added
+
+- Added inventory item schemas for creating, updating, and returning inventory records.
+- Added inventory item repository operations for creation, retrieval, filtering, searching, updating, and deactivation.
+- Added inventory transaction repository for recording and retrieving stock movements.
+- Added inventory service logic for stock receipts, stock usage, and positive or negative stock adjustments.
+- Added stock validation to prevent transactions that would result in a negative inventory balance.
+- Added database row locking for inventory updates to help prevent conflicting concurrent stock movements.
+- Added farm-scoped inventory API endpoints for listing, creating, retrieving, updating, and deactivating inventory items.
+- Added endpoints for recording and retrieving transactions for individual inventory items.
+- Added TypeScript inventory types and request interfaces.
+- Added a frontend inventory API client with authenticated requests, query filtering, and inventory transaction support.
+- Started the inventory management page for stock monitoring, item creation, stock movements, and transaction history.
+
+# Changed
+- Changed inventory creation so initial stock is introduced through a transaction rather than by directly setting the stock balance.
+- Organized inventory functionality into models, schemas, repositories, services, and API routes.
+- Kept inventory operations scoped to the relevant farm and subject to backend authorization checks.
+
+# Fixed
+- Fixed TypeScript filter-query typing in the inventory API client by making the query builder generic.
+- Verified that the inventory API routes appear in the FastAPI OpenAPI schema.
+- Verified that the frontend TypeScript check passes after the query-builder correction.
+
+# Notes
+- Frontend functional testing and the production build must be completed before declaring this release production-ready.
+- Database migration status and automated inventory integration-test results should be verified before release.

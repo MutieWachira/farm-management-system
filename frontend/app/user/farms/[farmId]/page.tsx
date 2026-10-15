@@ -628,8 +628,16 @@ export default function FarmDetailsPage() {
         description:
           "Manage livestock records, health information, and production.",
         href: `/user/farms/${farmId}/livestock`,
-        icon: "◉",
+        icon: "🐄",
         available: false,
+      },
+      {
+        title: "Inventory",
+        description:
+          "Manage your farm's inventory.",
+        href: `/user/farms/${farmId}/inventory`,
+        icon: "📦",
+        available: true,
       },
       {
         title: "Expenses",
