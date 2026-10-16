@@ -309,6 +309,24 @@ export default function FieldsPage() {
       return;
     }
 
+    const existingAreaExcludingSelected =
+      statistics.totalArea -
+      (selectedField
+        ? Number(selectedField.area_hectares || 0)
+        : 0);
+
+    if (
+      farm?.area_hectares !== null &&
+      farm?.area_hectares !== undefined &&
+      existingAreaExcludingSelected + area >
+        farm.area_hectares
+    ) {
+      setFormError(
+        `Total field area cannot exceed the farm area of ${farm.area_hectares} hectares.`,
+      );
+      return;
+    }
+
     if (!trimmedSoilType) {
       setFormError("Soil type is required.");
       return;
@@ -853,6 +871,22 @@ export default function FieldsPage() {
                     onChange={handleFormChange}
                     placeholder="e.g. 5.5"
                     min="0.01"
+                    max={
+                      farm?.area_hectares !== null &&
+                      farm?.area_hectares !== undefined
+                        ? Math.max(
+                            0,
+                            farm.area_hectares -
+                              statistics.totalArea +
+                              (selectedField
+                                ? Number(
+                                    selectedField.area_hectares ||
+                                      0,
+                                  )
+                                : 0),
+                          )
+                        : undefined
+                    }
                     step="0.01"
                     required
                     disabled={saving}
@@ -863,6 +897,16 @@ export default function FieldsPage() {
                     hectares
                   </span>
                 </div>
+                {farm?.area_hectares !== null &&
+                  farm?.area_hectares !== undefined && (
+                    <p className="mt-2 text-xs text-slate-500">
+                      {`Farm area: ${formatArea(
+                        farm.area_hectares,
+                      )}. Current field total: ${formatArea(
+                        statistics.totalArea,
+                      )}.`}
+                    </p>
+                  )}
               </div>
 
               <div>
@@ -945,4 +989,3 @@ export default function FieldsPage() {
     </main>
   );
 }
-

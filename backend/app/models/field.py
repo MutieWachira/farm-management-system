@@ -11,6 +11,7 @@ from app.db.base import Base, TimestampMixin, UUIDPrimaryKeyMixin
 if TYPE_CHECKING:
     from app.models.farm import Farm
     from app.models.crop import Crop
+    from app.models.farm_activity import FarmActivity
 
 
 class FieldStatus(str, Enum):
@@ -81,4 +82,8 @@ class Field(
         back_populates="field",
         cascade="all, delete-orphan",
     )
+
+    activities: Mapped[list["FarmActivity"]] = relationship(
+    back_populates="field",
+)
 

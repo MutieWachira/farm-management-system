@@ -362,3 +362,96 @@ AgriCore is a modern farm management system designed to help farmers and farm ma
 
 - Completed Crop feature implementation across backend and frontend.
 - Updated project version to v0.6.0.
+
+## [0.7.0] - 2026-10-13
+
+# Added
+
+- Introduced the Farm Activities feature for recording and tracking farm operations.
+- Added support for the following activity types:
+    - Planting
+    - Irrigation
+    - Fertilization
+    - Spraying
+    - Weeding
+    - Pest control
+    - Harvesting
+    - Land preparation
+    - Maintenance
+    - Other activities
+- Added activity details, including title, date, description, quantity, unit, and cost.
+- Added optional associations between activities, farms, fields, and crops.
+- Added backend API endpoints for creating, listing, retrieving, updating, and deleting farm activities.
+- Added request and response schemas for activity data validation.
+- Added repository and service layers for farm activity operations.
+- Added farm membership and role-based permission checks for activity management.
+- Added validation to ensure associated fields and crops belong to the correct farm.
+- Added a frontend page for recording, viewing, editing, and deleting farm activities.
+- Added activity history, loading states, empty states, success messages, error messages, and activity cost summaries.
+- Added frontend validation for required fields, quantities, and costs.
+
+# Security
+- Restricted activity creation, updating, and deletion to authorized farm managers and owners.
+- Restricted activity access to authorized farm members.
+- Added farm-scoped activity retrieval to prevent access to activities belonging to another farm.
+- Added validation for field and crop associations.
+- Validation and Testing
+- Planned API tests for permissions, farm isolation, invalid inputs, and activity CRUD operations.
+- Planned frontend checks using TypeScript, linting, and a production build.
+
+# Notes
+- Activity costs represent recorded costs and are not a complete farm accounting or profit calculation.
+- Automated tests, migration verification, and production-build checks must pass before this release is considered complete.
+
+# [0.8.0] - 2026-10-15
+
+# Added
+
+- Added inventory item schemas for creating, updating, and returning inventory records.
+- Added inventory item repository operations for creation, retrieval, filtering, searching, updating, and deactivation.
+- Added inventory transaction repository for recording and retrieving stock movements.
+- Added inventory service logic for stock receipts, stock usage, and positive or negative stock adjustments.
+- Added stock validation to prevent transactions that would result in a negative inventory balance.
+- Added database row locking for inventory updates to help prevent conflicting concurrent stock movements.
+- Added farm-scoped inventory API endpoints for listing, creating, retrieving, updating, and deactivating inventory items.
+- Added endpoints for recording and retrieving transactions for individual inventory items.
+- Added TypeScript inventory types and request interfaces.
+- Added a frontend inventory API client with authenticated requests, query filtering, and inventory transaction support.
+- Started the inventory management page for stock monitoring, item creation, stock movements, and transaction history.
+
+# Changed
+- Changed inventory creation so initial stock is introduced through a transaction rather than by directly setting the stock balance.
+- Organized inventory functionality into models, schemas, repositories, services, and API routes.
+- Kept inventory operations scoped to the relevant farm and subject to backend authorization checks.
+
+# Fixed
+- Fixed TypeScript filter-query typing in the inventory API client by making the query builder generic.
+- Verified that the inventory API routes appear in the FastAPI OpenAPI schema.
+- Verified that the frontend TypeScript check passes after the query-builder correction.
+
+# Notes
+- Frontend functional testing and the production build must be completed before declaring this release production-ready.
+- Database migration status and automated inventory integration-test results should be verified before release.
+
+# v0.9.0 — 2026-10-15
+
+# Added — Livestock Management
+- Added livestock data model and database migration.
+- Added livestock schemas for creating, updating, and returning livestock records.
+- Added repository and service layers for livestock data access and business logic.
+- Added livestock API endpoints for creating, listing, retrieving, and updating records.
+- Added farm-scoped livestock access and permission checks.
+- Added the livestock frontend page at frontend/src/app/user/farms/[farmId]/livestock/page.tsx.
+- Added livestock registration and editing forms.
+- Added livestock overview statistics and record listing.
+- Added search and filtering by species and status.
+- Added support for Active, Sold, Deceased, and Missing statuses.
+
+# Validation
+- Backend compilation and API route registration checks passed, if confirmed during testing.
+- Frontend TypeScript checks passed, if confirmed during testing.
+- Record any additional automated or manual tests completed for this release.
+
+# Notes
+- Livestock deletion and dedicated livestock transaction/history tracking are not included in this entry.
+- Keep the changelog updated as additional features and fixes are implemented.

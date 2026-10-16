@@ -10,6 +10,9 @@ if TYPE_CHECKING:
     from app.models.farm_membership import FarmMembership
     from app.models.field import Field
     from app.models.user import User
+    from app.models.farm_activity import FarmActivity
+    from app.models.inventory_item import InventoryItem
+    from app.models.livestock import Livestock
 
 
 class Farm(
@@ -66,6 +69,23 @@ class Farm(
     # Fields belonging to this farm
     fields: Mapped[list["Field"]] = relationship(
         "Field",
+        back_populates="farm",
+        cascade="all, delete-orphan",
+    )
+
+    activities: Mapped[list["FarmActivity"]] = relationship(
+        back_populates="farm",
+        cascade="all, delete-orphan",
+    )
+
+    inventory_items: Mapped[list["InventoryItem"]] = relationship (
+        "InventoryItem",
+        back_populates="farm",
+        cascade="all, delete-orphan",  
+    )
+
+    livestock: Mapped[list["Livestock"]] = relationship(
+        "Livestock",
         back_populates="farm",
         cascade="all, delete-orphan",
     )

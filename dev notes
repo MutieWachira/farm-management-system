@@ -1,0 +1,4 @@
+- do and write farm activity tests and inventory
+- when adding fields the total area sould not pass the farms area
+- area to be in acres and also values should be integers
+- Inventory isn't working find out why?

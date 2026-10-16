@@ -1,9 +1,13 @@
 from uuid import UUID
 
+from fastapi import HTTPException, status
+from sqlalchemy import select
+from sqlalchemy.orm import Session
+
 from app.core.enums import FarmRole
 from app.models.farm_membership import FarmMembership
-from sqlalchemy.orm import Session
 from app.models.farm import Farm
+from app.repositories.field_repository import FieldRepository
 from app.repositories.farm_repository import FarmRepository
 from app.schemas.farm import FarmCreate, FarmUpdate
 
@@ -12,6 +16,7 @@ class FarmService:
     def __init__(self, session: Session) -> None:
         self.session = session
         self.farms = FarmRepository(session)
+        self.fields = FieldRepository(session)
 
     def create (self, owner_id: UUID, data: FarmCreate,) -> Farm:
         """Create a farm owned by the authenticated user."""
@@ -43,6 +48,27 @@ class FarmService:
             farm.location = changes["location"].strip()
 
         if "area_hectares" in changes:
+            area_hectares = changes["area_hectares"]
+
+            if area_hectares is not None:
+                self.session.scalar(
+                    select(Farm.id)
+                    .where(Farm.id == farm.id)
+                    .with_for_update()
+                )
+                total_field_area = self.fields.total_area_by_farm(
+                    farm.id,
+                )
+
+                if total_field_area > area_hectares:
+                    raise HTTPException(
+                        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                        detail=(
+                            "Farm area cannot be less than the total "
+                            f"field area of {total_field_area} hectares."
+                        ),
+                    )
+
             farm.area_hectares = changes["area_hectares"]
 
         if "description" in changes:
