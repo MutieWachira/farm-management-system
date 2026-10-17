@@ -667,9 +667,9 @@ export default function FarmDetailsPage() {
         title: "Visualize Farm",
         description:
           "View and analyze farm data and performance metrics.",
-        href: `/dashboard/farms/${farmId}/visualize`,
+        href: `/user/farms/${farmId}/visualize`,
         icon: "📊",
-        available: false,
+        available: true,
       },
       
     ],

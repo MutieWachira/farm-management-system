@@ -13,6 +13,7 @@ from app.models.refresh_token import RefreshToken
 from app.models.user import User
 from app.models.livestock import Livestock, LivestockStatus
 from app.models.financial_transaction import FinancialTransaction
+from app.models.farm_layout import FarmLayout
 
 
 __all__ = [
@@ -33,4 +34,5 @@ __all__ = [
     "InventoryMovementType",
     "Livestock",
     "LivestockStatus",
+    "FarmLayout",
 ]

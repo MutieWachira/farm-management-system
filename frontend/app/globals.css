@@ -122,6 +122,18 @@ body {
   animation: weather-rain-fall 1.2s linear infinite;
 }
 
+.farm-crop-sprout {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  animation: farm-crop-emerge 850ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+}
+
+.farm-crop-leaves {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+  animation: farm-crop-sway 3.2s ease-in-out 850ms infinite alternate;
+}
+
 @keyframes weather-sun-breathe {
   0%, 100% { transform: scale(0.96); opacity: 0.82; }
   50% { transform: scale(1.06); opacity: 1; }
@@ -136,10 +148,22 @@ body {
   to { transform: translate3d(-2rem, 150%, 0) rotate(16deg); }
 }
 
+@keyframes farm-crop-emerge {
+  from { opacity: 0; transform: scaleY(0.12); }
+  to { opacity: 1; transform: scaleY(1); }
+}
+
+@keyframes farm-crop-sway {
+  from { transform: rotate(-5deg); }
+  to { transform: rotate(5deg); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .weather-scene__sun,
   .weather-scene__cloud,
-  .weather-scene__rain span {
+  .weather-scene__rain span,
+  .farm-crop-sprout,
+  .farm-crop-leaves {
     animation: none;
   }
 }

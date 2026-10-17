@@ -11,6 +11,7 @@ from app.api.farm_activities import router as farm_activities_router
 from app.api.inventory import router as inventory_router
 from app.api.livestock import router as livestock_router
 from app.api.financial_transactions import router as financial_transactions_router
+from app.api.farm_layouts import router as farm_layouts_router
 
 
 
@@ -60,6 +61,7 @@ app.include_router(farm_activities_router)
 app.include_router(inventory_router)
 app.include_router(livestock_router)
 app.include_router(financial_transactions_router)
+app.include_router(farm_layouts_router)
 
 @app.get("/health")
 async def health_check() -> dict[str, str]:

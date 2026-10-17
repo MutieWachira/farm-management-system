@@ -16,6 +16,7 @@ import {
   updateCrop,
 } from "@/src/lib/crop-api";
 import { getFields } from "@/src/lib/field-api";
+import { isPlantingDateDue } from "@/src/lib/crop-lifecycle";
 
 import type {
   CreateCropRequest,
@@ -978,6 +979,16 @@ export default function CropsPage() {
                         </dd>
                       </div>
                     </dl>
+
+                    {crop.status === "PLANNED" &&
+                      isPlantingDateDue(crop.planting_date) && (
+                        <p className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-3 text-xs leading-5 text-amber-900">
+                          The scheduled planting date has arrived, but this
+                          record is still Planned. Confirm the crop was
+                          planted, then edit its status. Dates do not
+                          automatically change crop status.
+                        </p>
+                      )}
 
                     {crop.notes && (
                       <div className="mt-5 rounded-lg bg-slate-50 p-3">
