@@ -643,9 +643,9 @@ export default function FarmDetailsPage() {
         title: "Expenses",
         description:
           "Track farm expenses and monitor financial activity.",
-        href: `/dashboard/farms/${farmId}/expenses`,
+        href: `/user/farms/${farmId}/finances`,
         icon: "KSh",
-        available: false,
+        available: true,
       },
       {
         title: "Members",

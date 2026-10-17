@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -7,9 +8,15 @@ import Link from "next/link";
 import { getCurrentUser } from "@/src/lib/auth-api";
 import { getAccessToken, clearTokens } from "@/src/lib/auth_storage";
 import { getFarms } from "@/src/lib/farm-api";
+import { getFields } from "@/src/lib/field-api";
+import { getCrops } from "@/src/lib/crop-api";
 
 import type { User } from "@/src/types/auth";
 import type { Farm } from "@/src/types/farm";
+
+// ============================================================
+// DASHBOARD PAGE
+// ============================================================
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -22,6 +29,11 @@ export default function DashboardPage() {
   const [farms, setFarms] = useState<Farm[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // null means statistics could not be loaded.
+  // Zero means the API successfully returned no records.
+  const [totalFields, setTotalFields] = useState<number | null>(null);
+  const [activeCrops, setActiveCrops] = useState<number | null>(null);
+
   // ============================================================
   // LOAD DASHBOARD DATA
   // ============================================================
@@ -31,10 +43,7 @@ export default function DashboardPage() {
 
     const loadDashboard = async () => {
       try {
-        // ------------------------------------------------------
-        // Check authentication
-        // ------------------------------------------------------
-
+        // 1. Verify that an access token exists.
         const token = getAccessToken();
 
         if (!token) {
@@ -42,18 +51,11 @@ export default function DashboardPage() {
           return;
         }
 
-        // ------------------------------------------------------
-        // Load user and farms concurrently
-        // ------------------------------------------------------
-
+        // 2. Load the authenticated user and their farms.
         const [currentUser, userFarms] = await Promise.all([
           getCurrentUser(token),
           getFarms(),
         ]);
-
-        // ------------------------------------------------------
-        // Prevent state updates if component was unmounted
-        // ------------------------------------------------------
 
         if (!isMounted) {
           return;
@@ -61,20 +63,62 @@ export default function DashboardPage() {
 
         setUser(currentUser);
         setFarms(userFarms);
+
+        // 3. Load statistics independently of authentication.
+        try {
+          // Fetch fields belonging to each farm.
+          const fieldsByFarm = await Promise.all(
+            userFarms.map((farm) => getFields(farm.id)),
+          );
+
+          // Combine all fields into one array.
+          const allFields = fieldsByFarm.flat();
+
+          // Fetch crops belonging to each field.
+          const cropsByField = await Promise.all(
+            allFields.map((field) => getCrops(field.id)),
+          );
+
+          // Combine all crops into one array.
+          const allCrops = cropsByField.flat();
+
+          if (!isMounted) {
+            return;
+          }
+
+          // 4. Update the statistics using real API data.
+          setTotalFields(allFields.length);
+
+          setActiveCrops(
+            allCrops.filter(
+              (crop) =>
+                crop.status === "PLANTED" ||
+                crop.status === "GROWING",
+            ).length,
+          );
+        } catch (error) {
+          // A statistics failure should not log out the user.
+          console.error(
+            "Failed to load field and crop statistics:",
+            error,
+          );
+
+          if (!isMounted) {
+            return;
+          }
+
+          setTotalFields(null);
+          setActiveCrops(null);
+        }
       } catch (error) {
+        // Handle failures loading the user or their farms.
         console.error("Failed to load dashboard:", error);
 
         if (!isMounted) {
           return;
         }
 
-        /*
-         * Authentication/API failure.
-         *
-         * Clear only AgriCore authentication tokens.
-         */
         clearTokens();
-
         router.replace("/login");
       } finally {
         if (isMounted) {
@@ -83,12 +127,9 @@ export default function DashboardPage() {
       }
     };
 
-    loadDashboard();
+    void loadDashboard();
 
-    // ----------------------------------------------------------
-    // Cleanup
-    // ----------------------------------------------------------
-
+    // Prevent state updates after the component unmounts.
     return () => {
       isMounted = false;
     };
@@ -137,7 +178,7 @@ export default function DashboardPage() {
         <div className="flex h-16 items-center justify-between px-6 lg:px-8">
           {/* Brand */}
 
-          <div className="flex items-center gap-3">
+          <Link href="/user/dashboard" className="flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-600 text-lg font-bold text-white shadow-sm">
               A
             </div>
@@ -151,19 +192,19 @@ export default function DashboardPage() {
                 Farm Management
               </p>
             </div>
-          </div>
+          </Link>
 
           {/* Header Actions */}
 
           <div className="flex items-center gap-4">
-            <button
-              type="button"
+            <Link
+              href="/user/farms"
               className="hidden rounded-lg border border-slate-200
                 bg-white px-4 py-2 text-sm font-medium text-slate-700
                 transition hover:bg-slate-50 sm:block"
             >
-              Help
-            </button>
+              Manage farms
+            </Link>
 
             <div className="flex items-center gap-3 border-l border-slate-200 pl-4">
               <div className="hidden text-right sm:block">
@@ -180,6 +221,7 @@ export default function DashboardPage() {
                 className="flex h-9 w-9 items-center justify-center
                   rounded-full bg-emerald-100 text-sm font-bold
                   text-emerald-700"
+                aria-label={`Signed in as ${user.first_name}`}
               >
                 {user.first_name.charAt(0).toUpperCase()}
               </div>
@@ -208,13 +250,13 @@ export default function DashboardPage() {
             </h1>
 
             <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
-              Monitor your farms, fields, and agricultural
-              operations from one place.
+              Monitor your farms, fields, and agricultural operations
+              from one place.
             </p>
           </div>
 
-          <button
-            type="button"
+          <Link
+            href="/user/farms"
             className="inline-flex w-fit items-center justify-center
               gap-2 rounded-xl bg-emerald-600 px-5 py-3
               text-sm font-semibold text-white shadow-sm
@@ -223,8 +265,8 @@ export default function DashboardPage() {
               focus:ring-emerald-500 focus:ring-offset-2"
           >
             <span className="text-lg leading-none">+</span>
-            Add Farm
-          </button>
+            Manage Farms
+          </Link>
         </section>
 
         {/* ======================================================
@@ -253,7 +295,11 @@ export default function DashboardPage() {
                 </p>
               </div>
 
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50 text-xl">
+              <div
+                className="flex h-11 w-11 items-center justify-center
+                  rounded-xl bg-emerald-50 text-xl"
+                aria-hidden="true"
+              >
                 🌱
               </div>
             </div>
@@ -276,18 +322,27 @@ export default function DashboardPage() {
                   Total Fields
                 </p>
 
-                <p className="mt-3 text-3xl font-bold tracking-tight text-slate-900">
-                  0
+                <p
+                  className="mt-3 text-3xl font-bold tracking-tight text-slate-900"
+                  aria-live="polite"
+                >
+                  {totalFields ?? "—"}
                 </p>
               </div>
 
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-xl">
+              <div
+                className="flex h-11 w-11 items-center justify-center
+                  rounded-xl bg-blue-50 text-xl"
+                aria-hidden="true"
+              >
                 ◫
               </div>
             </div>
 
             <p className="mt-4 text-xs text-slate-400">
-              Registered production fields
+              {totalFields === null
+                ? "Field data unavailable"
+                : "Registered production fields"}
             </p>
           </div>
 
@@ -304,18 +359,27 @@ export default function DashboardPage() {
                   Active Crops
                 </p>
 
-                <p className="mt-3 text-3xl font-bold tracking-tight text-slate-900">
-                  0
+                <p
+                  className="mt-3 text-3xl font-bold tracking-tight text-slate-900"
+                  aria-live="polite"
+                >
+                  {activeCrops ?? "—"}
                 </p>
               </div>
 
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-50 text-xl">
+              <div
+                className="flex h-11 w-11 items-center justify-center
+                  rounded-xl bg-amber-50 text-xl"
+                aria-hidden="true"
+              >
                 🌾
               </div>
             </div>
 
             <p className="mt-4 text-xs text-slate-400">
-              Currently active crops
+              {activeCrops === null
+                ? "Crop data unavailable"
+                : "Planted and growing crops"}
             </p>
           </div>
 
@@ -337,13 +401,17 @@ export default function DashboardPage() {
                 </p>
               </div>
 
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-sky-50 text-xl">
+              <div
+                className="flex h-11 w-11 items-center justify-center
+                  rounded-xl bg-sky-50 text-xl"
+                aria-hidden="true"
+              >
                 ✓
               </div>
             </div>
 
             <p className="mt-4 text-xs text-slate-400">
-              Awaiting farm data
+              Health assessment not configured
             </p>
           </div>
         </section>
@@ -353,13 +421,9 @@ export default function DashboardPage() {
         ======================================================= */}
 
         <section className="mt-6 grid gap-6 lg:grid-cols-3">
-          {/* ====================================================
-              FARM OVERVIEW
-          ===================================================== */}
+          {/* FARM OVERVIEW */}
 
           <div className="rounded-2xl border border-slate-200 bg-white shadow-sm lg:col-span-2">
-            {/* Header */}
-
             <div className="flex items-center justify-between border-b border-slate-100 px-6 py-5">
               <div>
                 <h2 className="font-semibold text-slate-900">
@@ -367,11 +431,9 @@ export default function DashboardPage() {
                 </h2>
 
                 <p className="mt-1 text-xs text-slate-500">
-                  Your farms and current operational status
+                  Your farms and farm management links
                 </p>
               </div>
-
-              {/* Manage Farms */}
 
               <Link
                 href="/user/farms"
@@ -389,7 +451,11 @@ export default function DashboardPage() {
 
             {farms.length === 0 ? (
               <div className="flex min-h-64 flex-col items-center justify-center px-6 py-10 text-center">
-                <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 text-2xl">
+                <div
+                  className="mb-4 flex h-14 w-14 items-center justify-center
+                    rounded-2xl bg-emerald-50 text-2xl"
+                  aria-hidden="true"
+                >
                   🌿
                 </div>
 
@@ -398,8 +464,8 @@ export default function DashboardPage() {
                 </h3>
 
                 <p className="mt-2 max-w-sm text-sm leading-6 text-slate-500">
-                  Add your first farm to begin tracking fields,
-                  crops, and agricultural operations.
+                  Add your first farm to begin tracking fields, crops,
+                  and agricultural operations.
                 </p>
 
                 <Link
@@ -411,21 +477,26 @@ export default function DashboardPage() {
                     focus:outline-none focus:ring-2
                     focus:ring-emerald-500 focus:ring-offset-2"
                 >
-                  Manage your farms
+                  Open farm management
                 </Link>
               </div>
             ) : (
-              /* Farm List */
-
               <div className="divide-y divide-slate-100">
                 {farms.map((farm) => (
-                  <div
+                  <Link
                     key={farm.id}
+                    href={`/user/farms/${farm.id}`}
                     className="flex items-center justify-between
-                      px-6 py-4 transition hover:bg-slate-50"
+                      gap-4 px-6 py-4 transition hover:bg-slate-50
+                      focus:outline-none focus:ring-2
+                      focus:ring-inset focus:ring-emerald-500"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-50 text-xl">
+                      <div
+                        className="flex h-11 w-11 items-center justify-center
+                          rounded-xl bg-emerald-50 text-xl"
+                        aria-hidden="true"
+                      >
                         🌱
                       </div>
 
@@ -440,18 +511,16 @@ export default function DashboardPage() {
                       </div>
                     </div>
 
-                    <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700">
-                      Active
+                    <span className="shrink-0 text-sm font-medium text-emerald-700">
+                      View farm →
                     </span>
-                  </div>
+                  </Link>
                 ))}
               </div>
             )}
           </div>
 
-          {/* ====================================================
-              QUICK ACTIONS
-          ===================================================== */}
+          {/* QUICK ACTIONS */}
 
           <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div className="border-b border-slate-100 px-6 py-5">
@@ -465,36 +534,46 @@ export default function DashboardPage() {
             </div>
 
             <div className="space-y-2 p-4">
-              {/* Add Farm */}
+              {/* Manage Farms */}
 
               <Link
-                href="/user/farms/farmId/members"
+                href="/user/farms"
                 className="flex w-full items-center gap-4 rounded-xl
-                  p-3 text-left transition hover:bg-slate-50"
+                  p-3 text-left transition hover:bg-slate-50
+                  focus:outline-none focus:ring-2 focus:ring-emerald-500"
               >
-                <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-50 text-lg">
+                <span
+                  className="flex h-10 w-10 items-center justify-center
+                    rounded-lg bg-emerald-50 text-lg"
+                  aria-hidden="true"
+                >
                   🌱
                 </span>
 
                 <div>
                   <p className="text-sm font-semibold text-slate-800">
-                    Add a member
+                    Manage farms
                   </p>
 
                   <p className="text-xs text-slate-500">
-                    Register a new farm
+                    View and register farms
                   </p>
                 </div>
               </Link>
 
               {/* Manage Fields */}
 
-              <button
-                type="button"
+              <Link
+                href="/user/farms"
                 className="flex w-full items-center gap-4 rounded-xl
-                  p-3 text-left transition hover:bg-slate-50"
+                  p-3 text-left transition hover:bg-slate-50
+                  focus:outline-none focus:ring-2 focus:ring-emerald-500"
               >
-                <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-50 text-lg">
+                <span
+                  className="flex h-10 w-10 items-center justify-center
+                    rounded-lg bg-blue-50 text-lg"
+                  aria-hidden="true"
+                >
                   ◫
                 </span>
 
@@ -504,19 +583,24 @@ export default function DashboardPage() {
                   </p>
 
                   <p className="text-xs text-slate-500">
-                    View and manage farm fields
+                    Choose a farm to manage fields
                   </p>
                 </div>
-              </button>
+              </Link>
 
               {/* Manage Crops */}
 
-              <button
-                type="button"
+              <Link
+                href="/user/farms"
                 className="flex w-full items-center gap-4 rounded-xl
-                  p-3 text-left transition hover:bg-slate-50"
+                  p-3 text-left transition hover:bg-slate-50
+                  focus:outline-none focus:ring-2 focus:ring-emerald-500"
               >
-                <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-50 text-lg">
+                <span
+                  className="flex h-10 w-10 items-center justify-center
+                    rounded-lg bg-amber-50 text-lg"
+                  aria-hidden="true"
+                >
                   🌾
                 </span>
 
@@ -526,32 +610,37 @@ export default function DashboardPage() {
                   </p>
 
                   <p className="text-xs text-slate-500">
-                    Track active crops
+                    Choose a farm to manage crops
                   </p>
                 </div>
-              </button>
+              </Link>
 
-              {/* Reports */}
+              {/* Farm Activities */}
 
-              <button
-                type="button"
+              <Link
+                href="/user/farms"
                 className="flex w-full items-center gap-4 rounded-xl
-                  p-3 text-left transition hover:bg-slate-50"
+                  p-3 text-left transition hover:bg-slate-50
+                  focus:outline-none focus:ring-2 focus:ring-emerald-500"
               >
-                <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-lg">
+                <span
+                  className="flex h-10 w-10 items-center justify-center
+                    rounded-lg bg-slate-100 text-lg"
+                  aria-hidden="true"
+                >
                   📊
                 </span>
 
                 <div>
                   <p className="text-sm font-semibold text-slate-800">
-                    View reports
+                    Farm activities
                   </p>
 
                   <p className="text-xs text-slate-500">
-                    Analyze farm performance
+                    Choose a farm to review activities
                   </p>
                 </div>
-              </button>
+              </Link>
             </div>
           </div>
         </section>

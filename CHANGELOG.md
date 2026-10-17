@@ -455,3 +455,55 @@ AgriCore is a modern farm management system designed to help farmers and farm ma
 # Notes
 - Livestock deletion and dedicated livestock transaction/history tracking are not included in this entry.
 - Keep the changelog updated as additional features and fixes are implemented.
+
+## [0.10.0] - 2026-10-15
+
+### Added — Farm Finance Management
+
+- Added the financial transaction model for recording farm income and expenses.
+- Added financial transaction schemas for creating, updating, and returning transaction records.
+- Added financial transaction repository operations for creating, retrieving, listing, updating, and deleting transactions.
+- Added financial transaction service logic for managing farm financial records.
+- Added financial summary functionality for calculating income, expenses, and net balance.
+- Added support for transaction categories, dates, descriptions, references, and currency codes.
+- Added validation for positive transaction amounts and valid transaction types.
+- Added validation to ensure income and expense categories match their respective transaction types.
+- Added farm-scoped financial API endpoints for creating, listing, retrieving, updating, and deleting transactions.
+- Added an API endpoint for retrieving financial summaries.
+- Added frontend TypeScript types for financial transactions and summaries.
+- Added an authenticated frontend financial API client.
+- Added the farm finance management page with transaction creation, filtering, transaction history, and summary cards.
+
+### Security
+
+- Applied farm membership authorization to financial record access.
+- Restricted financial record creation, updating, and deletion to authorized farm owners and managers.
+- Enforced backend validation and authorization rather than relying on frontend controls.
+- Scoped financial records to their associated farms.
+
+### Frontend
+
+- Added income and expense transaction forms.
+- Added transaction type and category selection.
+- Added transaction date, amount, currency, description, and reference fields.
+- Added financial summary cards for income, expenses, and net balance.
+- Added transaction filtering by type, category, and date range.
+- Added loading, validation, success, and error states.
+- Updated the shared API client to handle HTTP 204 No Content responses.
+
+### Validation and Testing
+
+- Verify financial transaction model and schema imports.
+- Verify financial API route registration.
+- Verify database migrations and resulting schema.
+- Test transaction creation, retrieval, updating, and deletion.
+- Test income and expense calculations.
+- Test role-based permissions and cross-farm access protection.
+- Run backend automated tests.
+- Run frontend TypeScript checks and linting.
+- Verify the frontend production build and manually test the finance page.
+
+### Notes
+
+- This release must not be considered production-ready until database migration verification, automated tests, permission checks, and frontend validation have passed.
+- Record any incomplete functionality or additional fixes before finalizing this release.
