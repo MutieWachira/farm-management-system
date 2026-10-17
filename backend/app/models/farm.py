@@ -13,6 +13,7 @@ if TYPE_CHECKING:
     from app.models.farm_activity import FarmActivity
     from app.models.inventory_item import InventoryItem
     from app.models.livestock import Livestock
+    from app.models.farm_layout import FarmLayout
 
 
 class Farm(
@@ -88,4 +89,10 @@ class Farm(
         "Livestock",
         back_populates="farm",
         cascade="all, delete-orphan",
+    )
+    
+    layout: Mapped["FarmLayout | None"] = relationship(
+    back_populates="farm",
+    cascade="all, delete-orphan",
+    uselist=False,
     )

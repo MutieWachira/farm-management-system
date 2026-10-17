@@ -65,23 +65,8 @@ export async function apiRequest<T>(
     },
   );
 
-  if (!response.ok) {
-    let errorMessage = "An unexpected error occurred.";
-
-    try {
-      const error =
-        (await response.json()) as ApiError;
-
-      const detailMessage = getErrorMessage(error.detail);
-
-      if (detailMessage) {
-        errorMessage = detailMessage;
-      }
-    } catch {
-      // Ignore malformed error responses.
-    }
-
-    throw new Error(errorMessage);
+  if (response.status === 204) {
+    return undefined as T;
   }
 
   return response.json() as Promise<T>;
