@@ -21,6 +21,63 @@ AgriCore is a modern farm management system designed to help farmers and farm ma
 - Migrations: Alembic
 
 
+## [0.12.0] - 2026-10-21
+
+### Added
+- **Irrigation record model**
+  - Added the `IrrigationRecord` database model.
+  - Added fields for farm, field, irrigation date, method, duration, water volume, and notes.
+  - Included record identifiers and creation/update timestamps.
+  - Added database constraints for positive irrigation duration and water volume.
+  - Added a composite index to support farm-scoped date queries.
+  - Registered the model with the application's model package.
+
+- **Irrigation record schemas**
+  - Added request and response schemas for creating, updating, and retrieving irrigation records.
+  - Added structured validation for irrigation data.
+
+- **Irrigation record repository**
+  - Added database operations for creating, retrieving, listing, updating, and deleting irrigation records.
+  - Added farm-scoped record retrieval to support tenant isolation.
+
+- **Irrigation record service**
+  - Added business logic for irrigation-record management.
+  - Added validation to ensure the selected field belongs to the specified farm.
+  - Added safeguards for invalid or missing required values.
+
+- **Irrigation record API**
+  - Added endpoints under `/api/v1/farms/{farm_id}/irrigation-records`.
+  - Added support for creating, listing, retrieving, updating, and deleting records.
+  - Integrated farm-membership and management-permission dependencies.
+
+- **Database migration**
+  - Prepared and applied the Alembic migration for the irrigation-record schema, subject to the migration verification completed locally.
+
+- **Frontend integration work**
+  - Added TypeScript interfaces for irrigation records and create/update requests.
+  - Added an irrigation API client for communicating with the backend.
+  - Improved shared API error handling to process unsuccessful HTTP responses and validation errors.
+  - Began the irrigation-management page with record entry, history, editing, deletion, and water-usage summaries.
+
+### Improved
+- Improved error handling for API requests.
+- Improved validation feedback for irrigation-record operations.
+- Reinforced farm-scoped access patterns for irrigation data.
+
+### Testing
+- Verified irrigation service imports during development.
+- Ran backend tests successfully at the reported development checkpoint.
+- Frontend lint, build, and end-to-end irrigation workflows remain subject to final verification.
+
+### Known Limitations
+- The irrigation frontend is not considered complete until lint, build, and browser tests pass.
+- Dedicated automated API tests for irrigation CRUD operations, permission enforcement, and cross-farm access must be verified.
+- Ecommerce functionality and broader production-readiness checks remain outside this release's completed scope.
+
+### Notes
+- This release introduces irrigation tracking as a dedicated farm-management feature.
+- Existing farm and field management workflows are intended to remain compatible.
+
 
 ## [0.11.0] - 2026-10-17
 
