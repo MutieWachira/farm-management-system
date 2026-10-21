@@ -12,6 +12,7 @@ from app.api.inventory import router as inventory_router
 from app.api.livestock import router as livestock_router
 from app.api.financial_transactions import router as financial_transactions_router
 from app.api.farm_layouts import router as farm_layouts_router
+from app.api.irrigation_records import router as irrigation_records_router
 
 
 
@@ -45,6 +46,7 @@ app.add_middleware(
          # Highly recommended: Add your local loopback address as well
         "http://127.0.0.1:3000",
         "https://farm-management-system-swart-six.vercel.app",
+        "https://2813c629-3000.uks1.devtunnels.ms",
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -62,6 +64,9 @@ app.include_router(inventory_router)
 app.include_router(livestock_router)
 app.include_router(financial_transactions_router)
 app.include_router(farm_layouts_router)
+app.include_router(farm_activities_router)
+app.include_router(irrigation_records_router)
+
 
 @app.get("/health")
 async def health_check() -> dict[str, str]:

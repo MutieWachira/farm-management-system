@@ -621,7 +621,7 @@ export default function FarmDetailsPage() {
           "Manage irrigation systems and water usage.",
         href: `/user/farms/${farmId}/irrigation`,
         icon: "💧",
-        available: false,
+        available: true,
       },
       {
         title: "Livestock",
@@ -644,7 +644,7 @@ export default function FarmDetailsPage() {
         description:
           "Track farm expenses and monitor financial activity.",
         href: `/user/farms/${farmId}/finances`,
-        icon: "KSh",
+        icon: "💸",
         available: true,
       },
       {
@@ -656,11 +656,19 @@ export default function FarmDetailsPage() {
         available: true,
       },
       {
+        title: "Reports",
+        description:
+          "View and analyze farm data and performance metrics.",
+        href: `/user/farms/${farmId}/reports`,
+        icon: "📊",
+        available: false,
+      },
+      {
         title: "Settings",
         description:
           "Manage farm configuration and farm-level settings.",
         href: `/dashboard/farms/${farmId}/settings`,
-        icon: "⚙",
+        icon: "⚙️",
         available: false,
       },
       {
@@ -668,7 +676,7 @@ export default function FarmDetailsPage() {
         description:
           "View and analyze farm data and performance metrics.",
         href: `/user/farms/${farmId}/visualize`,
-        icon: "📊",
+        icon: "👁️",
         available: true,
       },
       

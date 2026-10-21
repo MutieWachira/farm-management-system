@@ -54,20 +54,44 @@ export async function apiRequest<T>(
   path: string,
   options: RequestInit = {},
 ): Promise<T> {
-  const response = await fetch(
-    `${API_URL}${path}`,
-    {
-      ...options,
-      headers: {
-        "Content-Type": "application/json",
-        ...options.headers,
-      },
+  const response = await fetch(`${API_URL}${path}`, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options.headers,
     },
-  );
+  });
 
   if (response.status === 204) {
     return undefined as T;
   }
 
-  return response.json() as Promise<T>;
+  const contentType = response.headers.get("content-type") ?? "";
+  let payload: unknown;
+
+  if (contentType.includes("application/json")) {
+    try {
+      payload = await response.json();
+    } catch {
+      throw new Error("The server returned an invalid JSON response.");
+    }
+  } else {
+    payload = await response.text();
+  }
+
+  if (!response.ok) {
+    const detail =
+      payload && typeof payload === "object"
+        ? (payload as ApiError).detail
+        : payload;
+
+    const message = getErrorMessage(detail);
+
+    throw new Error(
+      message ??
+        `Request failed with status ${response.status} ${response.statusText}.`,
+    );
+  }
+
+  return payload as T;
 }
