@@ -661,7 +661,7 @@ export default function FarmDetailsPage() {
           "View and analyze farm data and performance metrics.",
         href: `/user/farms/${farmId}/reports`,
         icon: "📊",
-        available: false,
+        available: true,
       },
       {
         title: "Settings",
