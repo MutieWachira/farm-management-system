@@ -20,6 +20,42 @@ AgriCore is a modern farm management system designed to help farmers and farm ma
 - ORM: SQLAlchemy
 - Migrations: Alembic
 
+## [0.13.0] - 2026-10-25
+
+### Added
+- **Farm reports API:** Added a farm overview report endpoint at `GET /api/v1/farms/{farm_id}/reports/overview`.
+- **Report schemas:** Added structured schemas for farm information, field statistics, activity summaries, irrigation metrics, and financial summaries.
+- **Report service:** Added aggregation of field, activity, irrigation, income, and expense data.
+- **Date filtering:** Added optional start-date and end-date filters for activities, irrigation sessions, and financial transactions.
+- **Currency-aware financial reporting:** Added income, expenses, and net balance summaries grouped by currency.
+- **Frontend report types:** Added TypeScript interfaces for report data and date filters.
+- **Report API client:** Added an authenticated frontend helper to request farm overview reports.
+- **Farm Reports dashboard:** Added a responsive reports page at `/user/farms/[farmId]/reports`.
+- **Field analytics:** Added total, active, fallow, and inactive field counts, alongside registered field area.
+- **Activity analytics:** Added total activity counts and a breakdown by activity type.
+- **Irrigation analytics:** Added irrigation session counts, total duration, and recorded water volume.
+- **Financial analytics:** Added per-currency income, expense, and net balance summaries.
+- **Date-filter controls:** Added date inputs, filter validation, and a clear-filters action.
+- **User feedback states:** Added loading placeholders, error handling, retry controls, and empty-data messaging.
+
+### Changed
+- Centralized report requests in `frontend/src/lib/report-api.ts`.
+- Kept report data types in `frontend/src/types/report.ts` to improve frontend maintainability.
+- Kept financial summaries separated by currency to avoid combining incompatible monetary values.
+- Used the existing AgriCore responsive Tailwind styling conventions for the Reports interface.
+
+### Fixed
+- Added frontend validation to prevent a report start date from being later than its end date.
+- Added handling for missing farm identifiers and unavailable report data.
+
+### Validation status
+- Backend endpoint registration and import checks: previously reported as passing.
+- Frontend report types and API client TypeScript check: previously reported as passing.
+- Reports page TypeScript and lint checks: pending confirmation.
+- Backend report-service and endpoint test coverage: pending confirmation.
+- Reports navigation activation: pending completion of page validation.
+
+
 
 ## [0.12.0] - 2026-10-21
 
