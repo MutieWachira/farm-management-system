@@ -47,7 +47,6 @@ app.add_middleware(
          # Highly recommended: Add your local loopback address as well
         "http://127.0.0.1:3000",
         "https://farm-management-system-swart-six.vercel.app",
-        "https://farm-management-system-mjsi.vercel.app/"
         "https://2813c629-3000.uks1.devtunnels.ms",
     ],
     allow_credentials=True,
