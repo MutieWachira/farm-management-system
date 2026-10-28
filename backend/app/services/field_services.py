@@ -4,6 +4,7 @@ from fastapi import HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from app.core.units import format_acres_from_hectares
 from app.models.farm import Farm
 from app.models.field import Field
 from app.repositories.field_repository import FieldRepository
@@ -111,7 +112,7 @@ class FieldService:
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail=(
                     "Total field area cannot exceed the farm area "
-                    f"of {farm.area_hectares} hectares."
+                    f"of {format_acres_from_hectares(farm.area_hectares)}."
                 ),
             )
 

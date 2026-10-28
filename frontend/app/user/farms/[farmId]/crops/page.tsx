@@ -17,6 +17,11 @@ import {
 } from "@/src/lib/crop-api";
 import { getFields } from "@/src/lib/field-api";
 import { isPlantingDateDue } from "@/src/lib/crop-lifecycle";
+import {
+  acresToHectares,
+  formatAcres,
+  hectaresToAcres,
+} from "@/src/lib/area";
 
 import type {
   CreateCropRequest,
@@ -42,7 +47,7 @@ interface CropFormData {
   expected_harvest_date: string;
   actual_harvest_date: string;
   status: CropStatus;
-  area_hectares: string;
+  area_acres: string;
   expected_yield: string;
   notes: string;
 }
@@ -54,7 +59,7 @@ const EMPTY_FORM: CropFormData = {
   expected_harvest_date: "",
   actual_harvest_date: "",
   status: "PLANNED",
-  area_hectares: "",
+  area_acres: "",
   expected_yield: "",
   notes: "",
 };
@@ -132,8 +137,9 @@ function validateForm(
   }
 
   if (
-    form.area_hectares !== "" &&
-    Number(form.area_hectares) <= 0
+    form.area_acres !== "" &&
+    (!Number.isFinite(Number(form.area_acres)) ||
+      Number(form.area_acres) <= 0)
   ) {
     return "Area must be greater than 0.";
   }
@@ -194,9 +200,9 @@ function buildCreatePayload(
       form.actual_harvest_date;
   }
 
-  if (form.area_hectares !== "") {
+  if (form.area_acres !== "") {
     payload.area_hectares =
-      Number(form.area_hectares);
+      acresToHectares(Number(form.area_acres));
   }
 
   if (form.expected_yield !== "") {
@@ -232,9 +238,9 @@ function buildUpdatePayload(
     status: form.status,
 
     area_hectares:
-      form.area_hectares === ""
+      form.area_acres === ""
         ? null
-        : Number(form.area_hectares),
+        : acresToHectares(Number(form.area_acres)),
 
     expected_yield:
       form.expected_yield === ""
@@ -270,9 +276,9 @@ function cropToForm(crop: Crop): CropFormData {
 
     status: crop.status,
 
-    area_hectares:
+    area_acres:
       crop.area_hectares !== null
-        ? String(crop.area_hectares)
+        ? String(hectaresToAcres(crop.area_hectares))
         : "",
 
     expected_yield:
@@ -961,7 +967,7 @@ export default function CropsPage() {
                         <dd className="font-medium text-slate-900">
                           {crop.area_hectares !==
                           null
-                            ? `${crop.area_hectares} ha`
+                            ? formatAcres(crop.area_hectares)
                             : "—"}
                         </dd>
                       </div>
@@ -1312,20 +1318,20 @@ export default function CropsPage() {
                       htmlFor="crop-area"
                       className="block text-sm font-medium text-slate-700"
                     >
-                      Area (hectares)
+                      Area (acres)
                     </label>
 
                     <input
                       id="crop-area"
                       type="number"
-                      min="0.0001"
+                      min="0.01"
                       step="0.01"
                       value={
-                        formData.area_hectares
+                        formData.area_acres
                       }
                       onChange={(event) =>
                         updateFormField(
-                          "area_hectares",
+                          "area_acres",
                           event.target.value,
                         )
                       }

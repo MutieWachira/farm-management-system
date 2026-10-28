@@ -13,6 +13,7 @@ import { useParams, useRouter } from "next/navigation";
 import { getFields } from "@/src/lib/field-api";
 import { getCrops } from "@/src/lib/crop-api";
 import { isPlantingDateDue } from "@/src/lib/crop-lifecycle";
+import { formatAcres } from "@/src/lib/area";
 import {
   getFarmLayout,
   saveFarmLayout,
@@ -778,13 +779,13 @@ export default function FarmVisualizationPage() {
         {[
           {
             label: "Mapped field area",
-            value: `${farmMetrics.totalArea.toLocaleString(undefined, { maximumFractionDigits: 1 })} ha`,
+            value: formatAcres(farmMetrics.totalArea),
             detail: `${fields.length} mapped field${fields.length === 1 ? "" : "s"}`,
             icon: "▦",
           },
           {
             label: "Active land",
-            value: `${farmMetrics.activeArea.toLocaleString(undefined, { maximumFractionDigits: 1 })} ha`,
+            value: formatAcres(farmMetrics.activeArea),
             detail: "Across active fields",
             icon: "↗",
           },
@@ -1867,7 +1868,7 @@ export default function FarmVisualizationPage() {
                     {selectedField.name}
                   </p>
                   <p className="text-sm text-gray-500">
-                    {selectedField.area_hectares} hectares
+                    {formatAcres(selectedField.area_hectares)}
                   </p>
                 </div>
 

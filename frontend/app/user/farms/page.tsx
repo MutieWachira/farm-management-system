@@ -7,6 +7,11 @@ import {
 createFarm,
 getFarms,
 } from "@/src/lib/farm-api";
+import {
+  acresToHectares,
+  formatAcres,
+  hectaresToAcres,
+} from "@/src/lib/area";
 
 import type { Farm } from "@/src/types/farm";
 
@@ -61,7 +66,7 @@ try {
     name: name.trim(),
     location: location.trim(),
     area_hectares: area
-      ? Number(area)
+      ? acresToHectares(Number(area))
       : undefined,
     description: description.trim() || undefined,
   });
@@ -90,7 +95,7 @@ try {
 
 const totalArea = farms.reduce(
 (total, farm) =>
-total + (farm.area_hectares ?? 0),
+total + hectaresToAcres(farm.area_hectares ?? 0),
 0,
 );
 
@@ -250,7 +255,7 @@ Dashboard </Link>
         </div>
 
         <p className="mt-3 text-xs text-slate-400">
-          Combined registered area
+          Combined registered area (acres)
         </p>
       </div>
 
@@ -376,7 +381,7 @@ Dashboard </Link>
               htmlFor="farm-area"
               className="mb-2 block text-sm font-medium text-slate-700"
             >
-              Farm area
+              Farm area (acres)
               <span className="ml-1 font-normal text-slate-400">
                 (optional)
               </span>
@@ -397,7 +402,7 @@ Dashboard </Link>
               />
 
               <span className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-sm text-slate-400">
-                hectares
+                acres
               </span>
             </div>
           </div>
@@ -654,12 +659,7 @@ Dashboard </Link>
                     <p className="mt-1 font-semibold text-slate-800">
                       {farm.area_hectares !==
                       null
-                        ? `${farm.area_hectares.toLocaleString(
-                            undefined,
-                            {
-                              maximumFractionDigits: 2,
-                            },
-                          )} ha`
+                        ? formatAcres(farm.area_hectares)
                         : "Not set"}
                     </p>
                   </div>

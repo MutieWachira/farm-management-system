@@ -25,6 +25,7 @@ import { useParams } from "next/navigation";
 
 import { getFarms } from "@/src/lib/farm-api";
 import { getFarmOverviewReport } from "@/src/lib/report-api";
+import { formatAcres } from "@/src/lib/area";
 
 import type { Farm } from "@/src/types/farm";
 import type {
@@ -53,7 +54,7 @@ function formatNumber(value: number, maximumFractionDigits = 2): string {
 }
 
 function formatArea(value: number): string {
-  return `${formatNumber(value)} ha`;
+  return formatAcres(value);
 }
 
 function formatDate(value: string | null | undefined): string {
