@@ -14,6 +14,7 @@ from app.models.user import User
 from app.models.livestock import Livestock, LivestockStatus
 from app.models.financial_transaction import FinancialTransaction
 from app.models.farm_layout import FarmLayout
+from app.models.irrigation_record import IrrigationRecord
 
 
 __all__ = [
@@ -35,4 +36,5 @@ __all__ = [
     "Livestock",
     "LivestockStatus",
     "FarmLayout",
+    "IrrigationRecord",
 ]

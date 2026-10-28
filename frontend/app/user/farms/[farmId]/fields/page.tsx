@@ -12,6 +12,11 @@ import {
 } from "@/src/lib/field-api";
 
 import { getFarms } from "@/src/lib/farm-api";
+import {
+  acresToHectares,
+  formatAcres,
+  hectaresToAcres,
+} from "@/src/lib/area";
 
 import type {
   CreateFieldRequest,
@@ -53,14 +58,14 @@ type FormMode = "create" | "edit" | null;
 
 type FieldFormState = {
   name: string;
-  area_hectares: string;
+  area_acres: string;
   soil_type: string;
   status: FieldStatus;
 };
 
 const INITIAL_FORM: FieldFormState = {
   name: "",
-  area_hectares: "",
+  area_acres: "",
   soil_type: "",
   status: "ACTIVE",
 };
@@ -101,18 +106,6 @@ function formatStatus(status: string): string {
     .toLowerCase()
     .replace(/_/g, " ")
     .replace(/\b\w/g, (character) => character.toUpperCase());
-}
-
-function formatArea(area: number | string): string {
-  const numericArea = Number(area);
-
-  if (!Number.isFinite(numericArea)) {
-    return "—";
-  }
-
-  return `${numericArea.toLocaleString(undefined, {
-    maximumFractionDigits: 2,
-  })} hectares`;
 }
 
 export default function FieldsPage() {
@@ -240,10 +233,10 @@ export default function FieldsPage() {
 
     setForm({
       name: field.name ?? "",
-      area_hectares:
+      area_acres:
         field.area_hectares !== undefined &&
         field.area_hectares !== null
-          ? String(field.area_hectares)
+          ? String(hectaresToAcres(field.area_hectares))
           : "",
       soil_type: field.soil_type ?? "",
       status: field.status ?? "ACTIVE",
@@ -296,10 +289,10 @@ export default function FieldsPage() {
       return;
     }
 
-    const area = Number(form.area_hectares);
+    const area = Number(form.area_acres);
 
     if (
-      !form.area_hectares.trim() ||
+      !form.area_acres.trim() ||
       !Number.isFinite(area) ||
       area <= 0
     ) {
@@ -318,11 +311,14 @@ export default function FieldsPage() {
     if (
       farm?.area_hectares !== null &&
       farm?.area_hectares !== undefined &&
-      existingAreaExcludingSelected + area >
+      existingAreaExcludingSelected +
+        acresToHectares(area) >
         farm.area_hectares
     ) {
       setFormError(
-        `Total field area cannot exceed the farm area of ${farm.area_hectares} hectares.`,
+        `Total field area cannot exceed the farm area of ${formatAcres(
+          farm.area_hectares,
+        )}.`,
       );
       return;
     }
@@ -338,7 +334,7 @@ export default function FieldsPage() {
       if (formMode === "create") {
         const payload: CreateFieldRequest = {
           name: trimmedName,
-          area_hectares: area,
+          area_hectares: acresToHectares(area),
           soil_type: trimmedSoilType,
           status: form.status,
         };
@@ -352,7 +348,7 @@ export default function FieldsPage() {
       ) {
         const payload: UpdateFieldRequest = {
           name: trimmedName,
-          area_hectares: area,
+          area_hectares: acresToHectares(area),
           soil_type: trimmedSoilType,
           status: form.status,
         };
@@ -583,7 +579,7 @@ export default function FieldsPage() {
             </p>
 
             <p className="mt-2 text-3xl font-bold text-slate-950">
-              {statistics.totalArea.toLocaleString(
+              {hectaresToAcres(statistics.totalArea).toLocaleString(
                 undefined,
                 {
                   maximumFractionDigits: 2,
@@ -592,7 +588,7 @@ export default function FieldsPage() {
             </p>
 
             <p className="mt-1 text-xs text-slate-500">
-              hectares
+              acres
             </p>
           </div>
 
@@ -696,7 +692,7 @@ export default function FieldsPage() {
                       </h3>
 
                       <p className="mt-1 text-sm font-medium text-slate-500">
-                        {formatArea(
+                        {formatAcres(
                           field.area_hectares,
                         )}
                       </p>
@@ -728,7 +724,7 @@ export default function FieldsPage() {
                       </p>
 
                       <p className="mt-1 text-sm font-semibold text-slate-800">
-                        {formatArea(
+                        {formatAcres(
                           field.area_hectares,
                         )}
                       </p>
@@ -865,9 +861,9 @@ export default function FieldsPage() {
                 <div className="relative">
                   <input
                     id="field-area"
-                    name="area_hectares"
+                    name="area_acres"
                     type="number"
-                    value={form.area_hectares}
+                    value={form.area_acres}
                     onChange={handleFormChange}
                     placeholder="e.g. 5.5"
                     min="0.01"
@@ -876,14 +872,16 @@ export default function FieldsPage() {
                       farm?.area_hectares !== undefined
                         ? Math.max(
                             0,
-                            farm.area_hectares -
-                              statistics.totalArea +
-                              (selectedField
-                                ? Number(
-                                    selectedField.area_hectares ||
-                                      0,
-                                  )
-                                : 0),
+                            hectaresToAcres(
+                              farm.area_hectares -
+                                statistics.totalArea +
+                                (selectedField
+                                  ? Number(
+                                      selectedField.area_hectares ||
+                                        0,
+                                    )
+                                  : 0),
+                            ),
                           )
                         : undefined
                     }
@@ -894,15 +892,15 @@ export default function FieldsPage() {
                   />
 
                   <span className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-sm text-slate-400">
-                    hectares
+                    acres
                   </span>
                 </div>
                 {farm?.area_hectares !== null &&
                   farm?.area_hectares !== undefined && (
                     <p className="mt-2 text-xs text-slate-500">
-                      {`Farm area: ${formatArea(
+                      {`Farm area: ${formatAcres(
                         farm.area_hectares,
-                      )}. Current field total: ${formatArea(
+                      )}. Current field total: ${formatAcres(
                         statistics.totalArea,
                       )}.`}
                     </p>

@@ -20,6 +20,99 @@ AgriCore is a modern farm management system designed to help farmers and farm ma
 - ORM: SQLAlchemy
 - Migrations: Alembic
 
+## [0.13.0] - 2026-10-25
+
+### Added
+- **Farm reports API:** Added a farm overview report endpoint at `GET /api/v1/farms/{farm_id}/reports/overview`.
+- **Report schemas:** Added structured schemas for farm information, field statistics, activity summaries, irrigation metrics, and financial summaries.
+- **Report service:** Added aggregation of field, activity, irrigation, income, and expense data.
+- **Date filtering:** Added optional start-date and end-date filters for activities, irrigation sessions, and financial transactions.
+- **Currency-aware financial reporting:** Added income, expenses, and net balance summaries grouped by currency.
+- **Frontend report types:** Added TypeScript interfaces for report data and date filters.
+- **Report API client:** Added an authenticated frontend helper to request farm overview reports.
+- **Farm Reports dashboard:** Added a responsive reports page at `/user/farms/[farmId]/reports`.
+- **Field analytics:** Added total, active, fallow, and inactive field counts, alongside registered field area.
+- **Activity analytics:** Added total activity counts and a breakdown by activity type.
+- **Irrigation analytics:** Added irrigation session counts, total duration, and recorded water volume.
+- **Financial analytics:** Added per-currency income, expense, and net balance summaries.
+- **Date-filter controls:** Added date inputs, filter validation, and a clear-filters action.
+- **User feedback states:** Added loading placeholders, error handling, retry controls, and empty-data messaging.
+
+### Changed
+- Centralized report requests in `frontend/src/lib/report-api.ts`.
+- Kept report data types in `frontend/src/types/report.ts` to improve frontend maintainability.
+- Kept financial summaries separated by currency to avoid combining incompatible monetary values.
+- Used the existing AgriCore responsive Tailwind styling conventions for the Reports interface.
+
+### Fixed
+- Added frontend validation to prevent a report start date from being later than its end date.
+- Added handling for missing farm identifiers and unavailable report data.
+
+### Validation status
+- Backend endpoint registration and import checks: previously reported as passing.
+- Frontend report types and API client TypeScript check: previously reported as passing.
+- Reports page TypeScript and lint checks: pending confirmation.
+- Backend report-service and endpoint test coverage: pending confirmation.
+- Reports navigation activation: pending completion of page validation.
+
+
+
+## [0.12.0] - 2026-10-21
+
+### Added
+- **Irrigation record model**
+  - Added the `IrrigationRecord` database model.
+  - Added fields for farm, field, irrigation date, method, duration, water volume, and notes.
+  - Included record identifiers and creation/update timestamps.
+  - Added database constraints for positive irrigation duration and water volume.
+  - Added a composite index to support farm-scoped date queries.
+  - Registered the model with the application's model package.
+
+- **Irrigation record schemas**
+  - Added request and response schemas for creating, updating, and retrieving irrigation records.
+  - Added structured validation for irrigation data.
+
+- **Irrigation record repository**
+  - Added database operations for creating, retrieving, listing, updating, and deleting irrigation records.
+  - Added farm-scoped record retrieval to support tenant isolation.
+
+- **Irrigation record service**
+  - Added business logic for irrigation-record management.
+  - Added validation to ensure the selected field belongs to the specified farm.
+  - Added safeguards for invalid or missing required values.
+
+- **Irrigation record API**
+  - Added endpoints under `/api/v1/farms/{farm_id}/irrigation-records`.
+  - Added support for creating, listing, retrieving, updating, and deleting records.
+  - Integrated farm-membership and management-permission dependencies.
+
+- **Database migration**
+  - Prepared and applied the Alembic migration for the irrigation-record schema, subject to the migration verification completed locally.
+
+- **Frontend integration work**
+  - Added TypeScript interfaces for irrigation records and create/update requests.
+  - Added an irrigation API client for communicating with the backend.
+  - Improved shared API error handling to process unsuccessful HTTP responses and validation errors.
+  - Began the irrigation-management page with record entry, history, editing, deletion, and water-usage summaries.
+
+### Improved
+- Improved error handling for API requests.
+- Improved validation feedback for irrigation-record operations.
+- Reinforced farm-scoped access patterns for irrigation data.
+
+### Testing
+- Verified irrigation service imports during development.
+- Ran backend tests successfully at the reported development checkpoint.
+- Frontend lint, build, and end-to-end irrigation workflows remain subject to final verification.
+
+### Known Limitations
+- The irrigation frontend is not considered complete until lint, build, and browser tests pass.
+- Dedicated automated API tests for irrigation CRUD operations, permission enforcement, and cross-farm access must be verified.
+- Ecommerce functionality and broader production-readiness checks remain outside this release's completed scope.
+
+### Notes
+- This release introduces irrigation tracking as a dedicated farm-management feature.
+- Existing farm and field management workflows are intended to remain compatible.
 
 
 ## [0.11.0] - 2026-10-17

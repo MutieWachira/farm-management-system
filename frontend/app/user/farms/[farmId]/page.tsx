@@ -5,12 +5,13 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 
 import { getCurrentUser } from "@/src/lib/auth-api";
+import { formatAcres } from "@/src/lib/area";
 
 type Farm = {
   id: string;
   name: string;
   location: string;
-  area_hectares: number;
+  area_hectares: number | null;
   owner_id?: string;
   created_at?: string;
   updated_at?: string;
@@ -621,7 +622,7 @@ export default function FarmDetailsPage() {
           "Manage irrigation systems and water usage.",
         href: `/user/farms/${farmId}/irrigation`,
         icon: "💧",
-        available: false,
+        available: true,
       },
       {
         title: "Livestock",
@@ -644,7 +645,7 @@ export default function FarmDetailsPage() {
         description:
           "Track farm expenses and monitor financial activity.",
         href: `/user/farms/${farmId}/finances`,
-        icon: "KSh",
+        icon: "💸",
         available: true,
       },
       {
@@ -656,11 +657,19 @@ export default function FarmDetailsPage() {
         available: true,
       },
       {
+        title: "Reports",
+        description:
+          "View and analyze farm data and performance metrics.",
+        href: `/user/farms/${farmId}/reports`,
+        icon: "📊",
+        available: true,
+      },
+      {
         title: "Settings",
         description:
           "Manage farm configuration and farm-level settings.",
         href: `/dashboard/farms/${farmId}/settings`,
-        icon: "⚙",
+        icon: "⚙️",
         available: false,
       },
       {
@@ -668,7 +677,7 @@ export default function FarmDetailsPage() {
         description:
           "View and analyze farm data and performance metrics.",
         href: `/user/farms/${farmId}/visualize`,
-        icon: "📊",
+        icon: "👁️",
         available: true,
       },
       
@@ -912,11 +921,9 @@ export default function FarmDetailsPage() {
             </p>
 
             <p className="mt-2 text-2xl font-bold text-slate-900">
-              {farm.area_hectares}
-            </p>
-
-            <p className="mt-1 text-xs text-slate-500">
-              hectares
+              {farm.area_hectares == null
+                ? "Not specified"
+                : formatAcres(farm.area_hectares)}
             </p>
           </div>
 
@@ -1323,7 +1330,9 @@ export default function FarmDetailsPage() {
               </p>
 
               <p className="mt-2 text-sm font-medium text-slate-900">
-                {farm.area_hectares} hectares
+                {farm.area_hectares == null
+                  ? "Not specified"
+                  : formatAcres(farm.area_hectares)}
               </p>
             </div>
 
