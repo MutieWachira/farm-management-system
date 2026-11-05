@@ -20,6 +20,16 @@ AgriCore is a modern farm management system designed to help farmers and farm ma
 - ORM: SQLAlchemy
 - Migrations: Alembic
 
+## [0.13.2] - 2026-11-05
+## Fix
+- Fixed database error in vercel. Changed env variable.
+- Fixed database migration inconsistencies.
+- Ran database migrations.
+
+## [0.13.1] - 2026-10-28
+## Fix
+- Fixed CORs issue and cropi API registration endpoint.
+
 ## [0.13.0] - 2026-10-25
 
 ### Added

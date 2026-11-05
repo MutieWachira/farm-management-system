@@ -1,7 +1,7 @@
 """create livestock
 
 Revision ID: 235bcec84aec
-Revises: b33608befe62
+Revises: 6ebede9793eb
 Create Date: 2026-10-15 08:18:33.839887
 
 """
@@ -13,7 +13,7 @@ import sqlalchemy as sa
 
 # revision identifiers, used by Alembic.
 revision: str = '235bcec84aec'
-down_revision: Union[str, Sequence[str], None] = 'b33608befe62'
+down_revision: Union[str, Sequence[str], None] = '6ebede9793eb'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

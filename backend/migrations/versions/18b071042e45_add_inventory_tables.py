@@ -28,7 +28,7 @@ def upgrade() -> None:
     sa.Column('sku', sa.String(length=80), nullable=False),
     sa.Column('unit', sa.String(length=30), nullable=False),
     sa.Column('current_stock', sa.Numeric(precision=14, scale=3), nullable=False),
-    sa.Column('reorder_level', sa.Numeric(precision=14, scale=3), nullable=False),
+    sa.Column('reoder_level', sa.Numeric(precision=14, scale=3), nullable=False),
     sa.Column('description', sa.Text(), nullable=True),
     sa.Column('is_active', sa.Boolean(), nullable=False),
     sa.Column('id', sa.Uuid(), nullable=False),
