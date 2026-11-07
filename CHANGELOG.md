@@ -8,6 +8,12 @@ The project follows Semantic Versioning:
 - MINOR: new functionality
 - PATCH: backwards-compatible fixes
 
+Releases are created from conventional commits on `main`. Use `feat` for MINOR
+releases, `fix` or `perf` for PATCH releases, and `!` or a `BREAKING CHANGE:`
+footer for MAJOR releases. Other commit types do not create a release. The
+release workflow updates the application version, tags the release, and
+generates GitHub release notes.
+
 # AgriCore
 
 AgriCore is a modern farm management system designed to help farmers and farm managers manage agricultural operations, resources, finances, livestock, crops, inventory, and analytics.
@@ -657,7 +663,6 @@ AgriCore is a modern farm management system designed to help farmers and farm ma
 - Added API health-check endpoint.
 - Added initial project documentation.
 - Added Git configuration.
-
 
 
 

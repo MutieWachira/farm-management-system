@@ -1,5 +1,6 @@
 from fastapi.testclient import TestClient
 
+from app.core.version import APP_VERSION
 from app.main import app
 
 client = TestClient(app)
@@ -14,3 +15,4 @@ def test_health_check() -> None:
 
     assert data["status"] == "healthy"
     assert data["service"] == "agricore-api"
+    assert data["version"] == APP_VERSION
