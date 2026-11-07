@@ -9,7 +9,6 @@ class Settings(BaseSettings):
 
     app_env: str = "development"
     app_name: str = "AgriCore"
-    app_version: str = "0.2.0"
 
     database_url: str
 

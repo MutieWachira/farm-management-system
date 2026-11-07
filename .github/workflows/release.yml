@@ -1,0 +1,63 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "backend/**"
+      - "frontend/**"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-main
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out latest main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Calculate and synchronize release version
+        id: version
+        env:
+          BASELINE_REF: ${{ github.event.before }}
+        run: |
+          VERSION="$(python scripts/release_version.py --baseline-ref "$BASELINE_REF")"
+          if [ -z "$VERSION" ]; then
+            echo "No releasable conventional commits found."
+            exit 0
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Commit version and create tag
+        if: steps.version.outputs.version != ''
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add backend/app/core/version.py frontend/package.json frontend/package-lock.json
+          git commit -m "chore(release): v$VERSION"
+          git tag "v$VERSION"
+          git push origin HEAD:main
+          git push origin "v$VERSION"
+
+      - name: Publish GitHub release
+        if: steps.version.outputs.version != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: gh release create "v$VERSION" --generate-notes

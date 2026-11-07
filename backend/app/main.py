@@ -14,8 +14,7 @@ from app.api.financial_transactions import router as financial_transactions_rout
 from app.api.farm_layouts import router as farm_layouts_router
 from app.api.irrigation_records import router as irrigation_records_router
 from app.api.reports import router as reports_router
-
-
+from app.core.version import APP_VERSION
 
 settings = get_settings()
 
@@ -23,7 +22,7 @@ settings = get_settings()
 app = FastAPI(
     title=settings.app_name,
     description="Farm Management System API",
-    version=settings.app_version,
+    version=APP_VERSION,
 )
 
 
@@ -76,5 +75,5 @@ async def health_check() -> dict[str, str]:
     return {
         "status": "healthy",
         "service": "agricore-api",
-        "version": settings.app_version,
+        "version": APP_VERSION,
     }
